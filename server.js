@@ -34,7 +34,7 @@ app.get('/api/trends', async (req, res) => {
       title: item.title,
       traffic: item.traffic || 'Trending',
       trafficNum: parseTraffic(item.traffic),
-      link: item.link,
+      link: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
       pubDate: item.pubDate,
       newsTitle: item.newsTitle || null,
       newsUrl: item.newsUrl || null,
