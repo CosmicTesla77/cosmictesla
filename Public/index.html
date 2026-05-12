@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrendPulse | What's Trending Right Now</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e2e4e9;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%);
+      border-bottom: 1px solid #2a2d3a;
+      padding: 24px 32px;
+      text-align: center;
+    }
+    header h1 { font-size: 2rem; font-weight: 700; color: #00d4aa; letter-spacing: 1px; }
+    header p { color: #8b8fa3; margin-top: 6px; font-size: 0.95rem; }
+    .date-bar { text-align: center; padding: 16px; color: #6b7080; font-size: 0.85rem; }
+    .loading { text-align: center; padding: 80px 20px; color: #6b7080; font-size: 1.1rem; }
+    .loading .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid #2a2d3a; border-top: 3px solid #00d4aa;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .trends-grid { max-width: 900px; margin: 0 auto; padding: 0 20px 40px; display: flex; flex-direction: column; gap: 12px; }
+    .trend-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 20px 24px; display: flex; align-items: flex-start; gap: 16px; transition: border-color 0.2s;
+    }
+    .trend-card:hover { border-color: #00d4aa; }
+    .rank { font-size: 1.4rem; font-weight: 700; color: #00d4aa; min-width: 36px; text-align: center; padding-top: 2px; }
+    .trend-info { flex: 1; }
+    .trend-title { font-size: 1.15rem; font-weight: 600; color: #f0f1f5; margin-bottom: 6px; }
+    .trend-title a { color: #f0f1f5; text-decoration: none; }
+    .trend-title a:hover { color: #00d4aa; }
+    .trend-traffic {
+      font-size: 0.8rem; color: #00d4aa; background: rgba(0, 212, 170, 0.1);
+      padding: 2px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px;
+    }
+    .trend-news a { display: block; color: #8b8fa3; font-size: 0.85rem; text-decoration: none; padding: 3px 0; transition: color 0.2s; }
+    .trend-news a:hover { color: #00d4aa; }
+    .trend-news .source { color: #555a6e; font-size: 0.75rem; }
+    .trend-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .error { text-align: center; padding: 80px 20px; color: #ff6b6b; }
+    @media (max-width: 600px) {
+      .trend-card { padding: 16px; }
+      .trend-image { width: 60px; height: 60px; }
+      header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TrendPulse</h1>
+    <p>Real-time trending searches across the internet</p>
+  </header>
+  <div class="date-bar" id="dateBar"></div>
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching today's trends...
+    </div>
+  </div>
+  <script>
+    async function loadTrends() {
+      const content = document.getElementById('content');
+      const dateBar = document.getElementById('dateBar');
+      try {
+        const response = await fetch('/api/trends');
+        const data = await response.json();
+        if (data.error) {
+          content.innerHTML = '<div class="error">Failed to load trends. Refresh to try again.</div>';
+          return;
+        }
+        dateBar.textContent = 'Trending in the US \u2014 ' + data.date;
+        let html = '<div class="trends-grid">';
+        data.trends.forEach((trend, index) => {
+          html += '<div class="trend-card">';
+          html += '<div class="rank">' + (index + 1) + '</div>';
+          html += '<div class="trend-info">';
+          html += '<div class="trend-title"><a href="' + trend.link + '" target="_blank">' + trend.title + '</a></div>';
+          html += '<div class="trend-traffic">' + trend.traffic + ' searches</div>';
+          if (trend.newsTitle) {
+            html += '<div class="trend-news"><a href="' + (trend.newsUrl || '#') + '" target="_blank">' + trend.newsTitle;
+            if (trend.newsSource) { html += ' <span class="source">\u2014 ' + trend.newsSource + '</span>'; }
+            html += '</a></div>';
+          }
+          html += '</div>';
+          if (trend.image) { html += '<img class="trend-image" src="' + trend.image + '" alt="' + trend.title + '" />'; }
+          html += '</div>';
+        });
+        html += '</div>';
+        content.innerHTML = html;
+      } catch (err) {
+        content.innerHTML = '<div class="error">Could not connect to server. Make sure TrendPulse is running.</div>';
+      }
+    }
+    loadTrends();
+  </script>
+</body>
+</html>
