@@ -97,27 +97,21 @@ app.get('/api/trends', async (req, res) => {
   }
 });
 
-function httpsGetJson(url) {
+function fetchRaw(url) {
   return new Promise((resolve, reject) => {
-    const options = {
+    const req = https.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Accept': 'application/json',
       },
       timeout: 8000,
-    };
-    const req = https.get(url, options, (res) => {
+    }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return httpsGetJson(res.headers.location).then(resolve).catch(reject);
+        return fetchRaw(res.headers.location).then(resolve).catch(reject);
       }
-      if (res.statusCode !== 200) {
-        return reject(new Error(`HTTP ${res.statusCode}`));
-      }
+      if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`));
       let raw = '';
       res.on('data', (chunk) => { raw += chunk; });
-      res.on('end', () => {
-        try { resolve(JSON.parse(raw)); } catch (e) { reject(e); }
-      });
+      res.on('end', () => resolve(raw));
     });
     req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
     req.on('error', reject);
@@ -126,14 +120,12 @@ function httpsGetJson(url) {
 
 app.get('/api/reddit', async (req, res) => {
   try {
-    const json = await httpsGetJson('https://www.reddit.com/r/all/hot.json?limit=5');
-    const posts = json.data.children.map(({ data: p }) => ({
-      title: p.title,
-      subreddit: p.subreddit,
-      score: p.score,
-      numComments: p.num_comments,
-      url: 'https://www.reddit.com' + p.permalink,
-    }));
+    const xml = await fetchRaw('https://www.reddit.com/r/all/hot.rss');
+    const feed = await parser.parseString(xml);
+    const posts = feed.items.slice(0, 5).map((item) => {
+      const subreddit = (item.link || '').match(/reddit\.com\/r\/([^/]+)/)?.[1] || '';
+      return { title: item.title, subreddit, url: item.link };
+    });
     res.json({ posts });
   } catch (error) {
     console.error('Error fetching Reddit:', error.message);
