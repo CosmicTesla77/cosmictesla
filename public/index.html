@@ -88,11 +88,26 @@
     .reddit-sub { font-size: 0.8rem; color: #ff4500; background: rgba(255,69,0,0.1); padding: 2px 8px; border-radius: 20px; text-decoration: none; }
     .reddit-sub:hover { background: rgba(255,69,0,0.2); }
     .reddit-stat { font-size: 0.8rem; color: #6b7080; }
+    .yt-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .yt-card:hover { border-color: #ff3333; }
+    .yt-rank { font-size: 1.2rem; font-weight: 700; color: #ff3333; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .yt-thumb { width: 120px; height: 68px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .yt-info { flex: 1; min-width: 0; }
+    .yt-title a { font-size: 0.95rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .yt-title a:hover { color: #ff3333; }
+    .yt-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .yt-channel { font-size: 0.8rem; color: #ff3333; background: rgba(255,51,51,0.1); padding: 2px 8px; border-radius: 20px; }
+    .yt-views { font-size: 0.8rem; color: #6b7080; }
     @media (max-width: 600px) {
       .trend-card { padding: 16px; }
       .trend-image { width: 60px; height: 60px; }
       header h1 { font-size: 1.5rem; }
       .reddit-card { padding: 14px 16px; }
+      .yt-card { padding: 14px 16px; }
+      .yt-thumb { width: 100px; height: 56px; }
     }
   </style>
 </head>
@@ -103,6 +118,7 @@
     <nav class="site-nav">
       <a href="#google-trending">📈 Google Trending</a>
       <a href="#reddit-trending">🔥 Reddit Trending</a>
+      <a href="#youtube-trending">▶️ YouTube Trending</a>
     </nav>
   </header>
   <div class="date-bar" id="dateBar"></div>
@@ -134,6 +150,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching Reddit posts...
+    </div>
+  </div>
+  <div id="youtube-trending" class="section-header">
+    <h2>YouTube Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
+    <span class="section-label">US · Top videos right now</span>
+  </div>
+  <div id="youtube-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching YouTube trends...
     </div>
   </div>
   <footer style="text-align:center;padding:24px;border-top:1px solid #2a2d3a;color:#555a6e;font-size:0.85rem;">
@@ -211,8 +238,44 @@
       }
     }
 
+    function fmtViews(n) {
+      const v = parseInt(n, 10) || 0;
+      if (v >= 1000000) return (v / 1000000).toFixed(1).replace(/\.0$/, '') + 'M views';
+      if (v >= 1000) return (v / 1000).toFixed(1).replace(/\.0$/, '') + 'K views';
+      return v + ' views';
+    }
+
+    async function loadYouTube() {
+      const el = document.getElementById('youtube-content');
+      try {
+        const response = await fetch('/api/youtube');
+        const data = await response.json();
+        if (data.error || !data.videos) {
+          el.innerHTML = '<div class="error">Failed to load YouTube trends.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.videos.forEach((video, i) => {
+          html += '<div class="yt-card">';
+          html += '<div class="yt-rank">' + (i + 1) + '</div>';
+          html += '<img class="yt-thumb" src="' + esc(video.thumbnail) + '" alt="' + esc(video.title) + '" />';
+          html += '<div class="yt-info">';
+          html += '<div class="yt-title"><a href="' + esc(video.url) + '" target="_blank" rel="noopener">' + esc(video.title) + '</a></div>';
+          html += '<div class="yt-meta">';
+          html += '<span class="yt-channel">' + esc(video.channel) + '</span>';
+          html += '<span class="yt-views">▶ ' + fmtViews(video.views) + '</span>';
+          html += '</div></div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load YouTube trends.</div>';
+      }
+    }
+
     loadTrends();
     loadReddit();
+    loadYouTube();
   </script>
 </body>
 </html>

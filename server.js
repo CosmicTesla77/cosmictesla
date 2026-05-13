@@ -133,6 +133,27 @@ app.get('/api/reddit', async (req, res) => {
   }
 });
 
+app.get('/api/youtube', async (req, res) => {
+  const key = process.env.YOUTUBE_API_KEY;
+  if (!key) return res.status(500).json({ error: 'YouTube API key not configured' });
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=US&maxResults=10&key=${key}`;
+    const raw = await fetchRaw(url);
+    const json = JSON.parse(raw);
+    const videos = json.items.map((item) => ({
+      title: item.snippet.title,
+      channel: item.snippet.channelTitle,
+      views: item.statistics.viewCount || '0',
+      thumbnail: (item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url,
+      url: `https://www.youtube.com/watch?v=${item.id}`,
+    }));
+    res.json({ videos });
+  } catch (error) {
+    console.error('Error fetching YouTube:', error.message);
+    res.status(500).json({ error: 'Failed to fetch YouTube trends' });
+  }
+});
+
 app.listen(PORT, () => {
 console.log(`CosmicTesla is running at http://localhost:${PORT}`);
 });
