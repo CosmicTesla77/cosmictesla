@@ -1,6 +1,7 @@
 const express = require('express');
 const Parser = require('rss-parser');
 const path = require('path');
+const https = require('https');
 
 const app = express();
 const parser = new Parser({
@@ -96,12 +97,30 @@ app.get('/api/trends', async (req, res) => {
   }
 });
 
+function httpsGetJson(url, headers = {}) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      headers: { 'User-Agent': 'CosmicTesla/1.0 (nodejs)', ...headers },
+    };
+    https.get(url, options, (res) => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        return httpsGetJson(res.headers.location, headers).then(resolve).catch(reject);
+      }
+      if (res.statusCode !== 200) {
+        return reject(new Error(`HTTP ${res.statusCode}`));
+      }
+      let raw = '';
+      res.on('data', (chunk) => { raw += chunk; });
+      res.on('end', () => {
+        try { resolve(JSON.parse(raw)); } catch (e) { reject(e); }
+      });
+    }).on('error', reject);
+  });
+}
+
 app.get('/api/reddit', async (req, res) => {
   try {
-    const response = await fetch('https://www.reddit.com/r/all/hot.json?limit=5', {
-      headers: { 'User-Agent': 'CosmicTesla/1.0' },
-    });
-    const json = await response.json();
+    const json = await httpsGetJson('https://www.reddit.com/r/all/hot.json?limit=5&raw_json=1');
     const posts = json.data.children.map(({ data: p }) => ({
       title: p.title,
       subreddit: p.subreddit,
