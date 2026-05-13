@@ -144,7 +144,7 @@ app.get('/api/youtube', async (req, res) => {
     return res.status(500).json({ error: 'YouTube API key not configured' });
   }
   try {
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=US&maxResults=10&key=${key}`;
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=US&maxResults=15&key=${key}`;
     const raw = await fetchRaw(url, true);
     let json;
     try {
@@ -162,7 +162,8 @@ app.get('/api/youtube', async (req, res) => {
       return res.status(500).json({ error: 'No videos returned from YouTube' });
     }
     const videos = json.items
-      .filter((item) => parseInt(item.statistics.viewCount || '0', 10) > 0)
+      .filter((item) => parseInt(item.statistics?.viewCount || '0', 10) > 0)
+      .slice(0, 10)
       .map((item) => ({
         title: item.snippet.title,
         channel: item.snippet.channelTitle,

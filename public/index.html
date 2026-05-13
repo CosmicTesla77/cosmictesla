@@ -255,8 +255,9 @@
           el.innerHTML = '<div class="error">Failed to load YouTube trends.</div>';
           return;
         }
+        const videos = data.videos.filter(v => parseInt(v.views || '0', 10) > 0);
         let html = '<div class="trends-grid">';
-        data.videos.forEach((video, i) => {
+        videos.forEach((video, i) => {
           html += '<div class="yt-card">';
           html += '<div class="yt-rank">' + (i + 1) + '</div>';
           html += '<img class="yt-thumb" src="' + esc(video.thumbnail) + '" alt="' + esc(video.title) + '" />';
