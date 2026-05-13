@@ -26,6 +26,29 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/sitemap.xml', (req, res) => {
+  const base = 'https://www.cosmictesla.com';
+  const today = new Date().toISOString().slice(0, 10);
+  const staticUrls = [
+    { loc: `${base}/`,        priority: '1.0', changefreq: 'daily'   },
+    { loc: `${base}/blog`,    priority: '0.8', changefreq: 'daily'   },
+    { loc: `${base}/about`,   priority: '0.6', changefreq: 'monthly' },
+    { loc: `${base}/contact`, priority: '0.6', changefreq: 'monthly' },
+    { loc: `${base}/privacy`, priority: '0.4', changefreq: 'monthly' },
+  ];
+  let postUrls = [];
+  if (fs.existsSync(POSTS_DIR)) {
+    postUrls = fs.readdirSync(POSTS_DIR)
+      .filter((f) => f.endsWith('.md'))
+      .map((f) => ({ loc: `${base}/blog/${f.replace('.md', '')}`, priority: '0.7', changefreq: 'monthly' }));
+  }
+  const allUrls = [...staticUrls, ...postUrls];
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${
+    allUrls.map(u => `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`).join('\n')
+  }\n</urlset>`;
+  res.set('Content-Type', 'application/xml').send(xml);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 function parseTraffic(trafficStr) {
@@ -180,6 +203,12 @@ app.get('/api/youtube', async (req, res) => {
   }
 });
 
+function formatDate(dateStr) {
+  const d = new Date(dateStr.includes('T') ? dateStr : dateStr + 'T12:00:00');
+  if (isNaN(d.getTime())) return dateStr;
+  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(d);
+}
+
 function escHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -238,6 +267,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#reddit-trending">🔥 Reddit Trending</a>
     <a href="/#youtube-trending">▶️ YouTube Trending</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
+    <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
   </nav>
   <header>
     <h1><a href="/">CosmicTesla</a></h1>
@@ -249,6 +279,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/about">About</a>
     <a href="/privacy">Privacy Policy</a>
     <a href="/blog">Blog</a>
+    <a href="/contact">Contact</a>
   </footer>
 </body>
 </html>`;
@@ -275,7 +306,7 @@ app.get('/blog', (req, res) => {
     ? posts.map((p) => `
         <a class="post-card" href="/blog/${escHtml(p.slug)}">
           <div class="post-card-title">${escHtml(p.title)}</div>
-          <div class="post-card-date">${escHtml(p.date)}</div>
+          <div class="post-card-date">${escHtml(formatDate(p.date))}</div>
         </a>`).join('')
     : '<div class="empty-state">No posts yet.</div>';
 
@@ -309,10 +340,19 @@ app.get('/blog/:slug', (req, res) => {
       <div class="back-link"><a href="/blog">← Back to Blog</a></div>
       <article>
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
-        <div class="post-date">${escHtml(date)}</div>
+        <div class="post-date">${escHtml(formatDate(date))}</div>
         <div class="post-content">${marked(body)}</div>
       </article>
     </div>`));
+});
+
+app.get('/contact', (req, res) => {
+  res.send(blogLayout('Contact', `
+    <div class="blog-wrap">
+      <h1 style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:16px;">Contact</h1>
+      <p style="color:#c8cad4;line-height:1.8;margin-bottom:12px;">CosmicTesla is a real-time trending dashboard that aggregates what people are searching, sharing, and watching across Google, Reddit, and YouTube. For questions, feedback, or partnership inquiries, reach out directly.</p>
+      <p style="color:#c8cad4;line-height:1.8;">Email: <a href="mailto:lancedombroski@gmail.com" style="color:#00d4aa;text-decoration:underline;text-decoration-color:rgba(0,212,170,0.4);">lancedombroski@gmail.com</a></p>
+    </div>`, 'contact'));
 });
 
 app.listen(PORT, () => {
