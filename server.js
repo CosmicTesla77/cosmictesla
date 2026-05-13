@@ -97,14 +97,18 @@ app.get('/api/trends', async (req, res) => {
   }
 });
 
-function httpsGetJson(url, headers = {}) {
+function httpsGetJson(url) {
   return new Promise((resolve, reject) => {
     const options = {
-      headers: { 'User-Agent': 'CosmicTesla/1.0 (nodejs)', ...headers },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'application/json',
+      },
+      timeout: 8000,
     };
-    https.get(url, options, (res) => {
+    const req = https.get(url, options, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return httpsGetJson(res.headers.location, headers).then(resolve).catch(reject);
+        return httpsGetJson(res.headers.location).then(resolve).catch(reject);
       }
       if (res.statusCode !== 200) {
         return reject(new Error(`HTTP ${res.statusCode}`));
@@ -114,13 +118,15 @@ function httpsGetJson(url, headers = {}) {
       res.on('end', () => {
         try { resolve(JSON.parse(raw)); } catch (e) { reject(e); }
       });
-    }).on('error', reject);
+    });
+    req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
+    req.on('error', reject);
   });
 }
 
 app.get('/api/reddit', async (req, res) => {
   try {
-    const json = await httpsGetJson('https://www.reddit.com/r/all/hot.json?limit=5&raw_json=1');
+    const json = await httpsGetJson('https://www.reddit.com/r/all/hot.json?limit=5');
     const posts = json.data.children.map(({ data: p }) => ({
       title: p.title,
       subreddit: p.subreddit,
