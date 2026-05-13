@@ -96,6 +96,26 @@ app.get('/api/trends', async (req, res) => {
   }
 });
 
+app.get('/api/reddit', async (req, res) => {
+  try {
+    const response = await fetch('https://www.reddit.com/r/all/hot.json?limit=5', {
+      headers: { 'User-Agent': 'CosmicTesla/1.0' },
+    });
+    const json = await response.json();
+    const posts = json.data.children.map(({ data: p }) => ({
+      title: p.title,
+      subreddit: p.subreddit,
+      score: p.score,
+      numComments: p.num_comments,
+      url: 'https://www.reddit.com' + p.permalink,
+    }));
+    res.json({ posts });
+  } catch (error) {
+    console.error('Error fetching Reddit:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Reddit posts' });
+  }
+});
+
 app.listen(PORT, () => {
 console.log(`CosmicTesla is running at http://localhost:${PORT}`);
 });

@@ -61,10 +61,27 @@
     .news-label { font-size: 0.72rem; color: #555a6e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
     .trend-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
     .error { text-align: center; padding: 80px 20px; color: #ff6b6b; }
+    .section-header { max-width: 900px; margin: 32px auto 12px; padding: 0 20px; display: flex; align-items: center; gap: 10px; }
+    .section-header h2 { font-size: 1.1rem; font-weight: 700; color: #e2e4e9; }
+    .section-header .section-label { font-size: 0.75rem; color: #555a6e; text-transform: uppercase; letter-spacing: 0.07em; }
+    .reddit-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .reddit-card:hover { border-color: #ff4500; }
+    .reddit-rank { font-size: 1.2rem; font-weight: 700; color: #ff4500; min-width: 28px; text-align: center; padding-top: 2px; }
+    .reddit-info { flex: 1; min-width: 0; }
+    .reddit-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .reddit-title a:hover { color: #ff4500; }
+    .reddit-meta { margin-top: 6px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .reddit-sub { font-size: 0.8rem; color: #ff4500; background: rgba(255,69,0,0.1); padding: 2px 8px; border-radius: 20px; text-decoration: none; }
+    .reddit-sub:hover { background: rgba(255,69,0,0.2); }
+    .reddit-stat { font-size: 0.8rem; color: #6b7080; }
     @media (max-width: 600px) {
       .trend-card { padding: 16px; }
       .trend-image { width: 60px; height: 60px; }
       header h1 { font-size: 1.5rem; }
+      .reddit-card { padding: 14px 16px; }
     }
   </style>
 </head>
@@ -87,6 +104,16 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching today's trends...
+    </div>
+  </div>
+  <div class="section-header">
+    <h2>Reddit Trending</h2>
+    <span class="section-label">r/all · Hot right now</span>
+  </div>
+  <div id="reddit-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Reddit posts...
     </div>
   </div>
   <footer style="text-align:center;padding:24px;border-top:1px solid #2a2d3a;color:#555a6e;font-size:0.85rem;">
@@ -137,7 +164,40 @@
         content.innerHTML = '<div class="error">Could not connect to server. Make sure CosmicTesla is running.</div>';
       }
     }
+    function fmtNum(n) {
+      return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
+    }
+
+    async function loadReddit() {
+      const el = document.getElementById('reddit-content');
+      try {
+        const response = await fetch('/api/reddit');
+        const data = await response.json();
+        if (data.error || !data.posts) {
+          el.innerHTML = '<div class="error">Failed to load Reddit posts.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.posts.forEach((post, i) => {
+          html += '<div class="reddit-card">';
+          html += '<div class="reddit-rank">' + (i + 1) + '</div>';
+          html += '<div class="reddit-info">';
+          html += '<div class="reddit-title"><a href="' + esc(post.url) + '" target="_blank" rel="noopener">' + esc(post.title) + '</a></div>';
+          html += '<div class="reddit-meta">';
+          html += '<a class="reddit-sub" href="https://www.reddit.com/r/' + esc(post.subreddit) + '/" target="_blank" rel="noopener">r/' + esc(post.subreddit) + '</a>';
+          html += '<span class="reddit-stat">▲ ' + fmtNum(post.score) + ' upvotes</span>';
+          html += '<span class="reddit-stat">💬 ' + fmtNum(post.numComments) + ' comments</span>';
+          html += '</div></div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Reddit posts.</div>';
+      }
+    }
+
     loadTrends();
+    loadReddit();
   </script>
 </body>
 </html>
