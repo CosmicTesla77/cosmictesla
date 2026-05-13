@@ -16,9 +16,8 @@
     }
     header {
       background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%);
-      border-bottom: 1px solid #2a2d3a;
-      padding: 24px 32px;
       text-align: center;
+      padding: 24px 32px 0;
     }
     header h1 { font-size: 2rem; font-weight: 700; color: #00d4aa; letter-spacing: 1px; }
     header p { color: #8b8fa3; margin-top: 6px; font-size: 0.95rem; }
@@ -64,8 +63,8 @@
     .error { text-align: center; padding: 80px 20px; color: #ff6b6b; }
     .site-nav {
       position: sticky; top: 0; z-index: 100;
-      background: #1a1d29; border-bottom: 1px solid #2a2d3a;
-      display: flex; justify-content: center; gap: 4px; padding: 8px 20px;
+      background: #1a1d29; border-top: 1px solid #2a2d3a; border-bottom: 1px solid #2a2d3a;
+      display: flex; justify-content: center; gap: 4px; padding: 8px 20px; margin-top: 16px;
     }
     .site-nav a {
       color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500;
@@ -101,11 +100,11 @@
   <header>
     <h1>CosmicTesla</h1>
     <p>Real-time trending searches across the internet</p>
+    <nav class="site-nav">
+      <a href="#google-trending">📈 Google Trending</a>
+      <a href="#reddit-trending">🔥 Reddit Trending</a>
+    </nav>
   </header>
-  <nav class="site-nav">
-    <a href="#google-trending">📈 Google Trending</a>
-    <a href="#reddit-trending">🔥 Reddit Trending</a>
-  </nav>
   <div class="date-bar" id="dateBar"></div>
   <div class="filter-bar">
     <select id="countrySelect" onchange="loadTrends(this.value)">
