@@ -13,11 +13,12 @@
       background: #0f1117;
       color: #e2e4e9;
       min-height: 100vh;
+      padding-top: 44px;
     }
     header {
       background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%);
       text-align: center;
-      padding: 24px 32px 0;
+      padding: 24px 32px;
     }
     header h1 { font-size: 2rem; font-weight: 700; color: #00d4aa; letter-spacing: 1px; }
     header p { color: #8b8fa3; margin-top: 6px; font-size: 0.95rem; }
@@ -62,9 +63,9 @@
     .trend-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
     .error { text-align: center; padding: 80px 20px; color: #ff6b6b; }
     .site-nav {
-      position: sticky; top: 0; z-index: 100;
-      background: #1a1d29; border-top: 1px solid #2a2d3a; border-bottom: 1px solid #2a2d3a;
-      display: flex; justify-content: center; gap: 4px; padding: 8px 20px; margin-top: 16px;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: #1a1d29; border-bottom: 1px solid #2a2d3a;
+      display: flex; justify-content: center; gap: 4px; padding: 8px 20px;
     }
     .site-nav a {
       color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500;
@@ -112,14 +113,14 @@
   </style>
 </head>
 <body>
+  <nav class="site-nav">
+    <a href="#google-trending">📈 Google Trending</a>
+    <a href="#reddit-trending">🔥 Reddit Trending</a>
+    <a href="#youtube-trending">▶️ YouTube Trending</a>
+  </nav>
   <header>
     <h1>CosmicTesla</h1>
     <p>Real-time trending searches across the internet</p>
-    <nav class="site-nav">
-      <a href="#google-trending">📈 Google Trending</a>
-      <a href="#reddit-trending">🔥 Reddit Trending</a>
-      <a href="#youtube-trending">▶️ YouTube Trending</a>
-    </nav>
   </header>
   <div class="date-bar" id="dateBar"></div>
   <div class="filter-bar">
