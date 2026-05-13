@@ -161,13 +161,15 @@ app.get('/api/youtube', async (req, res) => {
       console.error('YouTube: no items in response:', JSON.stringify(json).slice(0, 500));
       return res.status(500).json({ error: 'No videos returned from YouTube' });
     }
-    const videos = json.items.map((item) => ({
-      title: item.snippet.title,
-      channel: item.snippet.channelTitle,
-      views: item.statistics.viewCount || '0',
-      thumbnail: (item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url,
-      url: `https://www.youtube.com/watch?v=${item.id}`,
-    }));
+    const videos = json.items
+      .filter((item) => parseInt(item.statistics.viewCount || '0', 10) > 0)
+      .map((item) => ({
+        title: item.snippet.title,
+        channel: item.snippet.channelTitle,
+        views: item.statistics.viewCount,
+        thumbnail: (item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url,
+        url: `https://www.youtube.com/watch?v=${item.id}`,
+      }));
     res.json({ videos });
   } catch (error) {
     console.error('YouTube fetch error:', error.message);
