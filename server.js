@@ -24,6 +24,14 @@ function parseTraffic(trafficStr) {
   return parseInt(cleaned, 10) || 0;
 }
 
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'about.html'));
+});
+
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
+
 app.get('/api/trends', async (req, res) => {
   try {
     const feed = await parser.parseURL(

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | CosmicTesla</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e2e4e9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%);
+      border-bottom: 1px solid #2a2d3a;
+      padding: 24px 32px;
+      text-align: center;
+    }
+    header h1 { font-size: 2rem; font-weight: 700; color: #00d4aa; letter-spacing: 1px; }
+    header h1 a { color: inherit; text-decoration: none; }
+    header p { color: #8b8fa3; margin-top: 6px; font-size: 0.95rem; }
+    main {
+      max-width: 760px;
+      margin: 48px auto;
+      padding: 0 24px;
+      flex: 1;
+    }
+    h2 { font-size: 1.6rem; font-weight: 700; color: #f0f1f5; margin-bottom: 16px; }
+    p { color: #8b8fa3; line-height: 1.75; margin-bottom: 20px; }
+    .card {
+      background: #1a1d29;
+      border: 1px solid #2a2d3a;
+      border-radius: 10px;
+      padding: 32px 36px;
+    }
+    .accent { color: #00d4aa; }
+    footer {
+      text-align: center;
+      padding: 24px;
+      border-top: 1px solid #2a2d3a;
+      color: #555a6e;
+      font-size: 0.85rem;
+    }
+    footer a { color: #8b8fa3; text-decoration: none; margin: 0 10px; }
+    footer a:hover { color: #00d4aa; }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .card { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">CosmicTesla</a></h1>
+    <p>Real-time trending searches across the internet</p>
+  </header>
+  <main>
+    <div class="card">
+      <h2>About <span class="accent">CosmicTesla</span></h2>
+      <p>CosmicTesla is a real-time trending search tracker that surfaces the most popular topics being searched across the United States right now. No noise, no filler — just the top 20 trending searches, updated throughout the day.</p>
+      <p>Trend data is sourced directly from the <a class="accent" href="https://trends.google.com" target="_blank">Google Trends</a> RSS feed and sorted by search volume so you always see what's actually capturing people's attention.</p>
+      <p>Each trend card shows the approximate search volume, a relevant news headline, and a link to explore the topic further on Google. The page is lightweight by design — no accounts, no tracking, no clutter.</p>
+      <p>CosmicTesla is an independent project built for anyone who wants a quick, clean pulse on what the internet is talking about today.</p>
+    </div>
+  </main>
+  <footer>
+    <span>&copy; 2026 CosmicTesla</span>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/privacy">Privacy Policy</a>
+  </footer>
+</body>
+</html>
