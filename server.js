@@ -39,9 +39,19 @@ app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });
 
-async function fetchHeadlines(topic) {
+const COUNTRIES = {
+  US: { name: 'United States', newsLocale: 'en-US', ceid: 'US:en' },
+  GB: { name: 'United Kingdom', newsLocale: 'en-GB', ceid: 'GB:en' },
+  CA: { name: 'Canada',         newsLocale: 'en-CA', ceid: 'CA:en' },
+  AU: { name: 'Australia',      newsLocale: 'en-AU', ceid: 'AU:en' },
+  IN: { name: 'India',          newsLocale: 'en-IN', ceid: 'IN:en' },
+};
+
+async function fetchHeadlines(topic, country) {
   try {
-    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=en-US&gl=US&ceid=US:en`;
+    const { newsLocale, ceid } = country;
+    const [hl, gl] = [newsLocale, ceid.split(':')[0]];
+    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=${hl}&gl=${gl}&ceid=${ceid}`;
     const feed = await parser.parseURL(url);
     return feed.items.slice(0, 3).map((item) => ({
       title: item.title,
@@ -53,9 +63,12 @@ async function fetchHeadlines(topic) {
 }
 
 app.get('/api/trends', async (req, res) => {
+  const geo = String(req.query.geo || 'US').toUpperCase();
+  const country = COUNTRIES[geo] || COUNTRIES.US;
+
   try {
     const feed = await parser.parseURL(
-      'https://trends.google.com/trending/rss?geo=US'
+      `https://trends.google.com/trending/rss?geo=${geo in COUNTRIES ? geo : 'US'}`
     );
 
     const trends = feed.items.map((item) => ({
@@ -69,11 +82,12 @@ app.get('/api/trends', async (req, res) => {
     trends.sort((a, b) => b.trafficNum - a.trafficNum);
     const top20 = trends.slice(0, 20);
 
-    const headlines = await Promise.all(top20.map((t) => fetchHeadlines(t.title)));
+    const headlines = await Promise.all(top20.map((t) => fetchHeadlines(t.title, country)));
     const trendsWithHeadlines = top20.map((t, i) => ({ ...t, headlines: headlines[i] }));
 
     res.json({
       date: new Date().toLocaleDateString(),
+      country: country.name,
       trends: trendsWithHeadlines,
     });
   } catch (error) {
