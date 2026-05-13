@@ -45,9 +45,10 @@
       font-size: 0.8rem; color: #00d4aa; background: rgba(0, 212, 170, 0.1);
       padding: 2px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px;
     }
-    .trend-news a { display: block; color: #8b8fa3; font-size: 0.85rem; text-decoration: none; padding: 3px 0; transition: color 0.2s; }
+    .trend-news { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .trend-news a { display: block; color: #8b8fa3; font-size: 0.85rem; text-decoration: none; padding: 2px 0; transition: color 0.2s; line-height: 1.35; }
     .trend-news a:hover { color: #00d4aa; }
-    .trend-news .source { color: #555a6e; font-size: 0.75rem; }
+    .news-label { font-size: 0.72rem; color: #555a6e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
     .trend-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
     .error { text-align: center; padding: 80px 20px; color: #ff6b6b; }
     @media (max-width: 600px) {
@@ -75,6 +76,10 @@
     <a href="/privacy" style="color:#8b8fa3;text-decoration:none;margin:0 10px;">Privacy Policy</a>
   </footer>
   <script>
+    function esc(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
     async function loadTrends() {
       const content = document.getElementById('content');
       const dateBar = document.getElementById('dateBar');
@@ -91,15 +96,18 @@
           html += '<div class="trend-card">';
           html += '<div class="rank">' + (index + 1) + '</div>';
           html += '<div class="trend-info">';
-          html += '<div class="trend-title"><a href="' + trend.link + '" target="_blank">' + trend.title + '</a></div>';
-          html += '<div class="trend-traffic">' + trend.traffic + ' searches</div>';
-          if (trend.newsTitle) {
-            html += '<div class="trend-news"><a href="' + (trend.newsUrl || '#') + '" target="_blank">' + trend.newsTitle;
-            if (trend.newsSource) { html += ' <span class="source">\u2014 ' + trend.newsSource + '</span>'; }
-            html += '</a></div>';
+          html += '<div class="trend-title"><a href="' + esc(trend.link) + '" target="_blank" rel="noopener">' + esc(trend.title) + '</a></div>';
+          html += '<div class="trend-traffic">' + esc(trend.traffic) + ' searches</div>';
+          if (trend.headlines && trend.headlines.length) {
+            html += '<div class="trend-news">';
+            html += '<div class="news-label">Top Headlines</div>';
+            trend.headlines.forEach(h => {
+              html += '<a href="' + esc(h.link) + '" target="_blank" rel="noopener">' + esc(h.title) + '</a>';
+            });
+            html += '</div>';
           }
           html += '</div>';
-          if (trend.image) { html += '<img class="trend-image" src="' + trend.image + '" alt="' + trend.title + '" />'; }
+          if (trend.image) { html += '<img class="trend-image" src="' + esc(trend.image) + '" alt="' + esc(trend.title) + '" />'; }
           html += '</div>';
         });
         html += '</div>';

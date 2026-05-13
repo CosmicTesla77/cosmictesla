@@ -39,6 +39,19 @@ app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });
 
+async function fetchHeadlines(topic) {
+  try {
+    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=en-US&gl=US&ceid=US:en`;
+    const feed = await parser.parseURL(url);
+    return feed.items.slice(0, 3).map((item) => ({
+      title: item.title,
+      link: item.link,
+    }));
+  } catch (e) {
+    return [];
+  }
+}
+
 app.get('/api/trends', async (req, res) => {
   try {
     const feed = await parser.parseURL(
@@ -51,18 +64,19 @@ app.get('/api/trends', async (req, res) => {
       trafficNum: parseTraffic(item.traffic),
       link: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
       pubDate: item.pubDate,
-      newsTitle: item.newsTitle || null,
-      newsUrl: item.newsUrl || null,
-      newsSource: item.newsSource || null,
       image: item.picture || null,
     }));
 
     trends.sort((a, b) => b.trafficNum - a.trafficNum);
+    const top20 = trends.slice(0, 20);
+
+    const headlines = await Promise.all(top20.map((t) => fetchHeadlines(t.title)));
+    const trendsWithHeadlines = top20.map((t, i) => ({ ...t, headlines: headlines[i] }));
 
     res.json({
       date: new Date().toLocaleDateString(),
       timeframe: 'Past 24 hours by search volume',
-      trends: trends.slice(0, 20),
+      trends: trendsWithHeadlines,
     });
   } catch (error) {
     console.error('Error fetching trends:', error.message);
