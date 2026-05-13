@@ -52,17 +52,10 @@ async function fetchHeadlines(topic) {
   }
 }
 
-const VALID_HOURS = [1, 4, 24, 168];
-const TIMEFRAME_LABELS = { 1: 'Past hour', 4: 'Past 4 hours', 24: 'Past 24 hours', 168: 'Past 7 days' };
-
 app.get('/api/trends', async (req, res) => {
-  const hours = VALID_HOURS.includes(parseInt(req.query.hours, 10))
-    ? parseInt(req.query.hours, 10)
-    : 24;
-
   try {
     const feed = await parser.parseURL(
-      `https://trends.google.com/trending/rss?geo=US&hours=${hours}`
+      'https://trends.google.com/trending/rss?geo=US'
     );
 
     const trends = feed.items.map((item) => ({
@@ -70,7 +63,6 @@ app.get('/api/trends', async (req, res) => {
       traffic: item.traffic || 'Trending',
       trafficNum: parseTraffic(item.traffic),
       link: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
-      pubDate: item.pubDate,
       image: item.picture || null,
     }));
 
@@ -82,7 +74,6 @@ app.get('/api/trends', async (req, res) => {
 
     res.json({
       date: new Date().toLocaleDateString(),
-      timeframe: TIMEFRAME_LABELS[hours],
       trends: trendsWithHeadlines,
     });
   } catch (error) {
