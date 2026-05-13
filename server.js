@@ -97,7 +97,7 @@ app.get('/api/trends', async (req, res) => {
   }
 });
 
-function fetchRaw(url) {
+function fetchRaw(url, allowErrorBody = false) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {
       headers: {
@@ -106,12 +106,16 @@ function fetchRaw(url) {
       timeout: 8000,
     }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return fetchRaw(res.headers.location).then(resolve).catch(reject);
+        return fetchRaw(res.headers.location, allowErrorBody).then(resolve).catch(reject);
       }
-      if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`));
       let raw = '';
       res.on('data', (chunk) => { raw += chunk; });
-      res.on('end', () => resolve(raw));
+      res.on('end', () => {
+        if (res.statusCode !== 200 && !allowErrorBody) {
+          return reject(new Error(`HTTP ${res.statusCode}: ${raw.slice(0, 200)}`));
+        }
+        resolve(raw);
+      });
     });
     req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
     req.on('error', reject);
@@ -135,11 +139,28 @@ app.get('/api/reddit', async (req, res) => {
 
 app.get('/api/youtube', async (req, res) => {
   const key = process.env.YOUTUBE_API_KEY;
-  if (!key) return res.status(500).json({ error: 'YouTube API key not configured' });
+  if (!key) {
+    console.error('YouTube: YOUTUBE_API_KEY is not set');
+    return res.status(500).json({ error: 'YouTube API key not configured' });
+  }
   try {
     const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=US&maxResults=10&key=${key}`;
-    const raw = await fetchRaw(url);
-    const json = JSON.parse(raw);
+    const raw = await fetchRaw(url, true);
+    let json;
+    try {
+      json = JSON.parse(raw);
+    } catch (e) {
+      console.error('YouTube: failed to parse response:', raw.slice(0, 500));
+      return res.status(500).json({ error: 'Failed to parse YouTube response' });
+    }
+    if (json.error) {
+      console.error('YouTube API error:', JSON.stringify(json.error));
+      return res.status(500).json({ error: `YouTube API error: ${json.error.message}` });
+    }
+    if (!json.items || !json.items.length) {
+      console.error('YouTube: no items in response:', JSON.stringify(json).slice(0, 500));
+      return res.status(500).json({ error: 'No videos returned from YouTube' });
+    }
     const videos = json.items.map((item) => ({
       title: item.snippet.title,
       channel: item.snippet.channelTitle,
@@ -149,7 +170,7 @@ app.get('/api/youtube', async (req, res) => {
     }));
     res.json({ videos });
   } catch (error) {
-    console.error('Error fetching YouTube:', error.message);
+    console.error('YouTube fetch error:', error.message);
     res.status(500).json({ error: 'Failed to fetch YouTube trends' });
   }
 });
