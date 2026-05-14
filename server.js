@@ -59,10 +59,10 @@ function toTitleCase(str) {
 
 const AMAZON_BLOCKED = ['dead', 'dies', 'death', 'killed', 'shooting', 'arrested', 'fraud', 'scandal', 'accused', 'indicted', 'charges', 'crash', 'murder'];
 
-function getAmazonAffiliateUrl(keyword) {
-  const lower = keyword.toLowerCase();
-  if (AMAZON_BLOCKED.some((w) => lower.includes(w))) return null;
-  return `https://www.amazon.com/s?k=${encodeURIComponent(keyword)}&tag=cosmictesla-20`;
+function getAmazonAffiliateUrl(title, headlineText = '') {
+  const combined = (title + ' ' + headlineText).toLowerCase();
+  if (AMAZON_BLOCKED.some((w) => combined.includes(w))) return null;
+  return `https://www.amazon.com/s?k=${encodeURIComponent(title)}&tag=cosmictesla-20`;
 }
 
 function parseTraffic(trafficStr) {
@@ -117,14 +117,16 @@ app.get('/api/trends', async (req, res) => {
       trafficNum: parseTraffic(item.traffic),
       link: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
       image: item.picture || null,
-      affiliateUrl: getAmazonAffiliateUrl(item.title),
     }));
 
     trends.sort((a, b) => b.trafficNum - a.trafficNum);
     const top20 = trends.slice(0, 20);
 
     const headlines = await Promise.all(top20.map((t) => fetchHeadlines(t.title, country)));
-    const trendsWithHeadlines = top20.map((t, i) => ({ ...t, headlines: headlines[i] }));
+    const trendsWithHeadlines = top20.map((t, i) => {
+      const headlineText = headlines[i].map((h) => h.title).join(' ');
+      return { ...t, headlines: headlines[i], affiliateUrl: getAmazonAffiliateUrl(t.title, headlineText) };
+    });
 
     lastUpdated.google = new Date();
     res.json({
