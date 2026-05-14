@@ -53,7 +53,15 @@ app.get('/sitemap.xml', (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+}
+
+const AMAZON_BLOCKED = ['dead', 'dies', 'death', 'killed', 'shooting', 'arrested', 'fraud', 'scandal', 'accused', 'indicted', 'charges', 'crash', 'murder'];
+
 function getAmazonAffiliateUrl(keyword) {
+  const lower = keyword.toLowerCase();
+  if (AMAZON_BLOCKED.some((w) => lower.includes(w))) return null;
   return `https://www.amazon.com/s?k=${encodeURIComponent(keyword)}&tag=cosmictesla-20`;
 }
 
@@ -104,7 +112,7 @@ app.get('/api/trends', async (req, res) => {
     );
 
     const trends = feed.items.map((item) => ({
-      title: item.title,
+      title: toTitleCase(item.title),
       traffic: item.traffic || 'Trending',
       trafficNum: parseTraffic(item.traffic),
       link: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
