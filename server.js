@@ -350,8 +350,8 @@ app.get('/contact', (req, res) => {
   res.send(blogLayout('Contact', `
     <div class="blog-wrap">
       <h1 style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:16px;">Contact</h1>
-      <p style="color:#c8cad4;line-height:1.8;margin-bottom:12px;">CosmicTesla is a real-time trending dashboard that aggregates what people are searching, sharing, and watching across Google, Reddit, and YouTube. For questions, feedback, or partnership inquiries, reach out directly.</p>
-      <p style="color:#c8cad4;line-height:1.8;">Email: <a href="mailto:lancedombroski@gmail.com" style="color:#00d4aa;text-decoration:underline;text-decoration-color:rgba(0,212,170,0.4);">lancedombroski@gmail.com</a></p>
+      <p style="color:#c8cad4;line-height:1.8;margin-bottom:12px;">CosmicTesla is a real-time trending intelligence hub that aggregates what people are searching, sharing, watching, buying, and talking about across Google, Reddit, YouTube, and a growing list of platforms. The scope is expanding continuously — more data sources, richer trend breakdowns, and original insight through the CosmicTesla Blog are actively in development. For questions, feedback, or partnership inquiries, reach out directly.</p>
+      <p style="color:#c8cad4;line-height:1.8;">Email: <a href="mailto:pixelridgestudio@gmail.com" style="color:#00d4aa;text-decoration:underline;text-decoration-color:rgba(0,212,170,0.4);">pixelridgestudio@gmail.com</a></p>
     </div>`, 'contact'));
 });
 
