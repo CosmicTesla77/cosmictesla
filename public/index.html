@@ -134,6 +134,7 @@
       <option value="IN">🇮🇳 India</option>
     </select>
   </div>
+  <div id="lastUpdatedBar" style="text-align:center;padding:6px 16px 0;font-size:0.78rem;color:#555a6e;"></div>
   <div id="google-trending" class="section-header" style="margin-top: 8px;">
     <h2>Google Trending</h2>
     <span class="section-label" id="googleLabel">Top searches · Sorted by volume</span>
@@ -279,9 +280,27 @@
       }
     }
 
+    async function loadLastUpdated() {
+      try {
+        const data = await fetch('/api/last-updated').then(r => r.json());
+        const timestamps = [data.google, data.reddit, data.youtube]
+          .filter(Boolean)
+          .map(t => new Date(t));
+        if (!timestamps.length) return;
+        const latest = new Date(Math.max(...timestamps));
+        const formatted = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Los_Angeles',
+          month: 'long', day: 'numeric', year: 'numeric',
+          hour: 'numeric', minute: '2-digit', hour12: true,
+        }).format(latest);
+        document.getElementById('lastUpdatedBar').textContent = 'Last updated: ' + formatted + ' PT';
+      } catch (e) { /* fail silently */ }
+    }
+
     loadTrends();
     loadReddit();
     loadYouTube();
+    loadLastUpdated();
   </script>
 </body>
 </html>

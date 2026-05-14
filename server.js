@@ -19,6 +19,8 @@ const parser = new Parser({
 });
 const PORT = process.env.PORT || 3000;
 
+const lastUpdated = { google: null, reddit: null, youtube: null };
+
 app.use((req, res, next) => {
   if (req.hostname === 'cosmictesla.com') {
     return res.redirect(301, 'https://www.cosmictesla.com' + req.originalUrl);
@@ -111,6 +113,7 @@ app.get('/api/trends', async (req, res) => {
     const headlines = await Promise.all(top20.map((t) => fetchHeadlines(t.title, country)));
     const trendsWithHeadlines = top20.map((t, i) => ({ ...t, headlines: headlines[i] }));
 
+    lastUpdated.google = new Date();
     res.json({
       date: new Date().toLocaleDateString(),
       country: country.name,
@@ -155,6 +158,7 @@ app.get('/api/reddit', async (req, res) => {
       const subreddit = (item.link || '').match(/reddit\.com\/r\/([^/]+)/)?.[1] || '';
       return { title: item.title, subreddit, url: item.link };
     });
+    lastUpdated.reddit = new Date();
     res.json({ posts });
   } catch (error) {
     console.error('Error fetching Reddit:', error.message);
@@ -196,11 +200,16 @@ app.get('/api/youtube', async (req, res) => {
         thumbnail: (item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url,
         url: `https://www.youtube.com/watch?v=${item.id}`,
       }));
+    lastUpdated.youtube = new Date();
     res.json({ videos });
   } catch (error) {
     console.error('YouTube fetch error:', error.message);
     res.status(500).json({ error: 'Failed to fetch YouTube trends' });
   }
+});
+
+app.get('/api/last-updated', (req, res) => {
+  res.json(lastUpdated);
 });
 
 function formatDate(dateStr) {
