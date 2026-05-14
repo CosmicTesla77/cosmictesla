@@ -53,6 +53,10 @@ app.get('/sitemap.xml', (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+function getAmazonAffiliateUrl(keyword) {
+  return `https://www.amazon.com/s?k=${encodeURIComponent(keyword)}&tag=cosmictesla-20`;
+}
+
 function parseTraffic(trafficStr) {
   if (!trafficStr) return 0;
   const cleaned = trafficStr.replace(/[^0-9]/g, '');
@@ -105,6 +109,7 @@ app.get('/api/trends', async (req, res) => {
       trafficNum: parseTraffic(item.traffic),
       link: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
       image: item.picture || null,
+      affiliateUrl: getAmazonAffiliateUrl(item.title),
     }));
 
     trends.sort((a, b) => b.trafficNum - a.trafficNum);
