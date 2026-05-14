@@ -120,7 +120,7 @@ app.get('/api/trends', async (req, res) => {
 
     lastUpdated.google = new Date();
     res.json({
-      date: new Date().toLocaleDateString(),
+      date: new Date().toISOString().slice(0, 10),
       country: country.name,
       trends: trendsWithHeadlines,
     });
@@ -240,10 +240,19 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-padding-top: 52px; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f1117; color: #e2e4e9; min-height: 100vh; padding-top: 44px; }
-    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1a1d29; border-bottom: 1px solid #2a2d3a; display: flex; justify-content: center; gap: 4px; padding: 8px 20px; flex-wrap: wrap; }
+    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1a1d29; border-bottom: 1px solid #2a2d3a; display: flex; justify-content: center; align-items: center; gap: 4px; padding: 8px 20px; height: 44px; }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
     .site-nav a { color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 16px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
     .site-nav a:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
     .site-nav a.active { color: #00d4aa; background: rgba(0,212,170,0.08); }
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; cursor: pointer; padding: 4px 6px; border: none; background: none; margin-left: auto; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #e2e4e9; border-radius: 2px; }
+    .nav-menu { display: none; position: fixed; top: 44px; left: 0; right: 0; background: #1a1d29; border-bottom: 1px solid #2a2d3a; flex-direction: column; z-index: 99; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+    .nav-menu a { color: #8b8fa3; text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 12px 20px; display: block; border-bottom: 1px solid rgba(42,45,58,0.6); transition: color 0.2s, background 0.2s; }
+    .nav-menu a:hover { color: #e2e4e9; background: rgba(255,255,255,0.05); }
+    .nav-menu a.active { color: #00d4aa; }
+    .nav-menu.open { display: flex; }
+    @media (max-width: 768px) { .nav-links { display: none; } .nav-hamburger { display: flex; } .site-nav { justify-content: flex-end; padding: 0 16px; } }
     header { background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%); border-bottom: 1px solid #2a2d3a; text-align: center; padding: 24px 32px; }
     header h1 a { font-size: 2rem; font-weight: 700; color: #00d4aa; letter-spacing: 1px; text-decoration: none; }
     header p { color: #8b8fa3; margin-top: 6px; font-size: 0.95rem; }
@@ -273,16 +282,29 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     .post-content pre code { background: none; padding: 0; color: #e2e4e9; }
     .post-content blockquote { border-left: 3px solid #00d4aa; padding-left: 16px; color: #8b8fa3; margin-bottom: 16px; }
     .empty-state { text-align: center; padding: 60px 20px; color: #555a6e; }
+    @media (max-width: 600px) { header h1 a { font-size: 1.5rem; } .blog-wrap { padding: 24px 16px; } }
   </style>
 </head>
 <body>
   <nav class="site-nav">
-    <a href="/#google-trending">📈 Google Trending</a>
-    <a href="/#reddit-trending">🔥 Reddit Trending</a>
-    <a href="/#youtube-trending">▶️ YouTube Trending</a>
-    <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
-    <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
+    <div class="nav-links">
+      <a href="/#google-trending">📈 Google Trending</a>
+      <a href="/#reddit-trending">🔥 Reddit Trending</a>
+      <a href="/#youtube-trending">▶️ YouTube Trending</a>
+      <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
+      <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
+    </div>
+    <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+  <div class="nav-menu" id="navMenu">
+    <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
+    <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
+    <a href="/#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
+    <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
+    <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
+  </div>
   <header>
     <h1><a href="/">CosmicTesla</a></h1>
     <p>Real-time trending searches across the internet</p>
@@ -295,6 +317,17 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/blog">Blog</a>
     <a href="/contact">Contact</a>
   </footer>
+  <script>
+    function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+    function closeMenu() { document.getElementById('navMenu').classList.remove('open'); }
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('navMenu');
+      var toggle = document.getElementById('navToggle');
+      if (menu && menu.classList.contains('open') && !menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+  </script>
 </body>
 </html>`;
 }

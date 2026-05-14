@@ -17,6 +17,7 @@
     }
     header {
       background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%);
+      border-bottom: 1px solid #2a2d3a;
       text-align: center;
       padding: 24px 32px;
     }
@@ -67,14 +68,32 @@
     .site-nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       background: #1a1d29; border-bottom: 1px solid #2a2d3a;
-      display: flex; justify-content: center; gap: 4px; padding: 8px 20px;
+      display: flex; justify-content: center; align-items: center; gap: 4px; padding: 8px 20px; height: 44px;
     }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
     .site-nav a {
       color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500;
       padding: 6px 16px; border-radius: 6px; transition: color 0.2s, background 0.2s;
     }
     .site-nav a:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
     .site-nav a.active { color: #00d4aa; background: rgba(0,212,170,0.08); }
+    .nav-hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; cursor: pointer; padding: 4px 6px; border: none; background: none; margin-left: auto;
+    }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #e2e4e9; border-radius: 2px; }
+    .nav-menu {
+      display: none; position: fixed; top: 44px; left: 0; right: 0;
+      background: #1a1d29; border-bottom: 1px solid #2a2d3a;
+      flex-direction: column; z-index: 99; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .nav-menu a {
+      color: #8b8fa3; text-decoration: none; font-size: 0.9rem; font-weight: 500;
+      padding: 12px 20px; display: block; border-bottom: 1px solid rgba(42,45,58,0.6);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-menu a:hover { color: #e2e4e9; background: rgba(255,255,255,0.05); }
+    .nav-menu.open { display: flex; }
     .section-header { max-width: 900px; margin: 32px auto 12px; padding: 0 20px; display: flex; align-items: center; gap: 10px; }
     .section-header h2 { font-size: 1.1rem; font-weight: 700; color: #e2e4e9; }
     .section-header .section-label { font-size: 0.75rem; color: #555a6e; text-transform: uppercase; letter-spacing: 0.07em; }
@@ -104,24 +123,41 @@
     .yt-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .yt-channel { font-size: 0.8rem; color: #ff3333; background: rgba(255,51,51,0.1); padding: 2px 8px; border-radius: 20px; }
     .yt-views { font-size: 0.8rem; color: #6b7080; }
-    @media (max-width: 600px) {
-      .trend-card { padding: 16px; }
-      .trend-image { width: 60px; height: 60px; }
-      header h1 { font-size: 1.5rem; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .site-nav { justify-content: flex-end; padding: 0 16px; }
+      .trend-card { padding: 18px 16px; }
       .reddit-card { padding: 14px 16px; }
       .yt-card { padding: 14px 16px; }
+    }
+    @media (max-width: 600px) {
+      .trend-image { width: 60px; height: 60px; }
+      header h1 { font-size: 1.5rem; }
       .yt-thumb { width: 100px; height: 56px; }
     }
   </style>
 </head>
 <body>
   <nav class="site-nav">
-    <a href="#google-trending">📈 Google Trending</a>
-    <a href="#reddit-trending">🔥 Reddit Trending</a>
-    <a href="#youtube-trending">▶️ YouTube Trending</a>
-    <a href="/blog">✍️ Blog</a>
-    <a href="/contact">📬 Contact</a>
+    <div class="nav-links">
+      <a href="#google-trending">📈 Google Trending</a>
+      <a href="#reddit-trending">🔥 Reddit Trending</a>
+      <a href="#youtube-trending">▶️ YouTube Trending</a>
+      <a href="/blog">✍️ Blog</a>
+      <a href="/contact">📬 Contact</a>
+    </div>
+    <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+  <div class="nav-menu" id="navMenu">
+    <a href="#google-trending" onclick="closeMenu()">📈 Google Trending</a>
+    <a href="#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
+    <a href="#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
+    <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
+    <a href="/contact" onclick="closeMenu()">📬 Contact</a>
+  </div>
   <header>
     <h1>CosmicTesla</h1>
     <p>Real-time trending searches across the internet</p>
@@ -178,6 +214,16 @@
     <div style="margin-top:10px;font-size:0.75rem;color:#3d4052;">CosmicTesla is a participant in the Amazon Services LLC Associates Program. We may earn a commission on qualifying purchases.</div>
   </footer>
   <script>
+    function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+    function closeMenu() { document.getElementById('navMenu').classList.remove('open'); }
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('navMenu');
+      var toggle = document.getElementById('navToggle');
+      if (menu.classList.contains('open') && !menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
     function esc(str) {
       return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
@@ -194,7 +240,9 @@
           content.innerHTML = '<div class="error">Failed to load trends. Refresh to try again.</div>';
           return;
         }
-        dateBar.textContent = 'Trending in ' + data.country + ' \u2014 ' + data.date;
+        const d = new Date(data.date + 'T12:00:00');
+        const fmtDate = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(d);
+        dateBar.textContent = 'Trending in ' + data.country + ' \u2014 ' + fmtDate;
         let html = '<div class="trends-grid">';
         data.trends.forEach((trend, index) => {
           html += '<div class="trend-card">';
