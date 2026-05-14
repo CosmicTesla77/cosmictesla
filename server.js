@@ -53,9 +53,17 @@ app.get('/sitemap.xml', (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const ACRONYM_MAP = new Map(
+  ['XRP', 'BTC', 'ETH', 'NFT', 'AI', 'NBA', 'NFL', 'MLB', 'NHL', 'UFC',
+   'NASCAR', 'NASA', 'CEO', 'FBI', 'CIA', 'DOJ', 'IRS', 'GOP', 'UK', 'USA',
+   'NYC', 'LA', 'DC', 'TV', 'PC', 'DJ', 'IPO', 'GDP', 'GTA', 'WWE', 'TikTok']
+  .map((a) => [a.toLowerCase(), a])
+);
+
 function toTitleCase(str) {
   return str.replace(/\w\S*/g, (word) => {
-    if (word === word.toUpperCase() && word.length > 1) return word;
+    const lower = word.toLowerCase();
+    if (ACRONYM_MAP.has(lower)) return ACRONYM_MAP.get(lower);
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
   });
 }
