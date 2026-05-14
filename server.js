@@ -54,10 +54,13 @@ app.get('/sitemap.xml', (req, res) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 function toTitleCase(str) {
-  return str.replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+  return str.replace(/\w\S*/g, (word) => {
+    if (word === word.toUpperCase() && word.length > 1) return word;
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
 }
 
-const AMAZON_BLOCKED = ['dead', 'dies', 'death', 'killed', 'shooting', 'arrested', 'fraud', 'scandal', 'accused', 'indicted', 'charges', 'crash', 'murder'];
+const AMAZON_BLOCKED = ['dead', 'dies', 'death', 'killed', 'shooting', 'arrested', 'fraud', 'scandal', 'accused', 'indicted', 'charges', 'crash', 'murder', 'war', 'military', 'explosion', 'attack', 'hostage', 'missile', 'bombing', 'earthquake', 'hurricane', 'flood', 'wildfire'];
 
 function getAmazonAffiliateUrl(title, headlineText = '') {
   const combined = (title + ' ' + headlineText).toLowerCase();
