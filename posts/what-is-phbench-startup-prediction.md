@@ -1,0 +1,14 @@
+# What Is PHBench and Can AI Actually Predict Which Startups Will Raise Series A
+2026-05-18
+
+Venture capital is one of the most information asymmetric markets in the world. A small number of investors with access to proprietary deal flow, founder networks, and years of pattern recognition make bets on early stage companies that most people never hear about until they either succeed spectacularly or disappear quietly. The question of what separates a company that raises a Series A from one that does not has been studied extensively and answered inconsistently.
+
+PHBench launched on Product Hunt today with over 240 votes and a premise that is either brilliant or hubristic depending on your perspective: it claims to predict which Product Hunt launches will go on to raise a Series A funding round. It uses the data from a Product Hunt launch, the vote count, the comment activity, the category, the founder background, the product description, and other signals, and compares them against historical patterns from companies that did and did not raise institutional funding after launching.
+
+The idea is grounded in a real observation. Product Hunt has been running since 2013 and has hosted launches from companies that went on to become significant businesses. Notion, Figma, Robinhood, and many other well known startups had early Product Hunt launches. That historical record creates a labeled dataset: launches that preceded successful fundraising and launches that did not. Machine learning on that dataset can theoretically identify patterns that correlate with future fundraising success.
+
+Whether those patterns are predictive or merely correlative is the critical question. A company that launches well on Product Hunt may raise a Series A not because the launch itself signaled quality, but because the same founders who execute a good Product Hunt launch also execute well on everything else. The launch is a proxy for founder quality, not a cause of investor interest.
+
+What PHBench represents regardless of its predictive accuracy is the broader trend of applying data analysis to markets that previously operated almost entirely on relationships and intuition. Credit scoring did this to lending. Algorithmic trading did this to financial markets. Data driven recruiting is doing this to hiring. The application of pattern recognition to venture capital deal selection is a natural extension of that trend.
+
+For founders, a tool that gives honest feedback on whether your launch has the characteristics of companies that went on to raise funding is genuinely useful, even if the prediction is probabilistic rather than certain. For investors, a product that surfaces overlooked launches with strong signals is a potential edge in a market where everyone is looking at the same deals.
