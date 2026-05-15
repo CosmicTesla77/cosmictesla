@@ -141,6 +141,18 @@
     .gh-meta { margin-top: 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .gh-lang { font-size: 0.8rem; color: #3fb950; background: rgba(63,185,80,0.1); padding: 2px 8px; border-radius: 20px; }
     .gh-stars { font-size: 0.8rem; color: #6b7080; }
+    .hn-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .hn-card:hover { border-color: #ff6600; }
+    .hn-rank { font-size: 1.2rem; font-weight: 700; color: #ff6600; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .hn-info { flex: 1; min-width: 0; }
+    .hn-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .hn-title a:hover { color: #ff6600; }
+    .hn-meta { margin-top: 6px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .hn-score { font-size: 0.8rem; color: #ff6600; background: rgba(255,102,0,0.1); padding: 2px 8px; border-radius: 20px; }
+    .hn-author { font-size: 0.8rem; color: #6b7080; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -177,6 +189,7 @@
       <a href="#youtube-trending">▶️ YouTube Trending</a>
       <a href="#wiki-trending">📖 Wikipedia</a>
       <a href="#github-trending">🐱 GitHub</a>
+      <a href="#hn-trending">🔶 HN</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -190,6 +203,7 @@
     <a href="#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
     <a href="#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
     <a href="#github-trending" onclick="closeMenu()">🐱 GitHub</a>
+    <a href="#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -249,6 +263,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching GitHub trends...
+    </div>
+  </div>
+  <div id="hn-trending" class="section-header">
+    <h2>Hacker News Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🔶 Top Stories</span>
+    <span class="section-label">news.ycombinator.com · Right now</span>
+  </div>
+  <div id="hn-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Hacker News stories...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -466,7 +491,35 @@
     loadTrends();
     loadReddit();
     loadWikipedia();
+    async function loadHackerNews() {
+      const el = document.getElementById('hn-content');
+      try {
+        const response = await fetch('/api/hackernews-trending');
+        const data = await response.json();
+        if (data.error || !data.stories) {
+          el.innerHTML = '<div class="error">Failed to load Hacker News stories.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.stories.forEach((story, i) => {
+          html += '<div class="hn-card">';
+          html += '<div class="hn-rank">' + (i + 1) + '</div>';
+          html += '<div class="hn-info">';
+          html += '<div class="hn-title"><a href="' + esc(story.url) + '" target="_blank" rel="noopener">' + esc(story.title) + '</a></div>';
+          html += '<div class="hn-meta">';
+          html += '<span class="hn-score">' + esc(String(story.score)) + ' points</span>';
+          if (story.author) html += '<span class="hn-author">Posted by ' + esc(story.author) + '</span>';
+          html += '</div></div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Hacker News stories.</div>';
+      }
+    }
+
     loadGitHub();
+    loadHackerNews();
     loadYouTube();
     loadLastUpdated();
   </script>

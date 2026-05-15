@@ -26,6 +26,7 @@ const wikimediaCache = { data: null, fetchedAt: null };
 const CACHE_TTL_3H = 3 * 60 * 60 * 1000;
 
 const githubCache = { data: null, fetchedAt: null };
+const hnCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 app.use((req, res, next) => {
@@ -223,6 +224,38 @@ app.get('/api/github-trending', async (req, res) => {
   } catch (error) {
     console.error('Error fetching GitHub trending:', error.message);
     res.status(500).json({ error: 'Failed to fetch GitHub trending' });
+  }
+});
+
+app.get('/api/hackernews-trending', async (req, res) => {
+  if (hnCache.data && hnCache.fetchedAt && (Date.now() - hnCache.fetchedAt < CACHE_TTL_2H)) {
+    return res.json(hnCache.data);
+  }
+  try {
+    const topRaw = await fetchRaw('https://hacker-news.firebaseio.com/v0/topstories.json');
+    const topIds = JSON.parse(topRaw).slice(0, 10);
+    const items = await Promise.all(
+      topIds.map((id) =>
+        fetchRaw(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
+          .then((r) => JSON.parse(r))
+          .catch(() => null)
+      )
+    );
+    const stories = items
+      .filter(Boolean)
+      .map((item) => ({
+        title: item.title || '',
+        score: item.score || 0,
+        url: item.url || `https://news.ycombinator.com/item?id=${item.id}`,
+        author: item.by || '',
+      }));
+    const result = { stories };
+    hnCache.data = result;
+    hnCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching Hacker News:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Hacker News trending' });
   }
 });
 
