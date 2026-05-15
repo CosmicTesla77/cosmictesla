@@ -421,6 +421,9 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#google-trending">📈 Google Trending</a>
       <a href="/#reddit-trending">🔥 Reddit Trending</a>
       <a href="/#youtube-trending">▶️ YouTube Trending</a>
+      <a href="/#wiki-trending">📖 Wikipedia</a>
+      <a href="/#github-trending">🐱 GitHub</a>
+      <a href="/#hn-trending">🔶 HN</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -432,6 +435,9 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
     <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
     <a href="/#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
+    <a href="/#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
+    <a href="/#github-trending" onclick="closeMenu()">🐱 GitHub</a>
+    <a href="/#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>
