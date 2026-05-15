@@ -115,6 +115,19 @@
     .reddit-sub { font-size: 0.8rem; color: #ff4500; background: rgba(255,69,0,0.1); padding: 2px 8px; border-radius: 20px; text-decoration: none; }
     .reddit-sub:hover { background: rgba(255,69,0,0.2); }
     .reddit-stat { font-size: 0.8rem; color: #6b7080; }
+    .wiki-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .wiki-card:hover { border-color: #3a89e8; }
+    .wiki-rank { font-size: 1.2rem; font-weight: 700; color: #3a89e8; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .wiki-info { flex: 1; min-width: 0; }
+    .wiki-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .wiki-title a:hover { color: #3a89e8; }
+    .wiki-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .wiki-views { font-size: 0.8rem; color: #6b7080; }
+    .wiki-read { font-size: 0.78rem; color: #3a89e8; text-decoration: none; transition: opacity 0.2s; }
+    .wiki-read:hover { opacity: 0.75; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -149,6 +162,7 @@
       <a href="#google-trending">📈 Google Trending</a>
       <a href="#reddit-trending">🔥 Reddit Trending</a>
       <a href="#youtube-trending">▶️ YouTube Trending</a>
+      <a href="#wiki-trending">📖 Wikipedia</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -160,6 +174,7 @@
     <a href="#google-trending" onclick="closeMenu()">📈 Google Trending</a>
     <a href="#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
     <a href="#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
+    <a href="#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -197,6 +212,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching Reddit posts...
+    </div>
+  </div>
+  <div id="wiki-trending" class="section-header">
+    <h2>Wikipedia Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
+    <span class="section-label">en.wikipedia · Most viewed yesterday</span>
+  </div>
+  <div id="wiki-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Wikipedia trends...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -356,8 +382,36 @@
       } catch (e) { /* fail silently */ }
     }
 
+    async function loadWikipedia() {
+      const el = document.getElementById('wiki-content');
+      try {
+        const response = await fetch('/api/wikimedia-trending');
+        const data = await response.json();
+        if (data.error || !data.articles) {
+          el.innerHTML = '<div class="error">Failed to load Wikipedia trends.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.articles.forEach((article, i) => {
+          html += '<div class="wiki-card">';
+          html += '<div class="wiki-rank">' + (i + 1) + '</div>';
+          html += '<div class="wiki-info">';
+          html += '<div class="wiki-title"><a href="' + esc(article.url) + '" target="_blank" rel="noopener">' + esc(article.title) + '</a></div>';
+          html += '<div class="wiki-meta">';
+          html += '<span class="wiki-views">' + Number(article.views).toLocaleString() + ' views</span>';
+          html += '<a class="wiki-read" href="' + esc(article.url) + '" target="_blank" rel="noopener">Read on Wikipedia →</a>';
+          html += '</div></div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Wikipedia trends.</div>';
+      }
+    }
+
     loadTrends();
     loadReddit();
+    loadWikipedia();
     loadYouTube();
     loadLastUpdated();
   </script>

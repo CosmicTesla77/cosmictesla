@@ -21,6 +21,9 @@ const PORT = process.env.PORT || 3000;
 
 const lastUpdated = { google: null, reddit: null, youtube: null };
 
+const wikimediaCache = { data: null, fetchedAt: null };
+const CACHE_TTL_3H = 3 * 60 * 60 * 1000;
+
 app.use((req, res, next) => {
   if (req.hostname === 'cosmictesla.com') {
     return res.redirect(301, 'https://www.cosmictesla.com' + req.originalUrl);
@@ -148,6 +151,42 @@ app.get('/api/trends', async (req, res) => {
   } catch (error) {
     console.error('Error fetching trends:', error.message);
     res.status(500).json({ error: 'Failed to fetch trends' });
+  }
+});
+
+app.get('/api/wikimedia-trending', async (req, res) => {
+  if (wikimediaCache.data && wikimediaCache.fetchedAt && (Date.now() - wikimediaCache.fetchedAt < CACHE_TTL_3H)) {
+    return res.json(wikimediaCache.data);
+  }
+  try {
+    let raw;
+    for (let daysBack = 1; daysBack <= 4; daysBack++) {
+      const d = new Date();
+      d.setUTCDate(d.getUTCDate() - daysBack);
+      const year = d.getUTCFullYear();
+      const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(d.getUTCDate()).padStart(2, '0');
+      const url = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/${year}/${month}/${day}`;
+      try { raw = await fetchRaw(url); break; } catch (e) { if (daysBack === 4) throw e; }
+    }
+    const json = JSON.parse(raw);
+    const SKIP = ['Main_Page'];
+    const SKIP_PREFIX = ['Special:', 'Wikipedia:', 'Talk:', 'Portal:', 'Help:', 'Category:'];
+    const articles = json.items[0].articles
+      .filter((a) => !SKIP.includes(a.article) && !SKIP_PREFIX.some((p) => a.article.startsWith(p)))
+      .slice(0, 10)
+      .map((a) => ({
+        title: a.article.replace(/_/g, ' '),
+        views: a.views,
+        url: `https://en.wikipedia.org/wiki/${a.article}`,
+      }));
+    const result = { articles };
+    wikimediaCache.data = result;
+    wikimediaCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching Wikimedia:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Wikipedia trends' });
   }
 });
 
