@@ -167,7 +167,7 @@ app.get('/api/wikimedia-trending', async (req, res) => {
       const month = String(d.getUTCMonth() + 1).padStart(2, '0');
       const day = String(d.getUTCDate()).padStart(2, '0');
       const url = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/${year}/${month}/${day}`;
-      try { raw = await fetchRaw(url); break; } catch (e) { if (daysBack === 4) throw e; }
+      try { raw = await fetchRaw(url, false, { 'User-Agent': 'CosmicTesla/1.0 (https://cosmictesla.com; contact@cosmictesla.com)' }); break; } catch (e) { if (daysBack === 4) throw e; }
     }
     const json = JSON.parse(raw);
     const SKIP = ['Main_Page'];
@@ -190,16 +190,17 @@ app.get('/api/wikimedia-trending', async (req, res) => {
   }
 });
 
-function fetchRaw(url, allowErrorBody = false) {
+function fetchRaw(url, allowErrorBody = false, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        ...extraHeaders,
       },
       timeout: 8000,
     }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return fetchRaw(res.headers.location, allowErrorBody).then(resolve).catch(reject);
+        return fetchRaw(res.headers.location, allowErrorBody, extraHeaders).then(resolve).catch(reject);
       }
       let raw = '';
       res.on('data', (chunk) => { raw += chunk; });
