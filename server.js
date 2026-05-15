@@ -4,6 +4,7 @@ const path = require('path');
 const https = require('https');
 const fs = require('fs');
 const { marked } = require('marked');
+const cheerio = require('cheerio');
 
 const app = express();
 const parser = new Parser({
@@ -23,6 +24,9 @@ const lastUpdated = { google: null, reddit: null, youtube: null };
 
 const wikimediaCache = { data: null, fetchedAt: null };
 const CACHE_TTL_3H = 3 * 60 * 60 * 1000;
+
+const githubCache = { data: null, fetchedAt: null };
+const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 app.use((req, res, next) => {
   if (req.hostname === 'cosmictesla.com') {
@@ -187,6 +191,38 @@ app.get('/api/wikimedia-trending', async (req, res) => {
   } catch (error) {
     console.error('Error fetching Wikimedia:', error.message);
     res.status(500).json({ error: 'Failed to fetch Wikipedia trends' });
+  }
+});
+
+app.get('/api/github-trending', async (req, res) => {
+  if (githubCache.data && githubCache.fetchedAt && (Date.now() - githubCache.fetchedAt < CACHE_TTL_2H)) {
+    return res.json(githubCache.data);
+  }
+  try {
+    const html = await fetchRaw('https://github.com/trending', false, {
+      'User-Agent': 'CosmicTesla/1.0 (https://cosmictesla.com; contact@cosmictesla.com)',
+      'Accept': 'text/html',
+    });
+    const $ = cheerio.load(html);
+    const repos = [];
+    $('article.Box-row').each((i, el) => {
+      if (i >= 10) return false;
+      const nameEl = $(el).find('h2 a');
+      const name = (nameEl.attr('href') || '').replace(/^\//, '').trim();
+      const description = $(el).find('p').first().text().trim();
+      const language = $(el).find('[itemprop="programmingLanguage"]').text().trim();
+      const starsRaw = $(el).find('.float-sm-right').text().trim();
+      const starsMatch = starsRaw.match(/[\d,]+/);
+      const starsToday = starsMatch ? starsMatch[0] : '0';
+      if (name) repos.push({ name, description, language, starsToday, url: `https://github.com/${name}` });
+    });
+    const result = { repos };
+    githubCache.data = result;
+    githubCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching GitHub trending:', error.message);
+    res.status(500).json({ error: 'Failed to fetch GitHub trending' });
   }
 });
 
