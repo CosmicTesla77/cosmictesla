@@ -153,6 +153,19 @@
     .hn-meta { margin-top: 6px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .hn-score { font-size: 0.8rem; color: #ff6600; background: rgba(255,102,0,0.1); padding: 2px 8px; border-radius: 20px; }
     .hn-author { font-size: 0.8rem; color: #6b7080; }
+    .ph-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .ph-card:hover { border-color: #ff6154; }
+    .ph-rank { font-size: 1.2rem; font-weight: 700; color: #ff6154; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .ph-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+    .ph-info { flex: 1; min-width: 0; }
+    .ph-name a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .ph-name a:hover { color: #ff6154; }
+    .ph-tagline { font-size: 0.85rem; color: #8b8fa3; margin-top: 3px; line-height: 1.4; }
+    .ph-meta { margin-top: 8px; }
+    .ph-votes { font-size: 0.8rem; color: #ff6154; background: rgba(255,97,84,0.1); padding: 2px 8px; border-radius: 20px; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -190,6 +203,7 @@
       <a href="#wiki-trending">📖 Wikipedia</a>
       <a href="#github-trending">🐱 GitHub</a>
       <a href="#hn-trending">🔶 HN</a>
+      <a href="#ph-trending">🚀 Product Hunt</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -204,6 +218,7 @@
     <a href="#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
     <a href="#github-trending" onclick="closeMenu()">🐱 GitHub</a>
     <a href="#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
+    <a href="#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -274,6 +289,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching Hacker News stories...
+    </div>
+  </div>
+  <div id="ph-trending" class="section-header">
+    <h2>Product Hunt Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🚀 Today</span>
+    <span class="section-label">producthunt.com · Top launches today</span>
+  </div>
+  <div id="ph-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Product Hunt launches...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -519,7 +545,35 @@
     }
 
     loadGitHub();
+    async function loadProductHunt() {
+      const el = document.getElementById('ph-content');
+      try {
+        const response = await fetch('/api/producthunt-trending');
+        const data = await response.json();
+        if (data.error || !data.posts) {
+          el.innerHTML = '<div class="error">Failed to load Product Hunt launches.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.posts.forEach((post, i) => {
+          html += '<div class="ph-card">';
+          html += '<div class="ph-rank">' + (i + 1) + '</div>';
+          if (post.thumbnail) html += '<img class="ph-thumb" src="' + esc(post.thumbnail) + '" alt="' + esc(post.name) + '" />';
+          html += '<div class="ph-info">';
+          html += '<div class="ph-name"><a href="' + esc(post.url) + '" target="_blank" rel="noopener">' + esc(post.name) + '</a></div>';
+          if (post.tagline) html += '<div class="ph-tagline">' + esc(post.tagline) + '</div>';
+          html += '<div class="ph-meta"><span class="ph-votes">▲ ' + esc(String(post.votes)) + ' votes</span></div>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Product Hunt launches.</div>';
+      }
+    }
+
     loadHackerNews();
+    loadProductHunt();
     loadYouTube();
     loadLastUpdated();
   </script>

@@ -27,6 +27,7 @@ const CACHE_TTL_3H = 3 * 60 * 60 * 1000;
 
 const githubCache = { data: null, fetchedAt: null };
 const hnCache = { data: null, fetchedAt: null };
+const phCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 app.use((req, res, next) => {
@@ -258,6 +259,64 @@ app.get('/api/hackernews-trending', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch Hacker News trending' });
   }
 });
+
+app.get('/api/producthunt-trending', async (req, res) => {
+  if (phCache.data && phCache.fetchedAt && (Date.now() - phCache.fetchedAt < CACHE_TTL_2H)) {
+    return res.json(phCache.data);
+  }
+  const token = process.env.PRODUCT_HUNT_TOKEN;
+  if (!token) return res.status(500).json({ error: 'PRODUCT_HUNT_TOKEN not configured' });
+  try {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const query = `{ posts(order: VOTES, first: 10, postedAfter: "${today.toISOString()}") { edges { node { name tagline votesCount url thumbnail { url } } } } }`;
+    const json = await postJson('https://api.producthunt.com/v2/api/graphql', { query }, {
+      'Authorization': `Bearer ${token}`,
+    });
+    const posts = (json.data?.posts?.edges || []).map(({ node: n }) => ({
+      name: n.name,
+      tagline: n.tagline,
+      votes: n.votesCount,
+      url: n.url,
+      thumbnail: n.thumbnail?.url || null,
+    }));
+    const result = { posts };
+    phCache.data = result;
+    phCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching Product Hunt:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Product Hunt trending' });
+  }
+});
+
+function postJson(url, body, headers = {}) {
+  return new Promise((resolve, reject) => {
+    const payload = JSON.stringify(body);
+    const u = new URL(url);
+    const options = {
+      hostname: u.hostname,
+      path: u.pathname + u.search,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        'User-Agent': 'CosmicTesla/1.0 (https://cosmictesla.com; contact@cosmictesla.com)',
+        ...headers,
+      },
+      timeout: 8000,
+    };
+    const req = https.request(options, (r) => {
+      let raw = '';
+      r.on('data', (c) => { raw += c; });
+      r.on('end', () => { try { resolve(JSON.parse(raw)); } catch (e) { reject(e); } });
+    });
+    req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+}
 
 function fetchRaw(url, allowErrorBody = false, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
