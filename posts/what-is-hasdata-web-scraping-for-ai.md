@@ -1,5 +1,5 @@
 # What Is HasData and Why AI Agents Need Web Scraping Tools
-2026-05-16
+2026-05-15
 
 Every AI agent needs data. That sounds obvious until you try to build one and realize that most of the data you actually want lives on websites that were never designed to share it programmatically. There is no button that says "download everything on this page as clean structured data." You have to go get it yourself. That process is called web scraping, and it is one of the most fundamental and underappreciated parts of the modern AI stack.
 

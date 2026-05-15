@@ -1,5 +1,5 @@
 # What Is an Agentic Website Builder and Is This the End of Traditional Web Development
-2026-05-20
+2026-05-15
 
 Website builders have existed for decades. Geocities let teenagers build pages with animated GIFs in the 1990s. WordPress made blogging accessible to non developers in the 2000s. Squarespace and Wix brought drag and drop design to small businesses in the 2010s. Each generation made website creation more accessible to more people, but all of them still required the human to make every decision: which template, which colors, which layout, which content goes where.
 

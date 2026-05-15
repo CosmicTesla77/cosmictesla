@@ -1,5 +1,5 @@
 # What Is Lensmor and How It Turns Trade Show Data Into Sales Meetings
-2026-05-17
+2026-05-15
 
 Trade shows and industry conferences are some of the most expensive marketing investments a company can make. A booth at a major industry event can cost tens of thousands of dollars before you factor in travel, accommodation, shipping, and staff time. The theory is that the concentration of potential customers in one place justifies the cost. The reality is that most companies walk away with a pile of business cards, a spreadsheet of badge scans, and very little idea of which contacts are actually worth pursuing.
 

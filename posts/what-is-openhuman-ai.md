@@ -1,5 +1,5 @@
 # What Is OpenHuman and Why Open Source AI Development Matters Right Now
-2026-05-19
+2026-05-15
 
 Every major AI system you interact with today is closed. The model weights, meaning the billions of numerical parameters that determine how the AI thinks and responds, are proprietary. You cannot inspect them, modify them, run them on your own hardware, or understand exactly how they work. You interact with the output through an interface controlled by a company, and that company decides what the AI will and will not do, what it costs to use, and whether it continues to exist.
 
