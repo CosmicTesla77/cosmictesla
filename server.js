@@ -33,7 +33,43 @@ const cryptoCache = { data: null, fetchedAt: null };
 const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
 const twitchCache = { data: null, fetchedAt: null };
+const spotifyCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
+
+let spotifyToken = null;
+let spotifyTokenExpiry = 0;
+
+async function getSpotifyToken() {
+  if (spotifyToken && Date.now() < spotifyTokenExpiry) return spotifyToken;
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const creds = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+  const payload = 'grant_type=client_credentials';
+  return new Promise((resolve, reject) => {
+    const req = https.request({
+      hostname: 'accounts.spotify.com', path: '/api/token', method: 'POST',
+      headers: {
+        'Authorization': `Basic ${creds}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(payload),
+      },
+    }, (res) => {
+      let raw = '';
+      res.on('data', (c) => { raw += c; });
+      res.on('end', () => {
+        try {
+          const j = JSON.parse(raw);
+          spotifyToken = j.access_token;
+          spotifyTokenExpiry = Date.now() + (j.expires_in - 60) * 1000;
+          resolve(spotifyToken);
+        } catch (e) { reject(e); }
+      });
+    });
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+}
 const CACHE_TTL_60M = 60 * 60 * 1000;
 const CACHE_TTL_5M = 5 * 60 * 1000;
 
@@ -491,6 +527,46 @@ app.get('/api/twitch-trending', async (req, res) => {
   }
 });
 
+app.get('/api/spotify-trending', async (req, res) => {
+  if (spotifyCache.data && spotifyCache.fetchedAt && (Date.now() - spotifyCache.fetchedAt < CACHE_TTL_5M)) {
+    return res.json(spotifyCache.data);
+  }
+  if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
+    return res.status(500).json({ error: 'Spotify credentials not configured' });
+  }
+  try {
+    const token = await getSpotifyToken();
+    const raw = await fetchRaw(
+      'https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF/tracks?limit=20&fields=items(track(name,artists,album(images)))',
+      false, { 'Authorization': `Bearer ${token}` }
+    );
+    const json = JSON.parse(raw);
+    const tracks = (json.items || [])
+      .filter((item) => item.track)
+      .slice(0, 20)
+      .map((item, i) => {
+        const t = item.track;
+        const artist = (t.artists || []).map((a) => a.name).join(', ');
+        const images = t.album?.images || [];
+        const art = (images.find((img) => img.width >= 200 && img.width <= 400) || images[0])?.url || null;
+        return {
+          rank: i + 1,
+          name: t.name,
+          artist,
+          art,
+          affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(t.name + ' ' + artist)}&tag=cosmictesla-20`,
+        };
+      });
+    const result = { tracks };
+    spotifyCache.data = result;
+    spotifyCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching Spotify:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Spotify trending' });
+  }
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -690,6 +766,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#steam-trending">🎮 Steam</a>
       <a href="/#books-trending">📚 Books</a>
       <a href="/#twitch-trending">🟣 Twitch</a>
+      <a href="/#spotify-trending">🎵 Spotify</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -710,6 +787,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
     <a href="/#books-trending" onclick="closeMenu()">📚 Books</a>
     <a href="/#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
+    <a href="/#spotify-trending" onclick="closeMenu()">🎵 Spotify</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>
