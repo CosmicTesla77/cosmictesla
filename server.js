@@ -30,6 +30,7 @@ const hnCache = { data: null, fetchedAt: null };
 const phCache = { data: null, fetchedAt: null };
 const tmdbCache = { data: null, fetchedAt: null };
 const cryptoCache = { data: null, fetchedAt: null };
+const steamCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 const CACHE_TTL_10M = 10 * 60 * 1000;
 
@@ -354,6 +355,42 @@ app.get('/api/crypto-trending', async (req, res) => {
   }
 });
 
+app.get('/api/steam-trending', async (req, res) => {
+  if (steamCache.data && steamCache.fetchedAt && (Date.now() - steamCache.fetchedAt < CACHE_TTL_2H)) {
+    return res.json(steamCache.data);
+  }
+  try {
+    const html = await fetchRaw('https://store.steampowered.com/search/?filter=topsellers', false, {
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept': 'text/html,application/xhtml+xml',
+    });
+    const $ = cheerio.load(html);
+    const games = [];
+    $('a.search_result_row').each((i, el) => {
+      if (games.length >= 10) return false;
+      const title = $(el).find('span.title').text().trim();
+      if (!title) return;
+      const appId = $(el).attr('data-ds-appid');
+      const price = $(el).find('.discount_final_price').text().trim()
+        || $(el).find('.search_price').text().trim().replace(/\s+/g, ' ')
+        || 'Free';
+      const reviewRaw = $(el).find('span[data-tooltip-html]').first().attr('data-tooltip-html') || '';
+      const review = reviewRaw.split('<br>')[0].trim();
+      const image = appId ? `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg` : null;
+      const url = $(el).attr('href') || `https://store.steampowered.com/app/${appId}/`;
+      const affiliateUrl = `https://www.amazon.com/s?k=${encodeURIComponent(title)}&tag=cosmictesla-20`;
+      games.push({ title, price, review, image, url, affiliateUrl });
+    });
+    const result = { games };
+    steamCache.data = result;
+    steamCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching Steam:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Steam top sellers' });
+  }
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -550,6 +587,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#ph-trending">🚀 Product Hunt</a>
       <a href="/#tmdb-trending">🎬 Movies & TV</a>
       <a href="/#crypto-trending">🪙 Crypto</a>
+      <a href="/#steam-trending">🎮 Steam</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -567,6 +605,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
     <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
     <a href="/#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
+    <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>

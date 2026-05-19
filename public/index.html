@@ -197,6 +197,21 @@
     .crypto-up { font-size: 0.8rem; color: #3fb950; font-weight: 600; }
     .crypto-down { font-size: 0.8rem; color: #ff6154; font-weight: 600; }
     .crypto-price { font-size: 0.8rem; color: #8b8fa3; }
+    .steam-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .steam-card:hover { border-color: #66c0f4; }
+    .steam-rank { font-size: 1.2rem; font-weight: 700; color: #66c0f4; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .steam-img { width: 120px; height: 45px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+    .steam-info { flex: 1; min-width: 0; }
+    .steam-title a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .steam-title a:hover { color: #66c0f4; }
+    .steam-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .steam-price { font-size: 0.8rem; color: #a4d007; background: rgba(164,208,7,0.1); padding: 2px 8px; border-radius: 20px; }
+    .steam-review { font-size: 0.8rem; color: #6b7080; }
+    .steam-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .steam-shop:hover { color: #ff9900; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -237,6 +252,7 @@
       <a href="#ph-trending">🚀 Product Hunt</a>
       <a href="#tmdb-trending">🎬 Movies & TV</a>
       <a href="#crypto-trending">🪙 Crypto</a>
+      <a href="#steam-trending">🎮 Steam</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -254,6 +270,7 @@
     <a href="#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
     <a href="#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
     <a href="#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
+    <a href="#steam-trending" onclick="closeMenu()">🎮 Steam</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -357,6 +374,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching crypto trends...
+    </div>
+  </div>
+  <div id="steam-trending" class="section-header">
+    <h2>Steam Top Sellers</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎮 Today</span>
+    <span class="section-label">store.steampowered.com · Top sellers</span>
+  </div>
+  <div id="steam-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Steam top sellers...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -698,7 +726,38 @@
     }
 
     loadTMDB();
+    async function loadSteam() {
+      const el = document.getElementById('steam-content');
+      try {
+        const response = await fetch('/api/steam-trending');
+        const data = await response.json();
+        if (data.error || !data.games) {
+          el.innerHTML = '<div class="error">Failed to load Steam top sellers.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.games.forEach((game, i) => {
+          html += '<div class="steam-card">';
+          html += '<div class="steam-rank">' + (i + 1) + '</div>';
+          if (game.image) html += '<img class="steam-img" src="' + esc(game.image) + '" alt="' + esc(game.title) + '" />';
+          html += '<div class="steam-info">';
+          html += '<div class="steam-title"><a href="' + esc(game.url) + '" target="_blank" rel="noopener">' + esc(game.title) + '</a></div>';
+          html += '<div class="steam-meta">';
+          if (game.price) html += '<span class="steam-price">' + esc(game.price) + '</span>';
+          if (game.review) html += '<span class="steam-review">' + esc(game.review) + '</span>';
+          html += '</div>';
+          html += '<a class="steam-shop" href="' + esc(game.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Steam top sellers.</div>';
+      }
+    }
+
     loadCrypto();
+    loadSteam();
     loadYouTube();
     loadLastUpdated();
   </script>
