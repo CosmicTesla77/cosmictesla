@@ -28,6 +28,7 @@ const CACHE_TTL_3H = 3 * 60 * 60 * 1000;
 const githubCache = { data: null, fetchedAt: null };
 const hnCache = { data: null, fetchedAt: null };
 const phCache = { data: null, fetchedAt: null };
+const tmdbCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 app.use((req, res, next) => {
@@ -296,6 +297,33 @@ app.get('/api/producthunt-trending', async (req, res) => {
   }
 });
 
+app.get('/api/tmdb-trending', async (req, res) => {
+  if (tmdbCache.data && tmdbCache.fetchedAt && (Date.now() - tmdbCache.fetchedAt < CACHE_TTL_2H)) {
+    return res.json(tmdbCache.data);
+  }
+  const key = process.env.TMDB_API_KEY;
+  if (!key) return res.status(500).json({ error: 'TMDB_API_KEY not configured' });
+  try {
+    const raw = await fetchRaw(`https://api.themoviedb.org/3/trending/all/day?api_key=${key}`);
+    const json = JSON.parse(raw);
+    const items = (json.results || []).slice(0, 10).map((item) => {
+      const title = item.title || item.name || '';
+      const mediaType = item.media_type === 'tv' ? 'TV Show' : 'Movie';
+      const poster = item.poster_path
+        ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : null;
+      const affiliateUrl = `https://www.amazon.com/s?k=${encodeURIComponent(title)}&tag=cosmictesla-20`;
+      return { title, mediaType, overview: item.overview || '', poster, affiliateUrl };
+    });
+    const result = { items };
+    tmdbCache.data = result;
+    tmdbCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching TMDB:', error.message);
+    res.status(500).json({ error: 'Failed to fetch TMDB trending' });
+  }
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -490,6 +518,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#github-trending">🐱 GitHub</a>
       <a href="/#hn-trending">🔶 HN</a>
       <a href="/#ph-trending">🚀 Product Hunt</a>
+      <a href="/#tmdb-trending">🎬 Movies & TV</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -505,6 +534,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#github-trending" onclick="closeMenu()">🐱 GitHub</a>
     <a href="/#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
     <a href="/#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
+    <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>

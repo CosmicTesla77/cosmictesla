@@ -166,6 +166,21 @@
     .ph-tagline { font-size: 0.85rem; color: #8b8fa3; margin-top: 3px; line-height: 1.4; }
     .ph-meta { margin-top: 8px; }
     .ph-votes { font-size: 0.8rem; color: #ff6154; background: rgba(255,97,84,0.1); padding: 2px 8px; border-radius: 20px; }
+    .tmdb-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .tmdb-card:hover { border-color: #01b4e4; }
+    .tmdb-rank { font-size: 1.2rem; font-weight: 700; color: #01b4e4; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .tmdb-info { flex: 1; min-width: 0; }
+    .tmdb-title a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .tmdb-title a:hover { color: #01b4e4; }
+    .tmdb-meta { margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .tmdb-type { font-size: 0.8rem; color: #01b4e4; background: rgba(1,180,228,0.1); padding: 2px 8px; border-radius: 20px; }
+    .tmdb-overview { font-size: 0.83rem; color: #8b8fa3; margin-top: 6px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .tmdb-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .tmdb-shop:hover { color: #ff9900; }
+    .tmdb-poster { width: 60px; height: 90px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -204,6 +219,7 @@
       <a href="#github-trending">🐱 GitHub</a>
       <a href="#hn-trending">🔶 HN</a>
       <a href="#ph-trending">🚀 Product Hunt</a>
+      <a href="#tmdb-trending">🎬 Movies & TV</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -219,6 +235,7 @@
     <a href="#github-trending" onclick="closeMenu()">🐱 GitHub</a>
     <a href="#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
     <a href="#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
+    <a href="#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -300,6 +317,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching Product Hunt launches...
+    </div>
+  </div>
+  <div id="tmdb-trending" class="section-header">
+    <h2>Movies &amp; TV Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎬 Today</span>
+    <span class="section-label">TMDB · Trending movies &amp; shows</span>
+  </div>
+  <div id="tmdb-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching movies &amp; TV trends...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -573,7 +601,37 @@
     }
 
     loadHackerNews();
+    async function loadTMDB() {
+      const el = document.getElementById('tmdb-content');
+      try {
+        const response = await fetch('/api/tmdb-trending');
+        const data = await response.json();
+        if (data.error || !data.items) {
+          el.innerHTML = '<div class="error">Failed to load Movies &amp; TV trends.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.items.forEach((item, i) => {
+          html += '<div class="tmdb-card">';
+          html += '<div class="tmdb-rank">' + (i + 1) + '</div>';
+          html += '<div class="tmdb-info">';
+          html += '<div class="tmdb-title"><a href="' + esc(item.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(item.title) + '</a></div>';
+          html += '<div class="tmdb-meta"><span class="tmdb-type">' + esc(item.mediaType) + '</span></div>';
+          if (item.overview) html += '<div class="tmdb-overview">' + esc(item.overview) + '</div>';
+          html += '<a class="tmdb-shop" href="' + esc(item.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
+          html += '</div>';
+          if (item.poster) html += '<img class="tmdb-poster" src="' + esc(item.poster) + '" alt="' + esc(item.title) + '" />';
+          html += '</div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Movies &amp; TV trends.</div>';
+      }
+    }
+
     loadProductHunt();
+    loadTMDB();
     loadYouTube();
     loadLastUpdated();
   </script>
