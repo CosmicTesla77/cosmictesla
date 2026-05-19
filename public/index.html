@@ -231,6 +231,20 @@
     .book-weeks { font-size: 0.78rem; color: #555a6e; margin-top: 5px; }
     .book-shop { display: inline-block; margin-top: 6px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
     .book-shop:hover { color: #ff9900; }
+    .twitch-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+    }
+    .twitch-card:hover { border-color: #9147ff; }
+    .twitch-rank { font-size: 1.2rem; font-weight: 700; color: #9147ff; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .twitch-box { width: 54px; height: 72px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+    .twitch-info { flex: 1; min-width: 0; }
+    .twitch-name a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .twitch-name a:hover { color: #9147ff; }
+    .twitch-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .twitch-viewers { font-size: 0.8rem; color: #9147ff; background: rgba(145,71,255,0.1); padding: 2px 8px; border-radius: 20px; }
+    .twitch-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .twitch-shop:hover { color: #ff9900; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -273,6 +287,7 @@
       <a href="#crypto-trending">🪙 Crypto</a>
       <a href="#steam-trending">🎮 Steam</a>
       <a href="#books-trending">📚 Books</a>
+      <a href="#twitch-trending">🟣 Twitch</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -292,6 +307,7 @@
     <a href="#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
     <a href="#steam-trending" onclick="closeMenu()">🎮 Steam</a>
     <a href="#books-trending" onclick="closeMenu()">📚 Books</a>
+    <a href="#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -420,6 +436,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching bestsellers...
+    </div>
+  </div>
+  <div id="twitch-trending" class="section-header">
+    <h2>Twitch Top Games</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🟣 Live</span>
+    <span class="section-label">twitch.tv · Most watched right now</span>
+  </div>
+  <div id="twitch-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Twitch top games...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -837,7 +864,41 @@
     }
 
     loadSteam();
+    function fmtViewers(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M viewers';
+      if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K viewers';
+      return n > 0 ? n + ' viewers' : 'Live on Twitch';
+    }
+
+    async function loadTwitch() {
+      const el = document.getElementById('twitch-content');
+      try {
+        const response = await fetch('/api/twitch-trending');
+        const data = await response.json();
+        if (data.error || !data.games) {
+          el.innerHTML = '<div class="error">Failed to load Twitch games. Make sure TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are set.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.games.forEach((game, i) => {
+          html += '<div class="twitch-card">';
+          html += '<div class="twitch-rank">' + (i + 1) + '</div>';
+          if (game.boxArt) html += '<img class="twitch-box" src="' + esc(game.boxArt) + '" alt="' + esc(game.name) + '" />';
+          html += '<div class="twitch-info">';
+          html += '<div class="twitch-name"><a href="' + esc(game.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(game.name) + '</a></div>';
+          html += '<div class="twitch-meta"><span class="twitch-viewers">🟣 ' + fmtViewers(game.viewers) + '</span></div>';
+          html += '<a class="twitch-shop" href="' + esc(game.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load Twitch games.</div>';
+      }
+    }
+
     loadBooks();
+    loadTwitch();
     loadYouTube();
     loadLastUpdated();
   </script>

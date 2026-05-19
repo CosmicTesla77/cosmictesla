@@ -32,8 +32,40 @@ const tmdbCache = { data: null, fetchedAt: null };
 const cryptoCache = { data: null, fetchedAt: null };
 const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
+const twitchCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 const CACHE_TTL_60M = 60 * 60 * 1000;
+const CACHE_TTL_5M = 5 * 60 * 1000;
+
+let twitchToken = null;
+let twitchTokenExpiry = 0;
+
+async function getTwitchToken() {
+  if (twitchToken && Date.now() < twitchTokenExpiry) return twitchToken;
+  const clientId = process.env.TWITCH_CLIENT_ID;
+  const clientSecret = process.env.TWITCH_CLIENT_SECRET;
+  const payload = `client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}&grant_type=client_credentials`;
+  return new Promise((resolve, reject) => {
+    const req = https.request({
+      hostname: 'id.twitch.tv', path: '/oauth2/token', method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(payload) },
+    }, (res) => {
+      let raw = '';
+      res.on('data', (c) => { raw += c; });
+      res.on('end', () => {
+        try {
+          const j = JSON.parse(raw);
+          twitchToken = j.access_token;
+          twitchTokenExpiry = Date.now() + (j.expires_in - 3600) * 1000;
+          resolve(twitchToken);
+        } catch (e) { reject(e); }
+      });
+    });
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+}
 const CACHE_TTL_10M = 10 * 60 * 1000;
 
 app.use((req, res, next) => {
@@ -423,6 +455,42 @@ app.get('/api/books-trending', async (req, res) => {
   }
 });
 
+app.get('/api/twitch-trending', async (req, res) => {
+  if (twitchCache.data && twitchCache.fetchedAt && (Date.now() - twitchCache.fetchedAt < CACHE_TTL_5M)) {
+    return res.json(twitchCache.data);
+  }
+  const clientId = process.env.TWITCH_CLIENT_ID;
+  const clientSecret = process.env.TWITCH_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return res.status(500).json({ error: 'Twitch credentials not configured' });
+  try {
+    const token = await getTwitchToken();
+    const twitchHeaders = { 'Client-ID': clientId, 'Authorization': `Bearer ${token}` };
+    const [gamesRaw, streamsRaw] = await Promise.all([
+      fetchRaw('https://api.twitch.tv/helix/games/top?first=20', false, twitchHeaders),
+      fetchRaw('https://api.twitch.tv/helix/streams?first=100', false, twitchHeaders),
+    ]);
+    const gamesJson = JSON.parse(gamesRaw);
+    const streamsJson = JSON.parse(streamsRaw);
+    const viewersByGame = {};
+    (streamsJson.data || []).forEach((s) => {
+      viewersByGame[s.game_id] = (viewersByGame[s.game_id] || 0) + s.viewer_count;
+    });
+    const games = (gamesJson.data || []).map((g) => ({
+      name: g.name,
+      boxArt: g.box_art_url.replace('{width}', '144').replace('{height}', '192'),
+      viewers: viewersByGame[g.id] || 0,
+      affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(g.name)}&tag=cosmictesla-20`,
+    }));
+    const result = { games };
+    twitchCache.data = result;
+    twitchCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching Twitch:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Twitch trending' });
+  }
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -621,6 +689,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#crypto-trending">🪙 Crypto</a>
       <a href="/#steam-trending">🎮 Steam</a>
       <a href="/#books-trending">📚 Books</a>
+      <a href="/#twitch-trending">🟣 Twitch</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -640,6 +709,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
     <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
     <a href="/#books-trending" onclick="closeMenu()">📚 Books</a>
+    <a href="/#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>
