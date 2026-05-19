@@ -37,8 +37,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/robots.txt', (req, res) => {
+  res.set('Content-Type', 'text/plain').send(
+    'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://cosmictesla.com/sitemap.xml\n'
+  );
+});
+
 app.get('/sitemap.xml', (req, res) => {
-  const base = 'https://www.cosmictesla.com';
+  const base = 'https://cosmictesla.com';
   const today = new Date().toISOString().slice(0, 10);
   const staticUrls = [
     { loc: `${base}/`,        priority: '1.0', changefreq: 'daily'   },
