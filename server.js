@@ -29,7 +29,9 @@ const githubCache = { data: null, fetchedAt: null };
 const hnCache = { data: null, fetchedAt: null };
 const phCache = { data: null, fetchedAt: null };
 const tmdbCache = { data: null, fetchedAt: null };
+const cryptoCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
+const CACHE_TTL_10M = 10 * 60 * 1000;
 
 app.use((req, res, next) => {
   if (req.hostname === 'cosmictesla.com') {
@@ -324,6 +326,34 @@ app.get('/api/tmdb-trending', async (req, res) => {
   }
 });
 
+app.get('/api/crypto-trending', async (req, res) => {
+  if (cryptoCache.data && cryptoCache.fetchedAt && (Date.now() - cryptoCache.fetchedAt < CACHE_TTL_10M)) {
+    return res.json(cryptoCache.data);
+  }
+  try {
+    const raw = await fetchRaw('https://api.coingecko.com/api/v3/search/trending', false, {
+      'Accept': 'application/json',
+      'User-Agent': 'CosmicTesla/1.0 (https://cosmictesla.com; contact@cosmictesla.com)',
+    });
+    const json = JSON.parse(raw);
+    const coins = (json.coins || []).slice(0, 10).map(({ item }) => ({
+      name: item.name,
+      symbol: item.symbol.toUpperCase(),
+      rank: item.market_cap_rank || null,
+      thumb: item.small || item.thumb || null,
+      priceChange: item.data?.price_change_percentage_24h?.usd ?? null,
+      price: item.data?.price || null,
+    }));
+    const result = { coins };
+    cryptoCache.data = result;
+    cryptoCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching CoinGecko:', error.message);
+    res.status(500).json({ error: 'Failed to fetch crypto trending' });
+  }
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -519,6 +549,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#hn-trending">🔶 HN</a>
       <a href="/#ph-trending">🚀 Product Hunt</a>
       <a href="/#tmdb-trending">🎬 Movies & TV</a>
+      <a href="/#crypto-trending">🪙 Crypto</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -535,6 +566,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
     <a href="/#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
     <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
+    <a href="/#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>

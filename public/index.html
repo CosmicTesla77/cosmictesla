@@ -181,6 +181,22 @@
     .tmdb-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
     .tmdb-shop:hover { color: #ff9900; }
     .tmdb-poster { width: 60px; height: 90px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .crypto-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s;
+    }
+    .crypto-card:hover { border-color: #f0b90b; }
+    .crypto-rank { font-size: 1.2rem; font-weight: 700; color: #f0b90b; min-width: 28px; text-align: center; flex-shrink: 0; }
+    .crypto-thumb { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .crypto-thumb-placeholder { width: 36px; height: 36px; border-radius: 50%; background: rgba(240,185,11,0.15); flex-shrink: 0; }
+    .crypto-info { flex: 1; min-width: 0; }
+    .crypto-name { font-size: 1rem; font-weight: 700; color: #f0f1f5; line-height: 1.3; }
+    .crypto-symbol { font-size: 0.8rem; color: #f0b90b; background: rgba(240,185,11,0.1); padding: 2px 8px; border-radius: 20px; margin-left: 6px; }
+    .crypto-meta { margin-top: 4px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .crypto-mcrank { font-size: 0.8rem; color: #6b7080; }
+    .crypto-up { font-size: 0.8rem; color: #3fb950; font-weight: 600; }
+    .crypto-down { font-size: 0.8rem; color: #ff6154; font-weight: 600; }
+    .crypto-price { font-size: 0.8rem; color: #8b8fa3; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -220,6 +236,7 @@
       <a href="#hn-trending">🔶 HN</a>
       <a href="#ph-trending">🚀 Product Hunt</a>
       <a href="#tmdb-trending">🎬 Movies & TV</a>
+      <a href="#crypto-trending">🪙 Crypto</a>
       <a href="/blog">✍️ Blog</a>
       <a href="/contact">📬 Contact</a>
     </div>
@@ -236,6 +253,7 @@
     <a href="#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
     <a href="#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
     <a href="#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
+    <a href="#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
     <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" onclick="closeMenu()">📬 Contact</a>
   </div>
@@ -328,6 +346,17 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching movies &amp; TV trends...
+    </div>
+  </div>
+  <div id="crypto-trending" class="section-header">
+    <h2>Crypto Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
+    <span class="section-label">CoinGecko · Top trending coins</span>
+  </div>
+  <div id="crypto-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching crypto trends...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -631,7 +660,45 @@
     }
 
     loadProductHunt();
+    async function loadCrypto() {
+      const el = document.getElementById('crypto-content');
+      try {
+        const response = await fetch('/api/crypto-trending');
+        const data = await response.json();
+        if (data.error || !data.coins) {
+          el.innerHTML = '<div class="error">Failed to load crypto trends.</div>';
+          return;
+        }
+        let html = '<div class="trends-grid">';
+        data.coins.forEach((coin, i) => {
+          const change = coin.priceChange;
+          const changeHtml = change !== null
+            ? `<span class="${change >= 0 ? 'crypto-up' : 'crypto-down'}">${change >= 0 ? '▲' : '▼'} ${Math.abs(change).toFixed(2)}%</span>`
+            : '';
+          html += '<div class="crypto-card">';
+          html += '<div class="crypto-rank">' + (i + 1) + '</div>';
+          if (coin.thumb) {
+            html += '<img class="crypto-thumb" src="' + esc(coin.thumb) + '" alt="' + esc(coin.name) + '" />';
+          } else {
+            html += '<div class="crypto-thumb-placeholder"></div>';
+          }
+          html += '<div class="crypto-info">';
+          html += '<div><span class="crypto-name">' + esc(coin.name) + '</span><span class="crypto-symbol">' + esc(coin.symbol) + '</span></div>';
+          html += '<div class="crypto-meta">';
+          if (coin.rank) html += '<span class="crypto-mcrank">Market cap #' + esc(String(coin.rank)) + '</span>';
+          if (coin.price) html += '<span class="crypto-price">' + esc(coin.price) + '</span>';
+          html += changeHtml;
+          html += '</div></div></div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="error">Could not load crypto trends.</div>';
+      }
+    }
+
     loadTMDB();
+    loadCrypto();
     loadYouTube();
     loadLastUpdated();
   </script>
