@@ -31,7 +31,9 @@ const phCache = { data: null, fetchedAt: null };
 const tmdbCache = { data: null, fetchedAt: null };
 const cryptoCache = { data: null, fetchedAt: null };
 const steamCache = { data: null, fetchedAt: null };
+const booksCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
+const CACHE_TTL_60M = 60 * 60 * 1000;
 const CACHE_TTL_10M = 10 * 60 * 1000;
 
 app.use((req, res, next) => {
@@ -391,6 +393,36 @@ app.get('/api/steam-trending', async (req, res) => {
   }
 });
 
+app.get('/api/books-trending', async (req, res) => {
+  if (booksCache.data && booksCache.fetchedAt && (Date.now() - booksCache.fetchedAt < CACHE_TTL_60M)) {
+    return res.json(booksCache.data);
+  }
+  const key = process.env.NYT_API_KEY;
+  if (!key) return res.status(500).json({ error: 'NYT_API_KEY not configured' });
+  try {
+    const [ficRaw, nonficRaw] = await Promise.all([
+      fetchRaw(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${key}`),
+      fetchRaw(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-nonfiction.json?api-key=${key}`),
+    ]);
+    const mapBooks = (raw) => JSON.parse(raw).results.books.slice(0, 10).map((b) => ({
+      rank: b.rank,
+      title: b.title,
+      author: b.author,
+      description: b.description,
+      weeksOnList: b.weeks_on_list,
+      cover: b.book_image || null,
+      affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(b.title + ' ' + b.author)}&tag=cosmictesla-20`,
+    }));
+    const result = { fiction: mapBooks(ficRaw), nonfiction: mapBooks(nonficRaw) };
+    booksCache.data = result;
+    booksCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching NYT Books:', error.message);
+    res.status(500).json({ error: 'Failed to fetch books trending' });
+  }
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -588,6 +620,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       <a href="/#tmdb-trending">🎬 Movies & TV</a>
       <a href="/#crypto-trending">🪙 Crypto</a>
       <a href="/#steam-trending">🎮 Steam</a>
+      <a href="/#books-trending">📚 Books</a>
       <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
       <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     </div>
@@ -606,6 +639,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
     <a href="/#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
     <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
+    <a href="/#books-trending" onclick="closeMenu()">📚 Books</a>
     <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
     <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
   </div>
