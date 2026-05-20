@@ -706,19 +706,35 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-padding-top: 52px; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f1117; color: #e2e4e9; min-height: 100vh; padding-top: 44px; }
-    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1a1d29; border-bottom: 1px solid #2a2d3a; display: flex; justify-content: center; align-items: center; gap: 4px; padding: 8px 20px; height: 44px; }
-    .nav-links { display: flex; gap: 4px; align-items: center; }
-    .site-nav a { color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 16px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
-    .site-nav a:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
-    .site-nav a.active { color: #00d4aa; background: rgba(0,212,170,0.08); }
+    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1a1d29; border-bottom: 1px solid #2a2d3a; display: flex; align-items: center; justify-content: center; gap: 2px; padding: 0 16px; height: 44px; }
+    .nav-group { position: relative; height: 44px; display: flex; align-items: center; }
+    .nav-group-btn { background: none; border: none; cursor: pointer; font-family: inherit; color: #8b8fa3; font-size: 0.85rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; gap: 4px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .nav-group:hover .nav-group-btn { color: #e2e4e9; background: rgba(255,255,255,0.06); }
+    .nav-group .chev { font-size: 0.5rem; transition: transform 0.2s; display: inline-block; }
+    .nav-group:hover .chev { transform: rotate(180deg); }
+    .nav-dropdown { position: absolute; top: 100%; left: 0; background: #1e2130; border: 1px solid #2a2d3a; border-radius: 8px; min-width: 175px; padding: 6px; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity 0.15s, transform 0.15s; }
+    .nav-group:hover .nav-dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .nav-dropdown a { display: block; color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 8px 12px; border-radius: 6px; white-space: nowrap; transition: color 0.2s, background 0.2s; }
+    .nav-dropdown a:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
+    .nav-standalone { color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: color 0.2s, background 0.2s; }
+    .nav-standalone:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
+    .nav-standalone.active { color: #00d4aa; background: rgba(0,212,170,0.08); }
     .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; cursor: pointer; padding: 4px 6px; border: none; background: none; margin-left: auto; }
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: #e2e4e9; border-radius: 2px; }
-    .nav-menu { display: none; position: fixed; top: 44px; left: 0; right: 0; background: #1a1d29; border-bottom: 1px solid #2a2d3a; flex-direction: column; z-index: 99; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-    .nav-menu a { color: #8b8fa3; text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 12px 20px; display: block; border-bottom: 1px solid rgba(42,45,58,0.6); transition: color 0.2s, background 0.2s; }
-    .nav-menu a:hover { color: #e2e4e9; background: rgba(255,255,255,0.05); }
-    .nav-menu a.active { color: #00d4aa; }
-    .nav-menu.open { display: flex; }
-    @media (max-width: 768px) { .nav-links { display: none; } .nav-hamburger { display: flex; } .site-nav { justify-content: flex-end; padding: 0 16px; } }
+    .nav-mobile-menu { display: none; position: fixed; top: 44px; left: 0; right: 0; background: #1a1d29; border-bottom: 1px solid #2a2d3a; max-height: calc(100vh - 44px); overflow-y: auto; z-index: 99; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+    .nav-mobile-menu.open { display: block; }
+    .nav-acc-group { border-bottom: 1px solid rgba(42,45,58,0.6); }
+    .nav-acc-btn { width: 100%; background: none; border: none; cursor: pointer; font-family: inherit; color: #8b8fa3; font-size: 0.9rem; font-weight: 600; padding: 13px 20px; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s; }
+    .nav-acc-btn:hover { color: #e2e4e9; }
+    .nav-acc-btn .chev { font-size: 0.5rem; transition: transform 0.2s; }
+    .nav-acc-group.open .nav-acc-btn .chev { transform: rotate(180deg); }
+    .nav-acc-items { display: none; padding: 0 0 6px; }
+    .nav-acc-group.open .nav-acc-items { display: block; }
+    .nav-acc-items a { display: block; color: #8b8fa3; text-decoration: none; font-size: 0.88rem; padding: 9px 20px 9px 32px; transition: color 0.2s, background 0.2s; }
+    .nav-acc-items a:hover { color: #e2e4e9; background: rgba(255,255,255,0.04); }
+    .nav-mobile-standalone a { display: block; color: #8b8fa3; text-decoration: none; font-size: 0.9rem; padding: 13px 20px; border-bottom: 1px solid rgba(42,45,58,0.6); transition: color 0.2s; }
+    .nav-mobile-standalone a:hover { color: #e2e4e9; }
+    @media (max-width: 768px) { .site-nav { justify-content: flex-end; } .nav-group, .nav-standalone { display: none; } .nav-hamburger { display: flex; } }
     header { background: linear-gradient(135deg, #1a1d29 0%, #0f1117 100%); border-bottom: 1px solid #2a2d3a; text-align: center; padding: 24px 32px; }
     header h1 a { font-size: 2rem; font-weight: 700; color: #00d4aa; letter-spacing: 1px; text-decoration: none; }
     header p { color: #8b8fa3; margin-top: 6px; font-size: 0.95rem; }
@@ -753,43 +769,83 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
 </head>
 <body>
   <nav class="site-nav">
-    <div class="nav-links">
-      <a href="/#google-trending">📈 Google Trending</a>
-      <a href="/#reddit-trending">🔥 Reddit Trending</a>
-      <a href="/#youtube-trending">▶️ YouTube Trending</a>
-      <a href="/#wiki-trending">📖 Wikipedia</a>
-      <a href="/#github-trending">🐱 GitHub</a>
-      <a href="/#hn-trending">🔶 HN</a>
-      <a href="/#ph-trending">🚀 Product Hunt</a>
-      <a href="/#tmdb-trending">🎬 Movies & TV</a>
-      <a href="/#crypto-trending">🪙 Crypto</a>
-      <a href="/#steam-trending">🎮 Steam</a>
-      <a href="/#books-trending">📚 Books</a>
-      <a href="/#twitch-trending">🟣 Twitch</a>
-      <a href="/#spotify-trending">🎵 Spotify</a>
-      <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
-      <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
+    <div class="nav-group">
+      <button class="nav-group-btn">Social <span class="chev">▼</span></button>
+      <div class="nav-dropdown">
+        <a href="/#google-trending">📈 Google Trending</a>
+        <a href="/#reddit-trending">🔥 Reddit Trending</a>
+        <a href="/#youtube-trending">▶️ YouTube Trending</a>
+      </div>
     </div>
+    <div class="nav-group">
+      <button class="nav-group-btn">Tech <span class="chev">▼</span></button>
+      <div class="nav-dropdown">
+        <a href="/#github-trending">🐱 GitHub</a>
+        <a href="/#hn-trending">🔶 Hacker News</a>
+        <a href="/#ph-trending">🚀 Product Hunt</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button class="nav-group-btn">Entertainment <span class="chev">▼</span></button>
+      <div class="nav-dropdown">
+        <a href="/#tmdb-trending">🎬 Movies &amp; TV</a>
+        <a href="/#steam-trending">🎮 Steam</a>
+        <a href="/#twitch-trending">🟣 Twitch</a>
+        <a href="/#spotify-trending">🎵 Spotify</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button class="nav-group-btn">Culture <span class="chev">▼</span></button>
+      <div class="nav-dropdown">
+        <a href="/#wiki-trending">📖 Wikipedia</a>
+        <a href="/#books-trending">📚 Books</a>
+        <a href="/#crypto-trending">🪙 Crypto</a>
+      </div>
+    </div>
+    <a href="/blog" class="nav-standalone ${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
+    <a href="/contact" class="nav-standalone ${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation" onclick="toggleMenu()">
       <span></span><span></span><span></span>
     </button>
   </nav>
-  <div class="nav-menu" id="navMenu">
-    <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
-    <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
-    <a href="/#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
-    <a href="/#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
-    <a href="/#github-trending" onclick="closeMenu()">🐱 GitHub</a>
-    <a href="/#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
-    <a href="/#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
-    <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies & TV</a>
-    <a href="/#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
-    <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
-    <a href="/#books-trending" onclick="closeMenu()">📚 Books</a>
-    <a href="/#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
-    <a href="/#spotify-trending" onclick="closeMenu()">🎵 Spotify</a>
-    <a href="/blog" class="${activePage === 'blog' ? 'active' : ''}" onclick="closeMenu()">✍️ Blog</a>
-    <a href="/contact" class="${activePage === 'contact' ? 'active' : ''}" onclick="closeMenu()">📬 Contact</a>
+  <div class="nav-mobile-menu" id="navMobileMenu">
+    <div class="nav-acc-group">
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Social <span class="chev">▼</span></button>
+      <div class="nav-acc-items">
+        <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
+        <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
+        <a href="/#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
+      </div>
+    </div>
+    <div class="nav-acc-group">
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Tech <span class="chev">▼</span></button>
+      <div class="nav-acc-items">
+        <a href="/#github-trending" onclick="closeMenu()">🐱 GitHub</a>
+        <a href="/#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
+        <a href="/#ph-trending" onclick="closeMenu()">🚀 Product Hunt</a>
+      </div>
+    </div>
+    <div class="nav-acc-group">
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Entertainment <span class="chev">▼</span></button>
+      <div class="nav-acc-items">
+        <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies &amp; TV</a>
+        <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
+        <a href="/#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
+        <a href="/#spotify-trending" onclick="closeMenu()">🎵 Spotify</a>
+      </div>
+    </div>
+    <div class="nav-acc-group">
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Culture <span class="chev">▼</span></button>
+      <div class="nav-acc-items">
+        <a href="/#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
+        <a href="/#books-trending" onclick="closeMenu()">📚 Books</a>
+        <a href="/#crypto-trending" onclick="closeMenu()">🪙 Crypto</a>
+      </div>
+    </div>
+    <div class="nav-mobile-standalone">
+      <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
+      <a href="/contact" onclick="closeMenu()">📬 Contact</a>
+    </div>
   </div>
   <header>
     <h1><a href="/">CosmicTesla</a></h1>
@@ -804,10 +860,11 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/contact">Contact</a>
   </footer>
   <script>
-    function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
-    function closeMenu() { document.getElementById('navMenu').classList.remove('open'); }
+    function toggleMenu() { document.getElementById('navMobileMenu').classList.toggle('open'); }
+    function closeMenu() { document.getElementById('navMobileMenu').classList.remove('open'); }
+    function toggleAccordion(btn) { btn.closest('.nav-acc-group').classList.toggle('open'); }
     document.addEventListener('click', function(e) {
-      var menu = document.getElementById('navMenu');
+      var menu = document.getElementById('navMobileMenu');
       var toggle = document.getElementById('navToggle');
       if (menu && menu.classList.contains('open') && !menu.contains(e.target) && !toggle.contains(e.target)) {
         menu.classList.remove('open');
