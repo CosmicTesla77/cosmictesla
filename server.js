@@ -536,27 +536,25 @@ app.get('/api/spotify-trending', async (req, res) => {
   }
   try {
     const token = await getSpotifyToken();
+    // /v1/recommendations works with client credentials (no user OAuth required).
+    // seed_genres drives genre diversity; min_popularity filters out obscure tracks.
     const raw = await fetchRaw(
-      'https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF/tracks?limit=20&fields=items(track(name,artists,album(images)))',
+      'https://api.spotify.com/v1/recommendations?seed_genres=pop%2Chip-hop%2Crock&limit=20&min_popularity=60',
       false, { 'Authorization': `Bearer ${token}` }
     );
     const json = JSON.parse(raw);
-    const tracks = (json.items || [])
-      .filter((item) => item.track)
-      .slice(0, 20)
-      .map((item, i) => {
-        const t = item.track;
-        const artist = (t.artists || []).map((a) => a.name).join(', ');
-        const images = t.album?.images || [];
-        const art = (images.find((img) => img.width >= 200 && img.width <= 400) || images[0])?.url || null;
-        return {
-          rank: i + 1,
-          name: t.name,
-          artist,
-          art,
-          affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(t.name + ' ' + artist)}&tag=cosmictesla-20`,
-        };
-      });
+    const tracks = (json.tracks || []).slice(0, 20).map((t, i) => {
+      const artist = (t.artists || []).map((a) => a.name).join(', ');
+      const images = t.album?.images || [];
+      const art = (images.find((img) => img.width >= 200 && img.width <= 400) || images[0])?.url || null;
+      return {
+        rank: i + 1,
+        name: t.name,
+        artist,
+        art,
+        affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(t.name + ' ' + artist)}&tag=cosmictesla-20`,
+      };
+    });
     const result = { tracks };
     spotifyCache.data = result;
     spotifyCache.fetchedAt = Date.now();
