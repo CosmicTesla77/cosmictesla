@@ -709,11 +709,11 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1a1d29; border-bottom: 1px solid #2a2d3a; display: flex; align-items: center; justify-content: center; gap: 2px; padding: 0 16px; height: 44px; }
     .nav-group { position: relative; height: 44px; display: flex; align-items: center; }
     .nav-group-btn { background: none; border: none; cursor: pointer; font-family: inherit; color: #8b8fa3; font-size: 0.85rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; gap: 4px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
-    .nav-group:hover .nav-group-btn { color: #e2e4e9; background: rgba(255,255,255,0.06); }
+    .nav-group.open .nav-group-btn, .nav-group-btn:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
     .nav-group .chev { font-size: 0.5rem; transition: transform 0.2s; display: inline-block; }
-    .nav-group:hover .chev { transform: rotate(180deg); }
-    .nav-dropdown { position: absolute; top: 100%; left: 0; background: #1e2130; border: 1px solid #2a2d3a; border-radius: 8px; min-width: 175px; padding: 6px; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity 0.15s, transform 0.15s; }
-    .nav-group:hover .nav-dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .nav-group.open .chev { transform: rotate(180deg); }
+    .nav-dropdown { display: none; position: absolute; top: 44px; left: 0; background: #1e2130; border: 1px solid #2a2d3a; border-radius: 8px; min-width: 180px; padding: 6px; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    .nav-group.open .nav-dropdown { display: block; }
     .nav-dropdown a { display: block; color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 8px 12px; border-radius: 6px; white-space: nowrap; transition: color 0.2s, background 0.2s; }
     .nav-dropdown a:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
     .nav-standalone { color: #8b8fa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: color 0.2s, background 0.2s; }
@@ -860,6 +860,10 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <a href="/contact">Contact</a>
   </footer>
   <script>
+    document.querySelectorAll('.nav-group').forEach(function(g) {
+      g.addEventListener('mouseenter', function() { this.classList.add('open'); });
+      g.addEventListener('mouseleave', function() { this.classList.remove('open'); });
+    });
     function toggleMenu() { document.getElementById('navMobileMenu').classList.toggle('open'); }
     function closeMenu() { document.getElementById('navMobileMenu').classList.remove('open'); }
     function toggleAccordion(btn) { btn.closest('.nav-acc-group').classList.toggle('open'); }
