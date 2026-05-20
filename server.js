@@ -949,6 +949,23 @@ app.get('/contact', (req, res) => {
     </div>`, 'contact'));
 });
 
+// ── Startup environment variable check ────────────────────────────────────
+const REQUIRED_ENV = [
+  'SPOTIFY_CLIENT_ID',
+  'SPOTIFY_CLIENT_SECRET',
+  'TWITCH_CLIENT_ID',
+  'TWITCH_CLIENT_SECRET',
+  'YOUTUBE_API_KEY',
+  'TMDB_API_KEY',
+  'NYT_API_KEY',
+  'PRODUCT_HUNT_TOKEN',
+];
+console.log('[CosmicTesla] Startup environment check:');
+REQUIRED_ENV.forEach((key) => {
+  const val = process.env[key];
+  console.log(`  ${key}: ${val ? `SET (${val.length} chars)` : 'NOT SET ⚠️'}`);
+});
+
 app.listen(PORT, () => {
-console.log(`CosmicTesla is running at http://localhost:${PORT}`);
+  console.log(`[CosmicTesla] Server running at http://localhost:${PORT}`);
 });
