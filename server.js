@@ -667,7 +667,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f1117; color: #e2e4e9; min-height: 100vh; padding-top: 44px; }
     .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1a1d29; border-bottom: 1px solid #2a2d3a; display: flex; align-items: center; justify-content: center; gap: 2px; padding: 0 16px; height: 44px; }
     .nav-group { position: relative; height: 44px; display: flex; align-items: center; }
-    .nav-group-btn { background: none; border: none; cursor: pointer; font-family: inherit; color: #8b8fa3; font-size: 0.85rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; gap: 4px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .nav-group-btn { background: none; border: none; cursor: pointer; font-family: inherit; color: #00d4aa; font-size: 0.9rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; gap: 4px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
     .nav-group.open .nav-group-btn, .nav-group-btn:hover { color: #e2e4e9; background: rgba(255,255,255,0.06); }
     .nav-group .chev { font-size: 0.5rem; transition: transform 0.2s; display: inline-block; }
     .nav-group.open .chev { transform: rotate(180deg); }
@@ -683,7 +683,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     .nav-mobile-menu { display: none; position: fixed; top: 44px; left: 0; right: 0; background: #1a1d29; border-bottom: 1px solid #2a2d3a; max-height: calc(100vh - 44px); overflow-y: auto; z-index: 99; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
     .nav-mobile-menu.open { display: block; }
     .nav-acc-group { border-bottom: 1px solid rgba(42,45,58,0.6); }
-    .nav-acc-btn { width: 100%; background: none; border: none; cursor: pointer; font-family: inherit; color: #8b8fa3; font-size: 0.9rem; font-weight: 600; padding: 13px 20px; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s; }
+    .nav-acc-btn { width: 100%; background: none; border: none; cursor: pointer; font-family: inherit; color: #00d4aa; font-size: 0.9rem; font-weight: 600; padding: 13px 20px; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s; }
     .nav-acc-btn:hover { color: #e2e4e9; }
     .nav-acc-btn .chev { font-size: 0.5rem; transition: transform 0.2s; }
     .nav-acc-group.open .nav-acc-btn .chev { transform: rotate(180deg); }
@@ -729,7 +729,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
 <body>
   <nav class="site-nav">
     <div class="nav-group">
-      <button class="nav-group-btn">Social <span class="chev">▼</span></button>
+      <button class="nav-group-btn">🌐 Social <span class="chev">▼</span></button>
       <div class="nav-dropdown">
         <a href="/#google-trending">📈 Google Trending</a>
         <a href="/#reddit-trending">🔥 Reddit Trending</a>
@@ -737,7 +737,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-group">
-      <button class="nav-group-btn">Tech <span class="chev">▼</span></button>
+      <button class="nav-group-btn">💻 Tech <span class="chev">▼</span></button>
       <div class="nav-dropdown">
         <a href="/#github-trending">🐱 GitHub</a>
         <a href="/#hn-trending">🔶 Hacker News</a>
@@ -745,7 +745,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-group">
-      <button class="nav-group-btn">Entertainment <span class="chev">▼</span></button>
+      <button class="nav-group-btn">🍿 Entertainment <span class="chev">▼</span></button>
       <div class="nav-dropdown">
         <a href="/#tmdb-trending">🎬 Movies &amp; TV</a>
         <a href="/#steam-trending">🎮 Steam</a>
@@ -754,7 +754,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-group">
-      <button class="nav-group-btn">Culture <span class="chev">▼</span></button>
+      <button class="nav-group-btn">📚 Culture <span class="chev">▼</span></button>
       <div class="nav-dropdown">
         <a href="/#wiki-trending">📖 Wikipedia</a>
         <a href="/#books-trending">📚 Books</a>
@@ -769,7 +769,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
   </nav>
   <div class="nav-mobile-menu" id="navMobileMenu">
     <div class="nav-acc-group">
-      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Social <span class="chev">▼</span></button>
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">🌐 Social <span class="chev">▼</span></button>
       <div class="nav-acc-items">
         <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
         <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
@@ -777,7 +777,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-acc-group">
-      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Tech <span class="chev">▼</span></button>
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">💻 Tech <span class="chev">▼</span></button>
       <div class="nav-acc-items">
         <a href="/#github-trending" onclick="closeMenu()">🐱 GitHub</a>
         <a href="/#hn-trending" onclick="closeMenu()">🔶 Hacker News</a>
@@ -785,7 +785,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-acc-group">
-      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Entertainment <span class="chev">▼</span></button>
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">🍿 Entertainment <span class="chev">▼</span></button>
       <div class="nav-acc-items">
         <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies &amp; TV</a>
         <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
@@ -794,7 +794,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-acc-group">
-      <button class="nav-acc-btn" onclick="toggleAccordion(this)">Culture <span class="chev">▼</span></button>
+      <button class="nav-acc-btn" onclick="toggleAccordion(this)">📚 Culture <span class="chev">▼</span></button>
       <div class="nav-acc-items">
         <a href="/#wiki-trending" onclick="closeMenu()">📖 Wikipedia</a>
         <a href="/#books-trending" onclick="closeMenu()">📚 Books</a>
