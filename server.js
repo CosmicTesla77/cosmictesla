@@ -546,26 +546,25 @@ app.get('/api/spotify-trending', async (req, res) => {
   }
   try {
     const token = await getSpotifyToken();
-    // /v1/recommendations works with client credentials (no user OAuth required).
-    // seed_genres drives genre diversity; min_popularity filters out obscure tracks.
+    // /v1/browse/new-releases works with client credentials and needs no seed params.
     const raw = await fetchRaw(
-      'https://api.spotify.com/v1/recommendations?seed_genres=pop%2Chip-hop%2Crock&limit=20&min_popularity=60',
+      'https://api.spotify.com/v1/browse/new-releases?limit=20&country=US',
       false, { 'Authorization': `Bearer ${token}` }
     );
     const json = JSON.parse(raw);
-    const tracks = (json.tracks || []).slice(0, 20).map((t, i) => {
-      const artist = (t.artists || []).map((a) => a.name).join(', ');
-      const images = t.album?.images || [];
+    const albums = (json.albums?.items || []).slice(0, 20).map((album, i) => {
+      const artist = (album.artists || []).map((a) => a.name).join(', ');
+      const images = album.images || [];
       const art = (images.find((img) => img.width >= 200 && img.width <= 400) || images[0])?.url || null;
       return {
         rank: i + 1,
-        name: t.name,
+        name: album.name,
         artist,
         art,
-        affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(t.name + ' ' + artist)}&tag=cosmictesla-20`,
+        affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(album.name + ' ' + artist)}&tag=cosmictesla-20`,
       };
     });
-    const result = { tracks };
+    const result = { albums };
     spotifyCache.data = result;
     spotifyCache.fetchedAt = Date.now();
     res.json(result);

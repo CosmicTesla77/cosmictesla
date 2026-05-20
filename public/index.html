@@ -550,8 +550,8 @@
   </div>
   <div id="spotify-trending" class="section-header">
     <h2>Spotify Trending</h2>
-    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎵 Trending</span>
-    <span class="section-label">Pop, Hip-Hop &amp; Rock · Trending now</span>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎵 New</span>
+    <span class="section-label">Spotify · New releases in the US</span>
   </div>
   <div id="spotify-content">
     <div class="loading">
@@ -1020,19 +1020,19 @@
       try {
         const response = await fetch('/api/spotify-trending');
         const data = await response.json();
-        if (data.error || !data.tracks) {
-          el.innerHTML = '<div class="error">Failed to load Spotify tracks. Make sure SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET are set.</div>';
+        if (data.error || !data.albums) {
+          el.innerHTML = '<div class="error">Failed to load Spotify new releases. Make sure SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET are set.</div>';
           return;
         }
         let html = '<div class="trends-grid">';
-        data.tracks.forEach((track) => {
+        data.albums.forEach((album) => {
           html += '<div class="spotify-card">';
-          html += '<div class="spotify-rank">' + esc(String(track.rank)) + '</div>';
-          if (track.art) html += '<img class="spotify-art" src="' + esc(track.art) + '" alt="' + esc(track.name) + '" />';
+          html += '<div class="spotify-rank">' + esc(String(album.rank)) + '</div>';
+          if (album.art) html += '<img class="spotify-art" src="' + esc(album.art) + '" alt="' + esc(album.name) + '" />';
           html += '<div class="spotify-info">';
-          html += '<div class="spotify-name"><a href="' + esc(track.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(track.name) + '</a></div>';
-          html += '<div class="spotify-artist">' + esc(track.artist) + '</div>';
-          html += '<a class="spotify-shop" href="' + esc(track.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
+          html += '<div class="spotify-name"><a href="' + esc(album.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(album.name) + '</a></div>';
+          html += '<div class="spotify-artist">' + esc(album.artist) + '</div>';
+          html += '<a class="spotify-shop" href="' + esc(album.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
           html += '</div></div>';
         });
         html += '</div>';
