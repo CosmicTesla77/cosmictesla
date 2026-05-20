@@ -59,10 +59,20 @@ async function getSpotifyToken() {
       res.on('end', () => {
         try {
           const j = JSON.parse(raw);
+          if (!j.access_token) {
+            // Log the full Spotify error so it appears in Railway deploy logs.
+            console.error('[Spotify] Token request failed — HTTP', res.statusCode);
+            console.error('[Spotify] Token endpoint response:', raw);
+            reject(new Error(`Spotify token error (HTTP ${res.statusCode}): ${raw}`));
+            return;
+          }
           spotifyToken = j.access_token;
           spotifyTokenExpiry = Date.now() + (j.expires_in - 60) * 1000;
           resolve(spotifyToken);
-        } catch (e) { reject(e); }
+        } catch (e) {
+          console.error('[Spotify] Failed to parse token response (HTTP', res.statusCode, '):', raw);
+          reject(e);
+        }
       });
     });
     req.on('error', reject);
@@ -961,7 +971,14 @@ const REQUIRED_ENV = [
 console.log('[CosmicTesla] Startup environment check:');
 REQUIRED_ENV.forEach((key) => {
   const val = process.env[key];
-  console.log(`  ${key}: ${val ? `SET (${val.length} chars)` : 'NOT SET ⚠️'}`);
+  if (!val) {
+    console.log(`  ${key}: NOT SET ⚠️`);
+  } else if (key === 'SPOTIFY_CLIENT_ID' || key === 'SPOTIFY_CLIENT_SECRET') {
+    // Show first 4 chars so we can confirm the right value is loaded without exposing the secret.
+    console.log(`  ${key}: SET (${val.length} chars, starts "${val.slice(0, 4)}")`);
+  } else {
+    console.log(`  ${key}: SET (${val.length} chars)`);
+  }
 });
 
 app.listen(PORT, () => {
