@@ -289,18 +289,19 @@
     .twitch-viewers { font-size: 0.8rem; color: #9147ff; background: rgba(145,71,255,0.1); padding: 2px 8px; border-radius: 20px; }
     .twitch-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
     .twitch-shop:hover { color: #ff9900; }
-    .billboard-card {
+    .itunes-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
     }
-    .billboard-card:hover { border-color: #f92c2c; }
-    .billboard-rank { font-size: 1.2rem; font-weight: 700; color: #f92c2c; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
-    .billboard-info { flex: 1; min-width: 0; }
-    .billboard-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
-    .billboard-title a:hover { color: #f92c2c; }
-    .billboard-artist { font-size: 0.85rem; color: #f92c2c; background: rgba(249,44,44,0.1); display: inline-block; padding: 2px 8px; border-radius: 20px; margin-top: 5px; }
-    .billboard-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
-    .billboard-shop:hover { color: #ff9900; }
+    .itunes-card:hover { border-color: #fc3c44; }
+    .itunes-rank { font-size: 1.2rem; font-weight: 700; color: #fc3c44; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
+    .itunes-art { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .itunes-info { flex: 1; min-width: 0; }
+    .itunes-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .itunes-title a:hover { color: #fc3c44; }
+    .itunes-artist { font-size: 0.85rem; color: #fc3c44; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .itunes-shop { display: inline-block; margin-top: 6px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .itunes-shop:hover { color: #ff9900; }
     .yt-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -353,7 +354,7 @@
         <a href="#tmdb-trending">🎬 Movies &amp; TV</a>
         <a href="#steam-trending">🎮 Steam</a>
         <a href="#twitch-trending">🟣 Twitch</a>
-        <a href="#billboard-trending">🎵 Billboard</a>
+        <a href="#itunes-trending">🎵 iTunes</a>
       </div>
     </div>
     <div class="nav-group">
@@ -393,7 +394,7 @@
         <a href="#tmdb-trending" onclick="closeMenu()">🎬 Movies &amp; TV</a>
         <a href="#steam-trending" onclick="closeMenu()">🎮 Steam</a>
         <a href="#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
-        <a href="#billboard-trending" onclick="closeMenu()">🎵 Billboard</a>
+        <a href="#itunes-trending" onclick="closeMenu()">🎵 iTunes</a>
       </div>
     </div>
     <div class="nav-acc-group">
@@ -547,15 +548,15 @@
       Fetching Twitch top games...
     </div>
   </div>
-  <div id="billboard-trending" class="section-header">
-    <h2>Billboard Hot 100</h2>
-    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎵 Hot 100</span>
-    <span class="section-label">billboard.com · Top songs right now</span>
+  <div id="itunes-trending" class="section-header">
+    <h2>iTunes Top Songs</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎵 US Top 20</span>
+    <span class="section-label">Apple iTunes · Top songs in the US</span>
   </div>
-  <div id="billboard-content">
+  <div id="itunes-content">
     <div class="loading">
       <div class="spinner"></div>
-      Fetching Billboard Hot 100...
+      Fetching iTunes top songs...
     </div>
   </div>
   <div id="youtube-trending" class="section-header">
@@ -1014,34 +1015,35 @@
     }
 
     loadBooks();
-    async function loadBillboard() {
-      const el = document.getElementById('billboard-content');
+    async function loadItunes() {
+      const el = document.getElementById('itunes-content');
       try {
-        const response = await fetch('/api/billboard-hot100');
+        const response = await fetch('/api/itunes-top-songs');
         const data = await response.json();
         if (data.error || !data.songs) {
-          el.innerHTML = '<div class="error">Failed to load Billboard Hot 100.</div>';
+          el.innerHTML = '<div class="error">Failed to load iTunes top songs.</div>';
           return;
         }
         let html = '<div class="trends-grid">';
         data.songs.forEach((song) => {
-          html += '<div class="billboard-card">';
-          html += '<div class="billboard-rank">' + esc(String(song.rank)) + '</div>';
-          html += '<div class="billboard-info">';
-          html += '<div class="billboard-title"><a href="' + esc(song.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(song.title) + '</a></div>';
-          if (song.artist) html += '<div class="billboard-artist">' + esc(song.artist) + '</div>';
-          html += '<a class="billboard-shop" href="' + esc(song.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
+          html += '<div class="itunes-card">';
+          html += '<div class="itunes-rank">' + esc(String(song.rank)) + '</div>';
+          if (song.art) html += '<img class="itunes-art" src="' + esc(song.art) + '" alt="' + esc(song.title) + '" />';
+          html += '<div class="itunes-info">';
+          html += '<div class="itunes-title"><a href="' + esc(song.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(song.title) + '</a></div>';
+          if (song.artist) html += '<div class="itunes-artist">' + esc(song.artist) + '</div>';
+          html += '<a class="itunes-shop" href="' + esc(song.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
           html += '</div></div>';
         });
         html += '</div>';
         el.innerHTML = html;
       } catch (err) {
-        el.innerHTML = '<div class="error">Could not load Billboard Hot 100.</div>';
+        el.innerHTML = '<div class="error">Could not load iTunes top songs.</div>';
       }
     }
 
     loadTwitch();
-    loadBillboard();
+    loadItunes();
     loadYouTube();
     loadLastUpdated();
   </script>

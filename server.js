@@ -33,7 +33,7 @@ const cryptoCache = { data: null, fetchedAt: null };
 const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
 const twitchCache = { data: null, fetchedAt: null };
-const billboardCache = { data: null, fetchedAt: null };
+const itunesCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 const CACHE_TTL_60M = 60 * 60 * 1000;
@@ -493,48 +493,36 @@ app.get('/api/twitch-trending', async (req, res) => {
   }
 });
 
-app.get('/api/billboard-hot100', async (req, res) => {
-  if (billboardCache.data && billboardCache.fetchedAt && (Date.now() - billboardCache.fetchedAt < CACHE_TTL_60M)) {
-    return res.json(billboardCache.data);
+app.get('/api/itunes-top-songs', async (req, res) => {
+  if (itunesCache.data && itunesCache.fetchedAt && (Date.now() - itunesCache.fetchedAt < CACHE_TTL_60M)) {
+    return res.json(itunesCache.data);
   }
   try {
-    const html = await fetchRaw('https://www.billboard.com/charts/hot-100/', false, {
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'en-US,en;q=0.9',
-    });
-    const $ = cheerio.load(html);
-    const songs = [];
-
-    $('ul.o-chart-results-list-row').each((i, el) => {
-      if (songs.length >= 20) return false;
-      const $el = $(el);
-      const rankStr = $el.find('span.c-label.a-font-primary-bold-l').first().text().trim();
-      const rank = parseInt(rankStr, 10);
-      if (!rank || rank > 100) return;
-      const title = $el.find('h3.c-title').first().text().trim();
-      // Artist sits in a span sibling of the title h3; exclude the bold-rank span
-      const artist = $el.find('span.c-label').not('.a-font-primary-bold-l').first().text().trim();
-      if (!title) return;
-      songs.push({
-        rank,
+    // Public Apple RSS feed — no auth, clean JSON, no Cloudflare.
+    const raw = await fetchRaw('https://itunes.apple.com/us/rss/topsongs/limit=20/json');
+    const json = JSON.parse(raw);
+    const entries = json.feed?.entry || [];
+    const songs = entries.slice(0, 20).map((entry, i) => {
+      const title  = entry['im:name']?.label   || '';
+      const artist = entry['im:artist']?.label || '';
+      // Images are ordered smallest → largest; last entry is highest quality (170×170).
+      const images = entry['im:image'] || [];
+      const art    = images.length ? images[images.length - 1].label : null;
+      return {
+        rank: i + 1,
         title,
         artist,
+        art,
         affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(title + (artist ? ' ' + artist : ''))}&tag=cosmictesla-20`,
-      });
+      };
     });
-
-    if (!songs.length) {
-      console.error('[Billboard] No songs parsed — page structure may have changed');
-      console.error('[Billboard] HTML snippet:', html.slice(0, 3000));
-    }
-
     const result = { songs };
-    billboardCache.data = result;
-    billboardCache.fetchedAt = Date.now();
+    itunesCache.data = result;
+    itunesCache.fetchedAt = Date.now();
     res.json(result);
   } catch (error) {
-    console.error('Error fetching Billboard Hot 100:', error.message);
-    res.status(500).json({ error: 'Failed to fetch Billboard Hot 100' });
+    console.error('Error fetching iTunes top songs:', error.message);
+    res.status(500).json({ error: 'Failed to fetch iTunes top songs' });
   }
 });
 
@@ -762,7 +750,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
         <a href="/#tmdb-trending">🎬 Movies &amp; TV</a>
         <a href="/#steam-trending">🎮 Steam</a>
         <a href="/#twitch-trending">🟣 Twitch</a>
-        <a href="/#billboard-trending">🎵 Billboard</a>
+        <a href="/#itunes-trending">🎵 iTunes</a>
       </div>
     </div>
     <div class="nav-group">
@@ -802,7 +790,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
         <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies &amp; TV</a>
         <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
         <a href="/#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
-        <a href="/#billboard-trending" onclick="closeMenu()">🎵 Billboard</a>
+        <a href="/#itunes-trending" onclick="closeMenu()">🎵 iTunes</a>
       </div>
     </div>
     <div class="nav-acc-group">
