@@ -33,53 +33,9 @@ const cryptoCache = { data: null, fetchedAt: null };
 const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
 const twitchCache = { data: null, fetchedAt: null };
-const spotifyCache = { data: null, fetchedAt: null };
+const billboardCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
-let spotifyToken = null;
-let spotifyTokenExpiry = 0;
-
-async function getSpotifyToken() {
-  if (spotifyToken && Date.now() < spotifyTokenExpiry) return spotifyToken;
-  const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  const creds = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-  const payload = 'grant_type=client_credentials';
-  return new Promise((resolve, reject) => {
-    const req = https.request({
-      hostname: 'accounts.spotify.com', path: '/api/token', method: 'POST',
-      headers: {
-        'Authorization': `Basic ${creds}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(payload),
-      },
-    }, (res) => {
-      let raw = '';
-      res.on('data', (c) => { raw += c; });
-      res.on('end', () => {
-        try {
-          const j = JSON.parse(raw);
-          if (!j.access_token) {
-            // Log the full Spotify error so it appears in Railway deploy logs.
-            console.error('[Spotify] Token request failed — HTTP', res.statusCode);
-            console.error('[Spotify] Token endpoint response:', raw);
-            reject(new Error(`Spotify token error (HTTP ${res.statusCode}): ${raw}`));
-            return;
-          }
-          spotifyToken = j.access_token;
-          spotifyTokenExpiry = Date.now() + (j.expires_in - 60) * 1000;
-          resolve(spotifyToken);
-        } catch (e) {
-          console.error('[Spotify] Failed to parse token response (HTTP', res.statusCode, '):', raw);
-          reject(e);
-        }
-      });
-    });
-    req.on('error', reject);
-    req.write(payload);
-    req.end();
-  });
-}
 const CACHE_TTL_60M = 60 * 60 * 1000;
 const CACHE_TTL_5M = 5 * 60 * 1000;
 
@@ -537,40 +493,48 @@ app.get('/api/twitch-trending', async (req, res) => {
   }
 });
 
-app.get('/api/spotify-trending', async (req, res) => {
-  if (spotifyCache.data && spotifyCache.fetchedAt && (Date.now() - spotifyCache.fetchedAt < CACHE_TTL_5M)) {
-    return res.json(spotifyCache.data);
-  }
-  if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
-    return res.status(500).json({ error: 'Spotify credentials not configured' });
+app.get('/api/billboard-hot100', async (req, res) => {
+  if (billboardCache.data && billboardCache.fetchedAt && (Date.now() - billboardCache.fetchedAt < CACHE_TTL_60M)) {
+    return res.json(billboardCache.data);
   }
   try {
-    const token = await getSpotifyToken();
-    // /v1/browse/new-releases works with client credentials and needs no seed params.
-    const raw = await fetchRaw(
-      'https://api.spotify.com/v1/browse/new-releases?limit=20&country=US',
-      false, { 'Authorization': `Bearer ${token}` }
-    );
-    const json = JSON.parse(raw);
-    const albums = (json.albums?.items || []).slice(0, 20).map((album, i) => {
-      const artist = (album.artists || []).map((a) => a.name).join(', ');
-      const images = album.images || [];
-      const art = (images.find((img) => img.width >= 200 && img.width <= 400) || images[0])?.url || null;
-      return {
-        rank: i + 1,
-        name: album.name,
-        artist,
-        art,
-        affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(album.name + ' ' + artist)}&tag=cosmictesla-20`,
-      };
+    const html = await fetchRaw('https://www.billboard.com/charts/hot-100/', false, {
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.9',
     });
-    const result = { albums };
-    spotifyCache.data = result;
-    spotifyCache.fetchedAt = Date.now();
+    const $ = cheerio.load(html);
+    const songs = [];
+
+    $('ul.o-chart-results-list-row').each((i, el) => {
+      if (songs.length >= 20) return false;
+      const $el = $(el);
+      const rankStr = $el.find('span.c-label.a-font-primary-bold-l').first().text().trim();
+      const rank = parseInt(rankStr, 10);
+      if (!rank || rank > 100) return;
+      const title = $el.find('h3.c-title').first().text().trim();
+      // Artist sits in a span sibling of the title h3; exclude the bold-rank span
+      const artist = $el.find('span.c-label').not('.a-font-primary-bold-l').first().text().trim();
+      if (!title) return;
+      songs.push({
+        rank,
+        title,
+        artist,
+        affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(title + (artist ? ' ' + artist : ''))}&tag=cosmictesla-20`,
+      });
+    });
+
+    if (!songs.length) {
+      console.error('[Billboard] No songs parsed — page structure may have changed');
+      console.error('[Billboard] HTML snippet:', html.slice(0, 3000));
+    }
+
+    const result = { songs };
+    billboardCache.data = result;
+    billboardCache.fetchedAt = Date.now();
     res.json(result);
   } catch (error) {
-    console.error('Error fetching Spotify:', error.message);
-    res.status(500).json({ error: 'Failed to fetch Spotify trending' });
+    console.error('Error fetching Billboard Hot 100:', error.message);
+    res.status(500).json({ error: 'Failed to fetch Billboard Hot 100' });
   }
 });
 
@@ -798,7 +762,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
         <a href="/#tmdb-trending">🎬 Movies &amp; TV</a>
         <a href="/#steam-trending">🎮 Steam</a>
         <a href="/#twitch-trending">🟣 Twitch</a>
-        <a href="/#spotify-trending">🎵 Spotify</a>
+        <a href="/#billboard-trending">🎵 Billboard</a>
       </div>
     </div>
     <div class="nav-group">
@@ -838,7 +802,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
         <a href="/#tmdb-trending" onclick="closeMenu()">🎬 Movies &amp; TV</a>
         <a href="/#steam-trending" onclick="closeMenu()">🎮 Steam</a>
         <a href="/#twitch-trending" onclick="closeMenu()">🟣 Twitch</a>
-        <a href="/#spotify-trending" onclick="closeMenu()">🎵 Spotify</a>
+        <a href="/#billboard-trending" onclick="closeMenu()">🎵 Billboard</a>
       </div>
     </div>
     <div class="nav-acc-group">
@@ -958,8 +922,6 @@ app.get('/contact', (req, res) => {
 
 // ── Startup environment variable check ────────────────────────────────────
 const REQUIRED_ENV = [
-  'SPOTIFY_CLIENT_ID',
-  'SPOTIFY_CLIENT_SECRET',
   'TWITCH_CLIENT_ID',
   'TWITCH_CLIENT_SECRET',
   'YOUTUBE_API_KEY',
@@ -972,9 +934,6 @@ REQUIRED_ENV.forEach((key) => {
   const val = process.env[key];
   if (!val) {
     console.log(`  ${key}: NOT SET ⚠️`);
-  } else if (key === 'SPOTIFY_CLIENT_ID' || key === 'SPOTIFY_CLIENT_SECRET') {
-    // Show first 4 chars so we can confirm the right value is loaded without exposing the secret.
-    console.log(`  ${key}: SET (${val.length} chars, starts "${val.slice(0, 4)}")`);
   } else {
     console.log(`  ${key}: SET (${val.length} chars)`);
   }
