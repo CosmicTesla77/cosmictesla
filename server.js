@@ -627,7 +627,7 @@ app.post('/api/generate-post-image', async (req, res) => {
     res.json({ url, query, fallback: false });
   } catch (err) {
     console.error('[Unsplash] generate-post-image failed:', err.message);
-    res.json({ url: fallback, query, fallback: true, error: err.message });
+    res.json({ url: fallback, query, fallback: true });
   }
 });
 
