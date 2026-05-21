@@ -804,7 +804,10 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     .post-content pre { background: #252838; border: 1px solid #2a2d3a; border-radius: 8px; padding: 16px; overflow-x: auto; margin-bottom: 16px; }
     .post-content pre code { background: none; padding: 0; color: #e2e4e9; }
     .post-content blockquote { border-left: 3px solid #00d4aa; padding-left: 16px; color: #8b8fa3; margin-bottom: 16px; }
-    .post-featured-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; margin: 20px 0 28px; }
+    .post-featured-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; margin: 20px 0 4px; }
+    .post-img-credit { font-size: 0.72rem; color: #555a6e; text-align: right; margin: 0 0 24px; }
+    .post-img-credit a { color: #555a6e; text-decoration: none; }
+    .post-img-credit a:hover { color: #8b8fa3; text-decoration: underline; }
     .empty-state { text-align: center; padding: 60px 20px; color: #555a6e; }
     @media (max-width: 600px) { header h1 a { font-size: 1.5rem; } .blog-wrap { padding: 24px 16px; } }
   </style>
@@ -980,7 +983,7 @@ app.get('/blog/:slug', (req, res) => {
       <article>
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
         <div class="post-date">${escHtml(formatDate(date))}</div>
-        ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />` : ''}
+        ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" /><p class="post-img-credit">Photo via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></p>` : ''}
         <div class="post-content">${marked(body)}</div>
       </article>
     </div>`));
