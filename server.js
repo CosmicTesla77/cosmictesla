@@ -576,37 +576,35 @@ app.get('/api/news-trending', async (req, res) => {
       )
     )
   );
-  // Step 1: collect per-feed results (only fulfilled feeds).
+  // Step 1: collect per-feed results (only fulfilled feeds with at least 1 item).
   const feedResults = [];
-  settled.forEach((r) => { if (r.status === 'fulfilled') feedResults.push(r.value); });
+  settled.forEach((r) => {
+    if (r.status === 'fulfilled' && r.value.length > 0) feedResults.push(r.value);
+  });
 
-  // Step 2: guarantee at least 2 stories from each working feed, newest-first.
-  const selected = [];
-  const usedLinks = new Set();
+  // Step 2: guaranteed array — 3 most-recent items from each working feed.
+  const guaranteed = [];
   for (const feedItems of feedResults) {
     const sorted = [...feedItems].sort((a, b) => b.pubDate - a.pubDate);
-    let picked = 0;
-    for (const item of sorted) {
-      if (picked >= 2) break;
-      if (!usedLinks.has(item.link)) {
-        selected.push(item);
-        usedLinks.add(item.link);
-        picked++;
-      }
-    }
+    guaranteed.push(...sorted.slice(0, 3));
   }
 
-  // Step 3: fill remaining slots up to 30 from the full pool, sorted newest-first.
+  // Step 3: remaining pool — all items from all working feeds, sorted newest-first.
   const pool = feedResults.flat().sort((a, b) => b.pubDate - a.pubDate);
+
+  // Step 4: build final display list.
+  // Start with the guaranteed items, then append from the pool without duplicates.
+  const display = [...guaranteed];
+  const displayLinks = new Set(display.map((a) => a.link));
   for (const item of pool) {
-    if (selected.length >= 30) break;
-    if (!usedLinks.has(item.link)) {
-      selected.push(item);
-      usedLinks.add(item.link);
+    if (display.length >= 30) break;
+    if (!displayLinks.has(item.link)) {
+      display.push(item);
+      displayLinks.add(item.link);
     }
   }
 
-  const items = selected.map((a) => ({
+  const items = display.map((a) => ({
     title:   a.title,
     link:    a.link,
     source:  a.source,
