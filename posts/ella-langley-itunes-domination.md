@@ -1,6 +1,6 @@
 # Ella Langley Is Dominating iTunes Right Now and Country Music Is Paying Attention
 2026-05-21
-https://source.unsplash.com/1200x628/?country-music-concert-stage
+https://source.unsplash.com/1200x628/?country-music-stage
 
 Ella Langley is not just trending today. She is occupying four of the top six spots on the iTunes Top Songs chart simultaneously, a level of chart domination that most artists never achieve at any point in their careers, let alone as an emerging name in country music.
 

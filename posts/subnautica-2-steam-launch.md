@@ -1,6 +1,6 @@
 # Subnautica 2 Has Arrived on Steam and Early Players Are Already Hooked
 2026-05-21
-https://source.unsplash.com/1200x628/?deep-ocean-underwater
+https://source.unsplash.com/1200x628/?ocean-underwater
 
 Subnautica 2 is live on Steam at $29.99 with a Very Positive rating from early players, and if the original game's reputation is any indication, this sequel is about to consume hundreds of hours from the people who pick it up this week.
 

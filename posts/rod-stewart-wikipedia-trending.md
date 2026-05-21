@@ -1,6 +1,6 @@
 # Rod Stewart Is One of the Most Searched People on the Internet Today
 2026-05-21
-https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Rod_Stewart_2013.jpg/800px-Rod_Stewart_2013.jpg
+https://source.unsplash.com/1200x628/?concert-rock-musician
 
 Rod Stewart is trending across Wikipedia today with over 202,000 views, putting him among the most searched individuals on the internet right now. For a career that has spanned more than six decades, that kind of traffic spike is a reminder that the world never stops paying attention to one of rock and roll's most enduring figures.
 

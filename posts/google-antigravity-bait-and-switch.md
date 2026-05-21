@@ -1,6 +1,6 @@
 # Google's Antigravity Bait and Switch Is the Top Story on Hacker News Today
 2026-05-21
-https://source.unsplash.com/1200x628/?google-headquarters-tech
+https://source.unsplash.com/1200x628/?technology-server
 
 A post titled Google's Antigravity Bait and Switch is leading Hacker News today and generating significant discussion across the developer and tech community. The story is touching a nerve because it speaks to a pattern that engineers and businesses who depend on Google products have experienced repeatedly over the years.
 
