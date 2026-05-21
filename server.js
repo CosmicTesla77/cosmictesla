@@ -576,10 +576,37 @@ app.get('/api/news-trending', async (req, res) => {
       )
     )
   );
-  let articles = [];
-  settled.forEach((r) => { if (r.status === 'fulfilled') articles = articles.concat(r.value); });
-  articles.sort((a, b) => b.pubDate - a.pubDate);
-  const items = articles.slice(0, 30).map((a) => ({
+  // Step 1: collect per-feed results (only fulfilled feeds).
+  const feedResults = [];
+  settled.forEach((r) => { if (r.status === 'fulfilled') feedResults.push(r.value); });
+
+  // Step 2: guarantee at least 2 stories from each working feed, newest-first.
+  const selected = [];
+  const usedLinks = new Set();
+  for (const feedItems of feedResults) {
+    const sorted = [...feedItems].sort((a, b) => b.pubDate - a.pubDate);
+    let picked = 0;
+    for (const item of sorted) {
+      if (picked >= 2) break;
+      if (!usedLinks.has(item.link)) {
+        selected.push(item);
+        usedLinks.add(item.link);
+        picked++;
+      }
+    }
+  }
+
+  // Step 3: fill remaining slots up to 30 from the full pool, sorted newest-first.
+  const pool = feedResults.flat().sort((a, b) => b.pubDate - a.pubDate);
+  for (const item of pool) {
+    if (selected.length >= 30) break;
+    if (!usedLinks.has(item.link)) {
+      selected.push(item);
+      usedLinks.add(item.link);
+    }
+  }
+
+  const items = selected.map((a) => ({
     title:   a.title,
     link:    a.link,
     source:  a.source,
