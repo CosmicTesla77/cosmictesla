@@ -722,6 +722,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     .post-content pre { background: #252838; border: 1px solid #2a2d3a; border-radius: 8px; padding: 16px; overflow-x: auto; margin-bottom: 16px; }
     .post-content pre code { background: none; padding: 0; color: #e2e4e9; }
     .post-content blockquote { border-left: 3px solid #00d4aa; padding-left: 16px; color: #8b8fa3; margin-bottom: 16px; }
+    .post-featured-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; margin: 20px 0 28px; }
     .empty-state { text-align: center; padding: 60px 20px; color: #555a6e; }
     @media (max-width: 600px) { header h1 a { font-size: 1.5rem; } .blog-wrap { padding: 24px 16px; } }
   </style>
@@ -886,7 +887,10 @@ app.get('/blog/:slug', (req, res) => {
   const lines = raw.split('\n');
   const title = lines[0].replace(/^#+\s*/, '').trim();
   const date = lines[1].trim();
-  const body = lines.slice(2).join('\n');
+  // Line 3 (index 2) is an optional featured image URL.
+  const line3 = (lines[2] || '').trim();
+  const featuredImage = line3.startsWith('http') ? line3 : null;
+  const body = lines.slice(featuredImage ? 3 : 2).join('\n');
 
   res.send(blogLayout(title, `
     <div class="blog-wrap">
@@ -894,6 +898,7 @@ app.get('/blog/:slug', (req, res) => {
       <article>
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
         <div class="post-date">${escHtml(formatDate(date))}</div>
+        ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />` : ''}
         <div class="post-content">${marked(body)}</div>
       </article>
     </div>`));
