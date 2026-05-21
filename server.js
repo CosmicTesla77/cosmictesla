@@ -553,11 +553,16 @@ app.get('/api/news-trending', async (req, res) => {
     return res.json(newsCache.data);
   }
   const FEEDS = [
-    { url: 'https://feeds.npr.org/1001/rss.xml',              source: 'NPR'         },
-    { url: 'http://feeds.bbci.co.uk/news/rss.xml',            source: 'BBC News'    },
-    { url: 'http://rss.cnn.com/rss/edition_world.rss',        source: 'CNN'         },
-    { url: 'https://www.aljazeera.com/xml/rss/all.xml',       source: 'Al Jazeera'  },
-    { url: 'https://feeds.abcnews.com/abcnews/topstories',    source: 'ABC News'    },
+    { url: 'https://feeds.npr.org/1001/rss.xml',                                                           source: 'NPR'         },
+    { url: 'http://feeds.bbci.co.uk/news/rss.xml',                                                         source: 'BBC News'    },
+    { url: 'http://rss.cnn.com/rss/edition_world.rss',                                                     source: 'CNN'         },
+    { url: 'https://www.aljazeera.com/xml/rss/all.xml',                                                    source: 'Al Jazeera'  },
+    { url: 'https://feeds.abcnews.com/abcnews/topstories',                                                 source: 'ABC News'    },
+    { url: 'https://moxie.foxnews.com/google-publisher/top.xml',                                           source: 'Fox News'    },
+    { url: 'https://feeds.nbcnews.com/nbcnews/public/news',                                                source: 'NBC News'    },
+    { url: 'https://rssfeeds.usatoday.com/usatoday-NewsTopStories',                                        source: 'USA Today'   },
+    { url: 'https://www.theguardian.com/world/rss',                                                        source: 'The Guardian'},
+    { url: 'https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com&hl=en-US&gl=US&ceid=US:en', source: 'Reuters'     },
   ];
   const settled = await Promise.allSettled(
     FEEDS.map(({ url, source }) =>
@@ -574,7 +579,7 @@ app.get('/api/news-trending', async (req, res) => {
   let articles = [];
   settled.forEach((r) => { if (r.status === 'fulfilled') articles = articles.concat(r.value); });
   articles.sort((a, b) => b.pubDate - a.pubDate);
-  const items = articles.slice(0, 20).map((a) => ({
+  const items = articles.slice(0, 30).map((a) => ({
     title:   a.title,
     link:    a.link,
     source:  a.source,
