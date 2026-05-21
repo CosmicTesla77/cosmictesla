@@ -1,6 +1,6 @@
 # Yesteryear by Caro Claire Burke Has Spent Six Weeks on the NYT Bestseller List and It Is Easy to See Why
 2026-05-21
-https://source.unsplash.com/1200x628/?book-reading-bestseller
+https://picsum.photos/seed/yesteryear/1200/628
 
 Yesteryear by Caro Claire Burke is holding at number two on the New York Times Fiction Bestseller list in its sixth consecutive week, and that kind of staying power in a market that cycles new titles weekly tells you everything you need to know about how strongly this book is connecting with readers.
 
