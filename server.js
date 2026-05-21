@@ -34,10 +34,12 @@ const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
 const twitchCache = { data: null, fetchedAt: null };
 const itunesCache = { data: null, fetchedAt: null };
+const newsCache   = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 const CACHE_TTL_60M = 60 * 60 * 1000;
-const CACHE_TTL_5M = 5 * 60 * 1000;
+const CACHE_TTL_15M = 15 * 60 * 1000;
+const CACHE_TTL_5M  = 5 * 60 * 1000;
 
 let twitchToken = null;
 let twitchTokenExpiry = 0;
@@ -546,6 +548,42 @@ app.get('/api/itunes-top-songs', async (req, res) => {
   }
 });
 
+app.get('/api/news-trending', async (req, res) => {
+  if (newsCache.data && newsCache.fetchedAt && (Date.now() - newsCache.fetchedAt < CACHE_TTL_15M)) {
+    return res.json(newsCache.data);
+  }
+  const FEEDS = [
+    { url: 'https://feeds.reuters.com/reuters/topNews', source: 'Reuters'  },
+    { url: 'https://feeds.apnews.com/rss/apf-topnews',  source: 'AP News'  },
+    { url: 'http://feeds.bbci.co.uk/news/rss.xml',      source: 'BBC News' },
+  ];
+  const settled = await Promise.allSettled(
+    FEEDS.map(({ url, source }) =>
+      parser.parseURL(url).then((feed) =>
+        feed.items.map((item) => ({
+          title: (item.title || '').trim(),
+          link:  item.link || item.guid || '',
+          source,
+          pubDate: item.pubDate ? new Date(item.pubDate) : new Date(0),
+        }))
+      )
+    )
+  );
+  let articles = [];
+  settled.forEach((r) => { if (r.status === 'fulfilled') articles = articles.concat(r.value); });
+  articles.sort((a, b) => b.pubDate - a.pubDate);
+  const items = articles.slice(0, 20).map((a) => ({
+    title:   a.title,
+    link:    a.link,
+    source:  a.source,
+    pubDate: a.pubDate.toISOString(),
+  }));
+  const result = { items };
+  newsCache.data     = result;
+  newsCache.fetchedAt = Date.now();
+  res.json(result);
+});
+
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
@@ -817,6 +855,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <div class="nav-group">
       <button class="nav-group-btn">🌐 Social <span class="chev">▼</span></button>
       <div class="nav-dropdown">
+        <a href="/#news-trending">📰 News Headlines</a>
         <a href="/#google-trending">📈 Google Trending</a>
         <a href="/#reddit-trending">🔥 Reddit Trending</a>
         <a href="/#youtube-trending">▶️ YouTube Trending</a>
@@ -857,6 +896,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <div class="nav-acc-group">
       <button class="nav-acc-btn" onclick="toggleAccordion(this)">🌐 Social <span class="chev">▼</span></button>
       <div class="nav-acc-items">
+        <a href="/#news-trending" onclick="closeMenu()">📰 News Headlines</a>
         <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
         <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
         <a href="/#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
