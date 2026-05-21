@@ -553,9 +553,11 @@ app.get('/api/news-trending', async (req, res) => {
     return res.json(newsCache.data);
   }
   const FEEDS = [
-    { url: 'https://feeds.reuters.com/reuters/topNews', source: 'Reuters'  },
-    { url: 'https://feeds.apnews.com/rss/apf-topnews',  source: 'AP News'  },
-    { url: 'http://feeds.bbci.co.uk/news/rss.xml',      source: 'BBC News' },
+    { url: 'https://feeds.npr.org/1001/rss.xml',              source: 'NPR'         },
+    { url: 'http://feeds.bbci.co.uk/news/rss.xml',            source: 'BBC News'    },
+    { url: 'http://rss.cnn.com/rss/edition_world.rss',        source: 'CNN'         },
+    { url: 'https://www.aljazeera.com/xml/rss/all.xml',       source: 'Al Jazeera'  },
+    { url: 'https://feeds.abcnews.com/abcnews/topstories',    source: 'ABC News'    },
   ];
   const settled = await Promise.allSettled(
     FEEDS.map(({ url, source }) =>
