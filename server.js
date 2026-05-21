@@ -106,6 +106,7 @@ app.get('/sitemap.xml', (req, res) => {
   res.set('Content-Type', 'application/xml').send(xml);
 });
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const ACRONYM_MAP = new Map(
@@ -135,6 +136,25 @@ function parseTraffic(trafficStr) {
   if (!trafficStr) return 0;
   const cleaned = trafficStr.replace(/[^0-9]/g, '');
   return parseInt(cleaned, 10) || 0;
+}
+
+const STOP_WORDS = new Set([
+  'a','an','the','and','or','but','in','on','at','to','for','of','with','by',
+  'from','is','are','was','were','be','been','has','have','had','will','would',
+  'could','should','may','might','do','does','did','its','it','this','that',
+  'these','those','as','so','if','not','no','up','out','about','into','than',
+  'just','now','one','two','how','what','who','why','when','where','which','can',
+]);
+
+// Strips stop words and returns up to 4 meaningful keywords joined by spaces.
+function extractKeywords(title) {
+  const words = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2 && !STOP_WORDS.has(w))
+    .slice(0, 4);
+  return words.join(' ') || title.split(' ')[0].toLowerCase();
 }
 
 app.get('/about', (req, res) => {
@@ -580,6 +600,68 @@ function fetchRaw(url, allowErrorBody = false, extraHeaders = {}) {
   });
 }
 
+// ── Unsplash integration ───────────────────────────────────────────────────
+async function fetchUnsplashImage(query) {
+  const key = process.env.UNSPLASH_ACCESS_KEY;
+  if (!key) throw new Error('UNSPLASH_ACCESS_KEY not set');
+  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`;
+  const raw = await fetchRaw(url, false, {
+    'Authorization': `Client-ID ${key}`,
+    'Accept-Version': 'v1',
+  });
+  const json = JSON.parse(raw);
+  const imageUrl = json.results?.[0]?.urls?.regular;
+  if (!imageUrl) throw new Error(`No Unsplash results for "${query}"`);
+  return imageUrl;
+}
+
+// Returns an Unsplash image URL for a given post title (keywords extracted).
+// Falls back to picsum if the API is unavailable.
+app.post('/api/generate-post-image', async (req, res) => {
+  const { title } = req.body || {};
+  if (!title) return res.status(400).json({ error: 'title is required' });
+  const query = extractKeywords(title);
+  const fallback = `https://picsum.photos/seed/${encodeURIComponent(query.split(' ')[0] || 'post')}/1200/628`;
+  try {
+    const url = await fetchUnsplashImage(query);
+    res.json({ url, query, fallback: false });
+  } catch (err) {
+    console.error('[Unsplash] generate-post-image failed:', err.message);
+    res.json({ url: fallback, query, fallback: true });
+  }
+});
+
+// Creates a new blog post .md file with an auto-fetched featured image on line 3.
+app.post('/api/create-post', async (req, res) => {
+  const { title, date, body } = req.body || {};
+  if (!title || !date || !body) {
+    return res.status(400).json({ error: 'title, date, and body are required' });
+  }
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const filePath = path.join(POSTS_DIR, `${slug}.md`);
+  const query = extractKeywords(title);
+  const firstKeyword = query.split(' ')[0] || slug.split('-')[0] || 'post';
+  const fallbackUrl = `https://picsum.photos/seed/${encodeURIComponent(firstKeyword)}/1200/628`;
+  let imageUrl = fallbackUrl;
+  let usedFallback = false;
+  try {
+    imageUrl = await fetchUnsplashImage(query);
+    console.log(`[Unsplash] Image for "${title}": ${imageUrl}`);
+  } catch (err) {
+    console.error('[Unsplash] Image fetch failed for new post, using fallback:', err.message);
+    usedFallback = true;
+  }
+  // Format: line 1 = # title, line 2 = date, line 3 = image URL, blank line, body.
+  const content = `# ${title}\n${date}\n${imageUrl}\n\n${body.trim()}\n`;
+  try {
+    fs.writeFileSync(filePath, content, 'utf8');
+    res.json({ slug, file: `posts/${slug}.md`, imageUrl, query, usedFallback });
+  } catch (err) {
+    console.error('[create-post] Write failed:', err.message);
+    res.status(500).json({ error: 'Failed to write post file' });
+  }
+});
+
 app.get('/api/reddit', async (req, res) => {
   try {
     const xml = await fetchRaw('https://www.reddit.com/r/all/hot.rss');
@@ -915,6 +997,7 @@ app.get('/contact', (req, res) => {
 
 // ── Startup environment variable check ────────────────────────────────────
 const REQUIRED_ENV = [
+  'UNSPLASH_ACCESS_KEY',
   'TWITCH_CLIENT_ID',
   'TWITCH_CLIENT_SECRET',
   'YOUTUBE_API_KEY',
