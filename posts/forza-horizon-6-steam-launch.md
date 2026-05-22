@@ -1,0 +1,8 @@
+Forza Horizon 6 Just Launched at 69.99 and Shot Straight to Number One on Steam
+May 22 2026
+
+Forza Horizon 6 launched today and immediately claimed the top spot on Steam's top sellers chart with a Very Positive rating out of the gate. The game is priced at 69.99, which puts it at the standard premium tier for major releases in 2026, and early buyers are not complaining. The Horizon series has built one of the most loyal audiences in the racing genre by consistently delivering open world driving experiences that feel alive, and the early word on this installment is that the team has raised the bar again on both visual fidelity and the sheer variety of events on offer.
+
+The Steam launch is significant because the Horizon series was previously tied tightly to Xbox and the Microsoft ecosystem. Bringing it to Steam with full day-one availability signals a broader platform strategy from Microsoft that prioritizes reach over exclusivity, and PC players who have been waiting for a reason to jump into the franchise are doing exactly that today. Counter-Strike 2 is still holding at number two as a free-to-play anchor, but Forza Horizon 6 sitting above it as a paid title on launch day says something about the appetite for this release.
+
+For players who want an open world to get lost in, a career to grind, and a garage to fill, Forza Horizon 6 appears to be delivering everything the series has promised and then some. The Very Positive rating this early in a launch window is a reliable signal that the game shipped without the kind of technical disasters that have plagued other major releases. Check the Steam Top Sellers section on CosmicTesla daily for what is moving on PC gaming right now.

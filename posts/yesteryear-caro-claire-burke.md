@@ -1,0 +1,10 @@
+Yesteryear by Caro Claire Burke Is Six Weeks on the Bestseller List and Still Climbing
+May 22 2026
+
+Yesteryear by Caro Claire Burke has now spent six weeks on the New York Times Fiction Bestseller list and shows no sign of losing momentum. The novel follows Natalie Heller Mills, a privileged tradwife social media influencer who wakes up one day to find herself transported into the comparatively difficult reality of the historical past she has been romanticizing online. It is a concept that lands with particular sharpness in 2026, a cultural moment when the aesthetics of domesticity and traditional gender roles have become genuine flashpoints in the broader conversation about how women are supposed to want to live their lives.
+
+Burke has written a book that works on multiple levels simultaneously, and that is the reason it has staying power on the list. On the surface it functions as a fish out of water story with dark comedic elements as Natalie confronts the actual conditions of the life she has been curating for her followers. Underneath that is a more serious interrogation of the gap between the performance of values and the lived experience of them, which is a theme that resonates far beyond any particular political tribe. Readers across a wide range of perspectives are finding something meaningful in Natalie's journey, which is exactly the condition that produces six-week bestseller runs.
+
+The novel has also generated significant book club traction, which is the engine that keeps literary fiction on the list long after the initial press cycle fades. When a book becomes the thing a group of people want to talk about together, it develops a life of its own that algorithms and advertising cannot manufacture. Yesteryear is that kind of book right now, and if you have been waiting to see whether it deserved the attention, six weeks of reader-driven sales is your answer.
+
+Find Yesteryear on Amazon: https://www.amazon.com/s?k=Yesteryear+Caro+Claire+Burke&tag=cosmictesla-20
