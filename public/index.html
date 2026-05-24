@@ -42,17 +42,47 @@
       margin: 0 auto 20px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .trends-grid { max-width: 1400px; margin: 0 auto; padding: 0 20px 40px; display: flex; flex-direction: column; gap: 12px; }
-    .trend-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 20px 24px; display: flex; align-items: flex-start; gap: 16px; transition: border-color 0.2s;
+    .trends-grid {
+      max-width: 1400px; margin: 0 auto; padding: 0 20px 40px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
     }
-    .trend-card:hover { border-color: #00d4aa; }
-    .rank { font-size: 1.4rem; font-weight: 700; color: #00d4aa; min-width: 36px; text-align: center; padding-top: 2px; }
-    .trend-info { flex: 1; }
-    .trend-title { font-size: 1.15rem; font-weight: 600; color: #f0f1f5; margin-bottom: 6px; }
+    @media (max-width: 1024px) {
+      .trends-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+    @media (max-width: 640px) {
+      .trends-grid { grid-template-columns: 1fr; gap: 12px; }
+    }
+    .trend-card {
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
+    }
+    .trend-card:hover {
+      border-color: #00d4aa;
+      box-shadow: 0 4px 20px rgba(0, 212, 170, 0.15);
+      transform: translateY(-2px);
+    }
+    .rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #00d4aa;
+      line-height: 1; z-index: 2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .trend-info { margin-top: 60px; flex: 1; display: flex; flex-direction: column; }
+    .trend-thumbnail {
+      width: 100%; height: 120px; object-fit: cover; border-radius: 8px;
+      margin-bottom: 12px; background: #2a2d3a;
+    }
+    .trend-title {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5;
+      margin-bottom: 8px; line-height: 1.3;
+    }
     .trend-title a { color: #f0f1f5; text-decoration: none; }
     .trend-title a:hover { color: #00d4aa; }
+    .trend-source {
+      font-size: 0.8rem; color: #8b8fa3; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-top: auto;
+    }
     .trend-traffic {
       font-size: 0.8rem; color: #00d4aa; background: rgba(0, 212, 170, 0.1);
       padding: 2px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px;
@@ -138,27 +168,65 @@
       transition: color 0.2s;
     }
     .nav-mobile-standalone a:hover { color: #e2e4e9; }
-    .section-header { max-width: 1400px; margin: 32px auto 12px; padding: 0 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .section-header h2 { font-size: 1.1rem; font-weight: 700; color: #e2e4e9; }
-    .section-header .section-label { font-size: 0.75rem; color: #555a6e; text-transform: uppercase; letter-spacing: 0.07em; }
+    .section-header {
+      max-width: 1400px; margin: 48px auto 24px; padding: 0 20px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .section-header h2 {
+      font-size: 1.8rem; font-weight: 800; color: #e2e4e9;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      border-bottom: 4px solid #00d4aa; padding-bottom: 8px;
+      display: inline-block; margin-bottom: 4px;
+    }
+    .section-header .section-label {
+      font-size: 0.75rem; color: #555a6e; text-transform: uppercase;
+      letter-spacing: 0.07em; margin-left: 0;
+    }
     @media (max-width: 768px) {
-      .section-header { flex-direction: column; align-items: flex-start; gap: 4px; }
-      .section-header h2 { font-size: 1rem; }
+      .section-header { margin: 32px auto 16px; }
+      .section-header h2 { font-size: 1.4rem; }
       .section-header .section-label { font-size: 0.72rem; }
+      .trend-card, .reddit-card, .yt-card, .itunes-card, .tmdb-card, .twitch-card {
+        min-height: 240px; padding: 16px;
+      }
+      .rank, .reddit-rank, .yt-rank, .itunes-rank, .tmdb-rank, .twitch-rank {
+        font-size: 1.8rem; top: 12px; left: 12px;
+      }
+      .trend-info, .reddit-info, .yt-info, .itunes-info, .tmdb-info, .twitch-info {
+        margin-top: 50px;
+      }
+      .trend-thumbnail, .yt-thumb, .itunes-art, .tmdb-poster, .twitch-box {
+        height: 100px; margin: 50px 0 10px;
+      }
     }
     .reddit-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
     }
-    .reddit-card:hover { border-color: #ff4500; }
-    .reddit-rank { font-size: 1.2rem; font-weight: 700; color: #ff4500; min-width: 28px; text-align: center; padding-top: 2px; }
-    .reddit-info { flex: 1; min-width: 0; }
-    .reddit-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .reddit-card:hover {
+      border-color: #ff4500;
+      box-shadow: 0 4px 20px rgba(255, 69, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    .reddit-rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #ff4500;
+      line-height: 1; z-index: 2;
+    }
+    .reddit-info { margin-top: 60px; flex: 1; display: flex; flex-direction: column; }
+    .reddit-title a {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
+      line-height: 1.3; display: block; margin-bottom: 8px;
+    }
     .reddit-title a:hover { color: #ff4500; }
-    .reddit-meta { margin-top: 6px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .reddit-sub { font-size: 0.8rem; color: #ff4500; background: rgba(255,69,0,0.1); padding: 2px 8px; border-radius: 20px; text-decoration: none; }
+    .reddit-meta { margin-top: auto; }
+    .reddit-sub {
+      font-size: 0.8rem; color: #ff4500; background: rgba(255,69,0,0.1);
+      padding: 2px 8px; border-radius: 20px; text-decoration: none;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
     .reddit-sub:hover { background: rgba(255,69,0,0.2); }
-    .reddit-stat { font-size: 0.8rem; color: #6b7080; }
     .wiki-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
@@ -211,20 +279,42 @@
     .ph-meta { margin-top: 8px; }
     .ph-votes { font-size: 0.8rem; color: #ff6154; background: rgba(255,97,84,0.1); padding: 2px 8px; border-radius: 20px; }
     .tmdb-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
     }
-    .tmdb-card:hover { border-color: #01b4e4; }
-    .tmdb-rank { font-size: 1.2rem; font-weight: 700; color: #01b4e4; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
-    .tmdb-info { flex: 1; min-width: 0; }
-    .tmdb-title a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .tmdb-card:hover {
+      border-color: #01b4e4;
+      box-shadow: 0 4px 20px rgba(1, 180, 228, 0.15);
+      transform: translateY(-2px);
+    }
+    .tmdb-rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #01b4e4;
+      line-height: 1; z-index: 2;
+    }
+    .tmdb-info { margin-top: 60px; flex: 1; display: flex; flex-direction: column; }
+    .tmdb-poster { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin-bottom: 12px; }
+    .tmdb-title a {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
+      line-height: 1.3; display: block; margin-bottom: 4px;
+    }
     .tmdb-title a:hover { color: #01b4e4; }
-    .tmdb-meta { margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .tmdb-type { font-size: 0.8rem; color: #01b4e4; background: rgba(1,180,228,0.1); padding: 2px 8px; border-radius: 20px; }
-    .tmdb-overview { font-size: 0.83rem; color: #8b8fa3; margin-top: 6px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .tmdb-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .tmdb-type {
+      font-size: 0.8rem; color: #01b4e4; background: rgba(1,180,228,0.1);
+      padding: 2px 8px; border-radius: 20px; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 8px; display: inline-block;
+    }
+    .tmdb-overview {
+      font-size: 0.83rem; color: #8b8fa3; line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden; flex: 1;
+    }
+    .tmdb-shop {
+      display: inline-block; margin-top: auto; font-size: 0.78rem;
+      color: #6b7080; text-decoration: none; transition: color 0.2s;
+    }
     .tmdb-shop:hover { color: #ff9900; }
-    .tmdb-poster { width: 60px; height: 90px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
     .crypto-card {
       background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
       padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s;
@@ -276,57 +366,103 @@
     .book-shop { display: inline-block; margin-top: 6px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
     .book-shop:hover { color: #ff9900; }
     .twitch-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
     }
-    .twitch-card:hover { border-color: #9147ff; }
-    .twitch-rank { font-size: 1.2rem; font-weight: 700; color: #9147ff; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
-    .twitch-box { width: 54px; height: 72px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
-    .twitch-info { flex: 1; min-width: 0; }
-    .twitch-name a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .twitch-card:hover {
+      border-color: #9147ff;
+      box-shadow: 0 4px 20px rgba(145, 71, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    .twitch-rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #9147ff;
+      line-height: 1; z-index: 2;
+    }
+    .twitch-box { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 60px 0 12px; }
+    .twitch-info { flex: 1; display: flex; flex-direction: column; }
+    .twitch-name a {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
+      line-height: 1.3; display: block; margin-bottom: 8px;
+    }
     .twitch-name a:hover { color: #9147ff; }
-    .twitch-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .twitch-viewers { font-size: 0.8rem; color: #9147ff; background: rgba(145,71,255,0.1); padding: 2px 8px; border-radius: 20px; }
-    .twitch-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .twitch-meta { margin-top: auto; }
+    .twitch-viewers {
+      font-size: 0.8rem; color: #9147ff; background: rgba(145,71,255,0.1);
+      padding: 2px 8px; border-radius: 20px; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 8px; display: inline-block;
+    }
+    .twitch-shop {
+      display: inline-block; margin-top: auto; font-size: 0.78rem;
+      color: #6b7080; text-decoration: none; transition: color 0.2s;
+    }
     .twitch-shop:hover { color: #ff9900; }
     .itunes-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
     }
-    .itunes-card:hover { border-color: #fc3c44; }
-    .itunes-rank { font-size: 1.2rem; font-weight: 700; color: #fc3c44; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
-    .itunes-art { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
-    .itunes-info { flex: 1; min-width: 0; }
-    .itunes-title a { font-size: 1rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .itunes-card:hover {
+      border-color: #fc3c44;
+      box-shadow: 0 4px 20px rgba(252, 60, 68, 0.15);
+      transform: translateY(-2px);
+    }
+    .itunes-rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #fc3c44;
+      line-height: 1; z-index: 2;
+    }
+    .itunes-art { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 60px 0 12px; }
+    .itunes-info { flex: 1; display: flex; flex-direction: column; }
+    .itunes-title a {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
+      line-height: 1.3; display: block; margin-bottom: 4px;
+    }
     .itunes-title a:hover { color: #fc3c44; }
-    .itunes-artist { font-size: 0.85rem; color: #fc3c44; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .itunes-shop { display: inline-block; margin-top: 6px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .itunes-artist {
+      font-size: 0.8rem; color: #fc3c44; margin-bottom: 8px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .itunes-shop {
+      display: inline-block; margin-top: auto; font-size: 0.78rem;
+      color: #6b7080; text-decoration: none; transition: color 0.2s;
+    }
     .itunes-shop:hover { color: #ff9900; }
     .yt-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
     }
-    .yt-card:hover { border-color: #ff3333; }
-    .yt-rank { font-size: 1.2rem; font-weight: 700; color: #ff3333; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
-    .yt-thumb { width: 120px; height: 68px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
-    .yt-info { flex: 1; min-width: 0; }
-    .yt-title a { font-size: 0.95rem; font-weight: 600; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .yt-card:hover {
+      border-color: #ff3333;
+      box-shadow: 0 4px 20px rgba(255, 51, 51, 0.15);
+      transform: translateY(-2px);
+    }
+    .yt-rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #ff3333;
+      line-height: 1; z-index: 2;
+    }
+    .yt-thumb { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 60px 0 12px; }
+    .yt-info { flex: 1; display: flex; flex-direction: column; }
+    .yt-title a {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
+      line-height: 1.3; display: block; margin-bottom: 8px;
+    }
     .yt-title a:hover { color: #ff3333; }
-    .yt-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .yt-channel { font-size: 0.8rem; color: #ff3333; background: rgba(255,51,51,0.1); padding: 2px 8px; border-radius: 20px; }
-    .yt-views { font-size: 0.8rem; color: #6b7080; }
-    @media (max-width: 768px) {
+    .yt-meta { margin-top: auto; }
+    .yt-channel {
+      font-size: 0.8rem; color: #ff3333; background: rgba(255,51,51,0.1);
+      padding: 2px 8px; border-radius: 20px; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 4px; display: inline-block;
+    }
+    .yt-views { font-size: 0.8rem; color: #8b8fa3; }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
       .site-nav { justify-content: flex-end; }
       .nav-group, .nav-standalone { display: none; }
       .nav-hamburger { display: flex; }
-      .trend-card { padding: 18px 16px; }
-      .reddit-card { padding: 14px 16px; }
-      .yt-card { padding: 14px 16px; }
-    }
-    @media (max-width: 600px) {
-      .trend-image { width: 60px; height: 60px; }
-      header h1 { font-size: 1.5rem; }
-      .yt-thumb { width: 100px; height: 56px; }
     }
   </style>
 </head>
@@ -437,6 +573,50 @@
       Fetching today's trends...
     </div>
   </div>
+  <div id="tmdb-trending" class="section-header">
+    <h2>Movies &amp; TV Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎬 Today</span>
+    <span class="section-label">TMDB · Trending movies &amp; shows</span>
+  </div>
+  <div id="tmdb-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching movies &amp; TV trends...
+    </div>
+  </div>
+  <div id="youtube-trending" class="section-header">
+    <h2>YouTube Trending</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
+    <span class="section-label">US · Top videos right now</span>
+  </div>
+  <div id="youtube-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching YouTube trends...
+    </div>
+  </div>
+  <div id="itunes-trending" class="section-header">
+    <h2>iTunes Top Songs</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎵 US Top 20</span>
+    <span class="section-label">Apple iTunes · Top songs in the US</span>
+  </div>
+  <div id="itunes-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching iTunes top songs...
+    </div>
+  </div>
+  <div id="twitch-trending" class="section-header">
+    <h2>Twitch Top Games</h2>
+    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🟣 Live</span>
+    <span class="section-label">twitch.tv · Most watched right now</span>
+  </div>
+  <div id="twitch-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching Twitch top games...
+    </div>
+  </div>
   <div id="reddit-trending" class="section-header">
     <h2>Reddit Trending</h2>
     <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
@@ -492,17 +672,6 @@
       Fetching Product Hunt launches...
     </div>
   </div>
-  <div id="tmdb-trending" class="section-header">
-    <h2>Movies &amp; TV Trending</h2>
-    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎬 Today</span>
-    <span class="section-label">TMDB · Trending movies &amp; shows</span>
-  </div>
-  <div id="tmdb-content">
-    <div class="loading">
-      <div class="spinner"></div>
-      Fetching movies &amp; TV trends...
-    </div>
-  </div>
   <div id="crypto-trending" class="section-header">
     <h2>Crypto Trending</h2>
     <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
@@ -537,39 +706,6 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching bestsellers...
-    </div>
-  </div>
-  <div id="twitch-trending" class="section-header">
-    <h2>Twitch Top Games</h2>
-    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🟣 Live</span>
-    <span class="section-label">twitch.tv · Most watched right now</span>
-  </div>
-  <div id="twitch-content">
-    <div class="loading">
-      <div class="spinner"></div>
-      Fetching Twitch top games...
-    </div>
-  </div>
-  <div id="itunes-trending" class="section-header">
-    <h2>iTunes Top Songs</h2>
-    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎵 US Top 20</span>
-    <span class="section-label">Apple iTunes · Top songs in the US</span>
-  </div>
-  <div id="itunes-content">
-    <div class="loading">
-      <div class="spinner"></div>
-      Fetching iTunes top songs...
-    </div>
-  </div>
-  <div id="youtube-trending" class="section-header">
-    <h2>YouTube Trending</h2>
-    <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🌐 Global</span>
-    <span class="section-label">US · Top videos right now</span>
-  </div>
-  <div id="youtube-content">
-    <div class="loading">
-      <div class="spinner"></div>
-      Fetching YouTube trends...
     </div>
   </div>
   <footer style="text-align:center;padding:24px;border-top:1px solid #2a2d3a;color:#555a6e;font-size:0.85rem;">
