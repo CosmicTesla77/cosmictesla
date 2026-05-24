@@ -160,7 +160,19 @@ function extractKeywords(title) {
 }
 
 app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'about.html'));
+  res.send(blogLayout('About CosmicTesla', `
+    <div class="blog-wrap">
+      <h1 style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:24px;">About CosmicTesla</h1>
+      <div class="post-content">
+        <p>My name is Lance Dombroski and CosmicTesla is based in San Diego, California. I spent nearly 11 years working as a regional manager overseeing numerous business locations across Southern California. Every day on that job was about reading people, tracking patterns, and staying ahead of what was coming next.</p>
+
+        <p>CosmicTesla is a real time trending content aggregator built for people who want to know what the internet is talking about right now. Whether you follow tech, culture, finance, gaming, music, or books, everything that is moving online today shows up here in one place.</p>
+
+        <p>CosmicTesla pulls live trending data from Google, Reddit, YouTube, Wikipedia, GitHub, Hacker News, Steam, Twitch, iTunes, and many more sources, with new ones added regularly. No recycled takes, no algorithm bait. Just what is trending right now across the internet, updated continuously.</p>
+
+        <p>I write about these trends daily because context matters. A trending search is more interesting when someone explains why it matters. That is what the blog is for.</p>
+      </div>
+    </div>`, 'about'));
 });
 
 app.get('/privacy', (req, res) => {
@@ -918,6 +930,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
         <a href="/#crypto-trending">🪙 Crypto</a>
       </div>
     </div>
+    <a href="/about" class="nav-standalone ${activePage === 'about' ? 'active' : ''}">ℹ️ About</a>
     <a href="/blog" class="nav-standalone ${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
     <a href="/contact" class="nav-standalone ${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
     <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation" onclick="toggleMenu()">
@@ -960,6 +973,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
       </div>
     </div>
     <div class="nav-mobile-standalone">
+      <a href="/about" onclick="closeMenu()">ℹ️ About</a>
       <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
       <a href="/contact" onclick="closeMenu()">📬 Contact</a>
     </div>
