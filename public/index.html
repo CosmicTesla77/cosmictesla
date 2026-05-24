@@ -71,7 +71,7 @@
     .trend-info { margin-top: 60px; flex: 1; display: flex; flex-direction: column; }
     .trend-thumbnail {
       width: 100%; height: 120px; object-fit: cover; border-radius: 8px;
-      margin-bottom: 12px; background: #2a2d3a;
+      margin: 55px 0 12px; background: #2a2d3a;
     }
     .trend-title {
       font-size: 1.1rem; font-weight: 700; color: #f0f1f5;
@@ -196,7 +196,7 @@
         margin-top: 50px;
       }
       .trend-thumbnail, .yt-thumb, .itunes-art, .tmdb-poster, .twitch-box {
-        height: 100px; margin: 50px 0 10px;
+        height: 100px; margin: 45px 0 10px;
       }
     }
     .reddit-card {
@@ -294,7 +294,7 @@
       line-height: 1; z-index: 2;
     }
     .tmdb-info { margin-top: 60px; flex: 1; display: flex; flex-direction: column; }
-    .tmdb-poster { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin-bottom: 12px; }
+    .tmdb-poster { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 55px 0 12px; }
     .tmdb-title a {
       font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
       line-height: 1.3; display: block; margin-bottom: 4px;
@@ -380,7 +380,7 @@
       font-size: 2.2rem; font-weight: 900; color: #9147ff;
       line-height: 1; z-index: 2;
     }
-    .twitch-box { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 60px 0 12px; }
+    .twitch-box { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 55px 0 12px; }
     .twitch-info { flex: 1; display: flex; flex-direction: column; }
     .twitch-name a {
       font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
@@ -413,7 +413,7 @@
       font-size: 2.2rem; font-weight: 900; color: #fc3c44;
       line-height: 1; z-index: 2;
     }
-    .itunes-art { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 60px 0 12px; }
+    .itunes-art { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 55px 0 12px; }
     .itunes-info { flex: 1; display: flex; flex-direction: column; }
     .itunes-title a {
       font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
@@ -444,7 +444,7 @@
       font-size: 2.2rem; font-weight: 900; color: #ff3333;
       line-height: 1; z-index: 2;
     }
-    .yt-thumb { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 60px 0 12px; }
+    .yt-thumb { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; margin: 55px 0 12px; }
     .yt-info { flex: 1; display: flex; flex-direction: column; }
     .yt-title a {
       font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
@@ -563,17 +563,7 @@
     </select>
   </div>
   <div id="lastUpdatedBar" style="text-align:center;padding:6px 16px 0;font-size:0.78rem;color:#555a6e;"></div>
-  <div id="google-trending" class="section-header" style="margin-top: 8px;">
-    <h2>Google Trending</h2>
-    <span class="section-label" id="googleLabel">Top searches · Sorted by volume</span>
-  </div>
-  <div id="content">
-    <div class="loading">
-      <div class="spinner"></div>
-      Fetching today's trends...
-    </div>
-  </div>
-  <div id="tmdb-trending" class="section-header">
+  <div id="tmdb-trending" class="section-header" style="margin-top: 8px;">
     <h2>Movies &amp; TV Trending</h2>
     <span style="font-size:0.72rem;color:#6b7080;background:#1a1d29;border:1px solid #2a2d3a;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">🎬 Today</span>
     <span class="section-label">TMDB · Trending movies &amp; shows</span>
@@ -615,6 +605,16 @@
     <div class="loading">
       <div class="spinner"></div>
       Fetching Twitch top games...
+    </div>
+  </div>
+  <div id="google-trending" class="section-header">
+    <h2>Google Trending</h2>
+    <span class="section-label" id="googleLabel">Top searches · Sorted by volume</span>
+  </div>
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Fetching today's trends...
     </div>
   </div>
   <div id="reddit-trending" class="section-header">
