@@ -93,7 +93,10 @@
     .news-label { font-size: 0.72rem; color: #555a6e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
     .amazon-link { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
     .amazon-link:hover { color: #ff9900; }
-    .trend-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .trend-image {
+      width: 100%; height: 180px; border-radius: 8px; object-fit: cover;
+      margin: 55px 0 12px; background: #2a2d3a;
+    }
     .error { text-align: center; padding: 80px 20px; color: #ff6b6b; }
     .site-nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -194,6 +197,12 @@
       }
       .trend-info, .reddit-info, .yt-info, .itunes-info, .tmdb-info, .twitch-info {
         margin-top: 50px;
+      }
+      .steam-content {
+        flex-direction: column; gap: 12px;
+      }
+      .steam-img {
+        width: 100%; height: 140px; align-self: center;
       }
       .trend-thumbnail, .yt-thumb, .itunes-art, .tmdb-poster, .twitch-box {
         height: 100px; margin: 45px 0 10px;
@@ -332,19 +341,43 @@
     .crypto-down { font-size: 0.8rem; color: #ff6154; font-weight: 600; }
     .crypto-price { font-size: 0.8rem; color: #8b8fa3; }
     .steam-card {
-      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 10px;
-      padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; transition: border-color 0.2s;
+      background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; transition: all 0.3s ease;
+      position: relative; min-height: 280px;
     }
-    .steam-card:hover { border-color: #66c0f4; }
-    .steam-rank { font-size: 1.2rem; font-weight: 700; color: #66c0f4; min-width: 28px; text-align: center; padding-top: 2px; flex-shrink: 0; }
-    .steam-img { width: 120px; height: 45px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
-    .steam-info { flex: 1; min-width: 0; }
-    .steam-title a { font-size: 1rem; font-weight: 700; color: #f0f1f5; text-decoration: none; line-height: 1.4; display: block; }
+    .steam-card:hover {
+      border-color: #66c0f4;
+      box-shadow: 0 4px 20px rgba(102, 192, 244, 0.15);
+      transform: translateY(-2px);
+    }
+    .steam-rank {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 2.2rem; font-weight: 900; color: #66c0f4;
+      line-height: 1; z-index: 2;
+    }
+    .steam-content {
+      margin-top: 60px; flex: 1; display: flex; gap: 16px; align-items: flex-start;
+    }
+    .steam-img {
+      width: 120px; height: 160px; border-radius: 8px; object-fit: cover;
+      flex-shrink: 0; box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    }
+    .steam-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .steam-title a {
+      font-size: 1.1rem; font-weight: 700; color: #f0f1f5; text-decoration: none;
+      line-height: 1.3; display: block; margin-bottom: 8px;
+    }
     .steam-title a:hover { color: #66c0f4; }
-    .steam-meta { margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .steam-price { font-size: 0.8rem; color: #a4d007; background: rgba(164,208,7,0.1); padding: 2px 8px; border-radius: 20px; }
+    .steam-meta { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .steam-price {
+      font-size: 0.8rem; color: #a4d007; background: rgba(164,208,7,0.1);
+      padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
     .steam-review { font-size: 0.8rem; color: #6b7080; }
-    .steam-shop { display: inline-block; margin-top: 8px; font-size: 0.78rem; color: #6b7080; text-decoration: none; transition: color 0.2s; }
+    .steam-shop {
+      display: inline-block; margin-top: auto; font-size: 0.78rem;
+      color: #6b7080; text-decoration: none; transition: color 0.2s;
+    }
     .steam-shop:hover { color: #ff9900; }
     .books-tabs { display: flex; justify-content: center; gap: 8px; padding: 0 20px 16px; max-width: 1400px; margin: 0 auto; }
     .books-tab { background: #1a1d29; border: 1px solid #2a2d3a; color: #8b8fa3; font-size: 0.85rem; font-weight: 500; padding: 6px 20px; border-radius: 6px; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
@@ -1068,6 +1101,7 @@
         data.games.forEach((game, i) => {
           html += '<div class="steam-card">';
           html += '<div class="steam-rank">' + (i + 1) + '</div>';
+          html += '<div class="steam-content">';
           if (game.image) html += '<img class="steam-img" src="' + esc(game.image) + '" alt="' + esc(game.title) + '" />';
           html += '<div class="steam-info">';
           html += '<div class="steam-title"><a href="' + esc(game.url) + '" target="_blank" rel="noopener">' + esc(game.title) + '</a></div>';
@@ -1076,7 +1110,7 @@
           if (game.review) html += '<span class="steam-review">' + esc(game.review) + '</span>';
           html += '</div>';
           html += '<a class="steam-shop" href="' + esc(game.affiliateUrl) + '" target="_blank" rel="noopener noreferrer">Shop on Amazon →</a>';
-          html += '</div></div>';
+          html += '</div></div></div>';
         });
         html += '</div>';
         el.innerHTML = html;
