@@ -34,7 +34,6 @@ const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
 const twitchCache = { data: null, fetchedAt: null };
 const itunesCache = { data: null, fetchedAt: null };
-const newsCache   = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 const CACHE_TTL_60M = 60 * 60 * 1000;
@@ -560,73 +559,6 @@ app.get('/api/itunes-top-songs', async (req, res) => {
   }
 });
 
-app.get('/api/news-trending', async (req, res) => {
-  if (newsCache.data && newsCache.fetchedAt && (Date.now() - newsCache.fetchedAt < CACHE_TTL_15M)) {
-    return res.json(newsCache.data);
-  }
-  const FEEDS = [
-    { url: 'https://feeds.npr.org/1001/rss.xml',                                                           source: 'NPR'         },
-    { url: 'http://feeds.bbci.co.uk/news/rss.xml',                                                         source: 'BBC News'    },
-    { url: 'http://rss.cnn.com/rss/edition_world.rss',                                                     source: 'CNN'         },
-    { url: 'https://www.aljazeera.com/xml/rss/all.xml',                                                    source: 'Al Jazeera'  },
-    { url: 'https://feeds.abcnews.com/abcnews/topstories',                                                 source: 'ABC News'    },
-    { url: 'https://moxie.foxnews.com/google-publisher/top.xml',                                           source: 'Fox News'    },
-    { url: 'https://feeds.nbcnews.com/nbcnews/public/news',                                                source: 'NBC News'    },
-    { url: 'https://rssfeeds.usatoday.com/usatoday-NewsTopStories',                                        source: 'USA Today'   },
-    { url: 'https://www.theguardian.com/world/rss',                                                        source: 'The Guardian'},
-    { url: 'https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com&hl=en-US&gl=US&ceid=US:en', source: 'Reuters'     },
-  ];
-  const settled = await Promise.allSettled(
-    FEEDS.map(({ url, source }) =>
-      parser.parseURL(url).then((feed) =>
-        feed.items.map((item) => ({
-          title: (item.title || '').trim(),
-          link:  item.link || item.guid || '',
-          source,
-          pubDate: item.pubDate ? new Date(item.pubDate) : new Date(0),
-        }))
-      )
-    )
-  );
-  // Step 1: collect per-feed results (only fulfilled feeds with at least 1 item).
-  const feedResults = [];
-  settled.forEach((r) => {
-    if (r.status === 'fulfilled' && r.value.length > 0) feedResults.push(r.value);
-  });
-
-  // Step 2: guaranteed array — 3 most-recent items from each working feed.
-  const guaranteed = [];
-  for (const feedItems of feedResults) {
-    const sorted = [...feedItems].sort((a, b) => b.pubDate - a.pubDate);
-    guaranteed.push(...sorted.slice(0, 3));
-  }
-
-  // Step 3: remaining pool — all items from all working feeds, sorted newest-first.
-  const pool = feedResults.flat().sort((a, b) => b.pubDate - a.pubDate);
-
-  // Step 4: build final display list.
-  // Start with the guaranteed items, then append from the pool without duplicates.
-  const display = [...guaranteed];
-  const displayLinks = new Set(display.map((a) => a.link));
-  for (const item of pool) {
-    if (display.length >= 30) break;
-    if (!displayLinks.has(item.link)) {
-      display.push(item);
-      displayLinks.add(item.link);
-    }
-  }
-
-  const items = display.map((a) => ({
-    title:   a.title,
-    link:    a.link,
-    source:  a.source,
-    pubDate: a.pubDate.toISOString(),
-  }));
-  const result = { items };
-  newsCache.data     = result;
-  newsCache.fetchedAt = Date.now();
-  res.json(result);
-});
 
 function postJson(url, body, headers = {}) {
   return new Promise((resolve, reject) => {
@@ -899,7 +831,6 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <div class="nav-group">
       <button class="nav-group-btn">🌐 Social <span class="chev">▼</span></button>
       <div class="nav-dropdown">
-        <a href="/#news-trending">📰 News Headlines</a>
         <a href="/#google-trending">📈 Google Trending</a>
         <a href="/#reddit-trending">🔥 Reddit Trending</a>
         <a href="/#youtube-trending">▶️ YouTube Trending</a>
@@ -941,7 +872,6 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <div class="nav-acc-group">
       <button class="nav-acc-btn" onclick="toggleAccordion(this)">🌐 Social <span class="chev">▼</span></button>
       <div class="nav-acc-items">
-        <a href="/#news-trending" onclick="closeMenu()">📰 News Headlines</a>
         <a href="/#google-trending" onclick="closeMenu()">📈 Google Trending</a>
         <a href="/#reddit-trending" onclick="closeMenu()">🔥 Reddit Trending</a>
         <a href="/#youtube-trending" onclick="closeMenu()">▶️ YouTube Trending</a>
