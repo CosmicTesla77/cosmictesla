@@ -624,9 +624,15 @@ async function fetchUnsplashImage(query) {
     'Accept-Version': 'v1',
   });
   const json = JSON.parse(raw);
-  const imageUrl = json.results?.[0]?.urls?.regular;
+  const photo = json.results?.[0];
+  const imageUrl = photo?.urls?.regular;
   if (!imageUrl) throw new Error(`No Unsplash results for "${query}"`);
-  return imageUrl;
+  const photographerName = photo?.user?.name || '';
+  const rawProfileUrl = photo?.user?.links?.html || '';
+  const profileUrl = rawProfileUrl
+    ? rawProfileUrl + '?utm_source=cosmictesla&utm_medium=referral'
+    : '';
+  return { imageUrl, photographerName, profileUrl };
 }
 
 // Returns an Unsplash image URL for a given post title (keywords extracted).
@@ -637,11 +643,11 @@ app.post('/api/generate-post-image', async (req, res) => {
   const query = extractKeywords(title);
   const fallback = `https://picsum.photos/seed/${encodeURIComponent(query.split(' ')[0] || 'post')}/1200/628`;
   try {
-    const url = await fetchUnsplashImage(query);
-    res.json({ url, query, fallback: false });
+    const { imageUrl, photographerName, profileUrl } = await fetchUnsplashImage(query);
+    res.json({ url: imageUrl, query, fallback: false, photographerName, profileUrl });
   } catch (err) {
     console.error('[Unsplash] generate-post-image failed:', err.message);
-    res.json({ url: fallback, query, fallback: true });
+    res.json({ url: fallback, query, fallback: true, photographerName: '', profileUrl: '' });
   }
 });
 
@@ -657,19 +663,24 @@ app.post('/api/create-post', async (req, res) => {
   const firstKeyword = query.split(' ')[0] || slug.split('-')[0] || 'post';
   const fallbackUrl = `https://picsum.photos/seed/${encodeURIComponent(firstKeyword)}/1200/628`;
   let imageUrl = fallbackUrl;
+  let photographerName = '';
+  let profileUrl = '';
   let usedFallback = false;
   try {
-    imageUrl = await fetchUnsplashImage(query);
+    ({ imageUrl, photographerName, profileUrl } = await fetchUnsplashImage(query));
     console.log(`[Unsplash] Image for "${title}": ${imageUrl}`);
   } catch (err) {
     console.error('[Unsplash] Image fetch failed for new post, using fallback:', err.message);
     usedFallback = true;
   }
-  // Format: line 1 = # title, line 2 = date, line 3 = image URL, blank line, body.
-  const content = `# ${title}\n${date}\n${imageUrl}\n\n${body.trim()}\n`;
+  // Format: line 1 = # title, line 2 = date, line 3 = IMAGE_URL|PHOTOGRAPHER_NAME|PROFILE_URL, blank line, body.
+  const imageLine = photographerName && profileUrl
+    ? `${imageUrl}|${photographerName}|${profileUrl}`
+    : imageUrl;
+  const content = `# ${title}\n${date}\n${imageLine}\n\n${body.trim()}\n`;
   try {
     fs.writeFileSync(filePath, content, 'utf8');
-    res.json({ slug, file: `posts/${slug}.md`, imageUrl, query, usedFallback });
+    res.json({ slug, file: `posts/${slug}.md`, imageUrl, query, usedFallback, photographerName, profileUrl });
   } catch (err) {
     console.error('[create-post] Write failed:', err.message);
     res.status(500).json({ error: 'Failed to write post file' });
@@ -988,10 +999,26 @@ app.get('/blog/:slug', (req, res) => {
   const lines = raw.split('\n');
   const title = lines[0].replace(/^#+\s*/, '').trim();
   const date = lines[1].trim();
-  // Line 3 (index 2) is an optional featured image URL.
+  // Line 3 (index 2) is an optional featured image line.
+  // New format: IMAGE_URL|PHOTOGRAPHER_NAME|PROFILE_URL
+  // Legacy format: IMAGE_URL (no attribution)
   const line3 = (lines[2] || '').trim();
-  const featuredImage = line3.startsWith('http') ? line3 : null;
+  let featuredImage = null, imgPhotographerName = null, imgProfileUrl = null;
+  if (line3.startsWith('http')) {
+    const parts = line3.split('|');
+    featuredImage = parts[0];
+    if (parts.length >= 3) {
+      imgPhotographerName = parts[1];
+      imgProfileUrl = parts[2];
+    }
+  }
   const body = lines.slice(featuredImage ? 3 : 2).join('\n');
+
+  const imgCredit = featuredImage
+    ? (imgPhotographerName && imgProfileUrl
+        ? `<p class="post-img-credit">Photo by <a href="${escHtml(imgProfileUrl)}" target="_blank" rel="noopener">${escHtml(imgPhotographerName)}</a> on <a href="https://unsplash.com/?utm_source=cosmictesla&amp;utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>`
+        : `<p class="post-img-credit">Photo via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></p>`)
+    : '';
 
   res.send(blogLayout(title, `
     <div class="blog-wrap">
@@ -999,7 +1026,7 @@ app.get('/blog/:slug', (req, res) => {
       <article>
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
         <div class="post-date">${escHtml(formatDate(date))}</div>
-        ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" /><p class="post-img-credit">Photo via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></p>` : ''}
+        ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
         <div class="post-content">${marked(body)}</div>
       </article>
     </div>`));
