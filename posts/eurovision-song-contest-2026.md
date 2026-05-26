@@ -1,5 +1,5 @@
-# Eurovision Song Contest 2026: Everything You Need to Know Right Now
-2026-05-17
+Eurovision Song Contest 2026: Everything You Need to Know Right Now
+May 19 2026
 
 The Eurovision Song Contest 2026 is dominating global attention this week, pulling over half a million Wikipedia views in a single day and trending across nearly every major platform. The contest, held annually and broadcast to hundreds of millions of viewers worldwide, is one of the most watched non-sporting events on earth. This year the competition is drawing massive engagement online as fans debate performances, vote predictions, and national entries.
 

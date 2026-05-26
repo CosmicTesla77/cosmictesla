@@ -1,5 +1,5 @@
-# Eurovision Song Contest 2026 Is Pulling Half a Million Wikipedia Readers and the Competition Is Getting Close
-2026-05-18
+Eurovision Song Contest 2026 Is Pulling Half a Million Wikipedia Readers and the Competition Is Getting Close
+May 19 2026
 
 Eurovision Song Contest 2026 is sitting at nearly 590,000 Wikipedia views from yesterday alone, which puts it at number two on the global trending list. This is what Eurovision does in the weeks leading up to the live shows. The audience is massive, international, and extremely online.
 

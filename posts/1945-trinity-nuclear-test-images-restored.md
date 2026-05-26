@@ -1,5 +1,5 @@
-# Lost Images from the 1945 Trinity Nuclear Test Have Been Digitally Restored
-2026-05-21
+Lost Images from the 1945 Trinity Nuclear Test Have Been Digitally Restored
+May 15 2026
 
 Lost photographs from the Trinity nuclear test, the first detonation of an atomic bomb in history conducted on July 16, 1945, in the New Mexico desert, have been digitally restored and are now circulating widely online. The story is trending on Hacker News and drawing significant attention from history enthusiasts, science communities, and anyone with even a passing interest in the event that changed the course of human history.
 

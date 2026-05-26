@@ -1,5 +1,5 @@
-# What Is ASCII and Why Does It Still Matter in 2026
-2026-05-15
+What Is ASCII and Why Does It Still Matter in 2026
+May 15 2026
 
 If you have ever seen a piece of digital art made entirely from keyboard characters, a progress bar made of equal signs, or text that looks like a picture when you squint at it, you have encountered ASCII art. But ASCII itself is something more fundamental than an art form. It is one of the oldest and most consequential standards in the history of computing, and it is still running silently underneath almost everything you do on a computer today.
 

@@ -1,5 +1,5 @@
-# Golf Technology in 2026: How Data Is Changing the Game
-2026-05-04
+Golf Technology in 2026: How Data Is Changing the Game
+May 15 2026
 
 Golf has always been a sport obsessed with marginal gains. The difference between a scratch handicap and a tour professional is measured in fractions of a degree in swing plane, milliseconds of timing, and centimeters of ball contact. That obsession with precision made golf an early adopter of technology, and the pace of adoption has accelerated dramatically in the past few years.
 
