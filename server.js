@@ -178,6 +178,43 @@ app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });
 
+app.get('/terms', (req, res) => {
+  res.send(blogLayout('Terms of Service', `
+    <div class="blog-wrap">
+      <h1 style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;">Terms of Service</h1>
+      <div class="post-date">Last updated: May 26 2026</div>
+      <div class="post-content">
+        <p>Welcome to CosmicTesla. By accessing or using cosmictesla.com you agree to the following terms.</p>
+
+        <h2>Use of This Site</h2>
+        <p>CosmicTesla is a free, read only content aggregator. You may browse and share content from this site for personal, non-commercial purposes. You may not scrape, reproduce, or redistribute our original blog content without permission.</p>
+
+        <h2>Content and Accuracy</h2>
+        <p>CosmicTesla aggregates trending data from third party sources including Google, Reddit, YouTube, Wikipedia, GitHub, Hacker News, Product Hunt, TMDB, CoinGecko, Steam, Twitch, iTunes, and the New York Times. We do not guarantee the accuracy, completeness, or timeliness of any third party data displayed on this site. Trending data is provided for informational purposes only.</p>
+
+        <h2>Affiliate Links</h2>
+        <p>CosmicTesla participates in the Amazon Associates Program. Some links on this site are affiliate links, meaning we may earn a commission if you make a purchase through them at no additional cost to you.</p>
+
+        <h2>Advertising</h2>
+        <p>This site may display advertisements served by Google AdSense. CosmicTesla does not control the content of these advertisements.</p>
+
+        <h2>Intellectual Property</h2>
+        <p>Original blog content published on CosmicTesla is the property of CosmicTesla. Trending data displayed on this site remains the property of its respective sources.</p>
+
+        <h2>Third Party Links</h2>
+        <p>CosmicTesla contains links to third party websites. We are not responsible for the content or privacy practices of those sites.</p>
+
+        <h2>Changes to These Terms</h2>
+        <p>We may update these terms at any time. Continued use of the site after changes are posted constitutes acceptance of the updated terms.</p>
+
+        <h2>Contact</h2>
+        <p>For questions about these terms contact us at <a href="mailto:pixelridgestudio@gmail.com">pixelridgestudio@gmail.com</a></p>
+
+        <p>CosmicTesla is operated by Lance Dombroski and is based in San Diego, California.</p>
+      </div>
+    </div>`, 'terms'));
+});
+
 const COUNTRIES = {
   US: { name: 'United States', newsLocale: 'en-US', ceid: 'US:en' },
   GB: { name: 'United Kingdom', newsLocale: 'en-GB', ceid: 'GB:en' },
@@ -938,6 +975,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     <span>&copy; 2026 CosmicTesla</span>
     <a href="/about">About</a>
     <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms of Service</a>
     <a href="/blog">Blog</a>
     <a href="/contact">Contact</a>
   </footer>
