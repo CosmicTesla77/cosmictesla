@@ -1,0 +1,12 @@
+Memorial Day 2026 Is Here and America Is Paying Attention
+May 26 2026
+
+Memorial Day is one of those holidays that sits in a complicated place in the American cultural calendar. It arrives every year at the unofficial start of summer, bringing barbecues and beach trips and long weekends, and somewhere underneath all of that is the actual reason it exists: to honor the men and women who died while serving in the United States military. The tension between celebration and solemnity is not a flaw in how Americans observe the day. It is the reality of a country trying to hold grief and gratitude alongside ordinary life.
+
+The holiday has its roots in the years immediately following the Civil War, when communities across the country began organizing ceremonies to decorate the graves of soldiers who had died in that conflict. Originally called Decoration Day, it was observed on May 30th each year regardless of what day of the week it fell on. It was not until 1971 that Congress officially moved it to the last Monday in May, creating the three day weekend that most Americans now associate with the holiday.
+
+What gets lost in the long weekend framing is the scale of what is being commemorated. More than 1.3 million Americans have died in military service across the country's wars, from the Revolution through the conflicts of the 21st century. Memorial Day is specifically about those deaths, not about veterans broadly, which is what Veterans Day in November is for. The distinction matters because it keeps the focus on sacrifice rather than service, on loss rather than survival.
+
+The Wikipedia traffic Memorial Day generates every year around this time reflects something genuine. People are curious. They want to understand what they are supposed to be feeling, what the history is, whether the barbecue is disrespectful or simply human. The answer is that grief and celebration have always coexisted in American life and the holiday was never meant to be purely somber. It was meant to be a moment of communal acknowledgment, a pause before the summer begins.
+
+This year, as in every year, flags will fly at half-staff until noon and then be raised to full height for the remainder of the day, a practice that reflects both the mourning and the resolution
