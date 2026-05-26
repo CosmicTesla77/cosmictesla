@@ -749,6 +749,16 @@ app.get('/api/last-updated', (req, res) => {
   res.json(lastUpdated);
 });
 
+function linkifyAmazonLines(text) {
+  return text.split('\n').map((line) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('https://www.amazon.com')) {
+      return `<a href="${escHtml(trimmed)}" target="_blank" rel="noopener sponsored">Shop on Amazon</a>`;
+    }
+    return line;
+  }).join('\n');
+}
+
 function formatDate(dateStr) {
   const d = new Date(dateStr.includes('T') ? dateStr : dateStr + 'T12:00:00');
   if (isNaN(d.getTime())) return dateStr;
@@ -829,7 +839,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
     .post-content pre { background: #252838; border: 1px solid #2a2d3a; border-radius: 8px; padding: 16px; overflow-x: auto; margin-bottom: 16px; }
     .post-content pre code { background: none; padding: 0; color: #e2e4e9; }
     .post-content blockquote { border-left: 3px solid #00d4aa; padding-left: 16px; color: #8b8fa3; margin-bottom: 16px; }
-    .post-featured-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; margin: 20px 0 4px; }
+    .post-featured-img { width: 100%; height: 340px; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; margin: 20px 0 4px; }
     .post-img-credit { font-size: 0.72rem; color: #555a6e; text-align: right; margin: 0 0 24px; }
     .post-img-credit a { color: #555a6e; text-decoration: none; }
     .post-img-credit a:hover { color: #8b8fa3; text-decoration: underline; }
@@ -1027,7 +1037,7 @@ app.get('/blog/:slug', (req, res) => {
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
         <div class="post-date">${escHtml(formatDate(date))}</div>
         ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
-        <div class="post-content">${marked(body)}</div>
+        <div class="post-content">${marked(linkifyAmazonLines(body))}</div>
       </article>
     </div>`));
 });
