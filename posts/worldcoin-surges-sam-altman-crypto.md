@@ -1,5 +1,6 @@
 Worldcoin Is Surging Nearly 30 Percent and the Sam Altman Connection Explains Why
 May 26 2026
+https://picsum.photos/seed/worldcoin-surges-sam-altman-crypto/1200/600
 
 Worldcoin is up nearly 30 percent and trending at the top of CoinGecko's most watched coins right now. For most people outside the crypto world the name might not register immediately, but the backstory of this project is one of the more fascinating and contested in the entire cryptocurrency space, and the person behind it is someone almost everyone has heard of.
 

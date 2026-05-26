@@ -1,5 +1,6 @@
 The Most Upvoted Story on Hacker News Today Is About Using AI to Write Code More Slowly
 May 26 2026
+https://picsum.photos/seed/using-ai-to-write-better-code-more-slowly/1200/600
 
 A post titled "Using AI to write better code more slowly" is sitting at 923 points on Hacker News, making it by far the most engaged story on the platform right now. The title alone explains why it resonated. In a world where the dominant narrative around AI coding tools is speed, productivity, and automation, someone making the case for deliberate slowness is going to stop a lot of developers mid-scroll.
 

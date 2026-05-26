@@ -1,5 +1,6 @@
 Memorial Day 2026 Is Here and America Is Paying Attention
 May 26 2026
+https://picsum.photos/seed/memorial-day-2026-what-it-means/1200/600
 
 Memorial Day is one of those holidays that sits in a complicated place in the American cultural calendar. It arrives every year at the unofficial start of summer, bringing barbecues and beach trips and long weekends, and somewhere underneath all of that is the actual reason it exists: to honor the men and women who died while serving in the United States military. The tension between celebration and solemnity is not a flaw in how Americans observe the day. It is the reality of a country trying to hold grief and gratitude alongside ordinary life.
 

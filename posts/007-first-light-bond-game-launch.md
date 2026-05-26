@@ -1,5 +1,6 @@
 007 First Light Is the Bond Game Fans Have Been Waiting For
 May 26 2026
+https://picsum.photos/seed/007-first-light-bond-game-launch/1200/600
 
 007 First Light launched and immediately became one of the most watched games on Twitch with over 125,000 concurrent viewers, placing it in the top three of all games being streamed right now. It also sits in the top three on Steam. For a franchise that has had a complicated history with video games, this kind of simultaneous launch momentum across both sales and viewership is a significant statement.
 

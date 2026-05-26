@@ -1,5 +1,6 @@
 The Correspondent by Virginia Evans Has Been on the NYT Bestseller List for 29 Weeks and That Number Tells You Everything
 May 26 2026
+https://picsum.photos/seed/the-correspondent-virginia-evans-29-weeks/1200/600
 
 Most books on the New York Times Fiction bestseller list appear for one or two weeks, collect the credential, and move on. A handful of breakout hits stay for a month or six weeks. Twenty nine weeks is a different category entirely. Twenty nine weeks means The Correspondent by Virginia Evans has been consistently selling through since it first appeared on the list, surviving the news cycles that kill most books, outlasting the social media moments that drive initial spikes, and building an audience through the oldest mechanism in publishing: one reader telling another reader.
 
