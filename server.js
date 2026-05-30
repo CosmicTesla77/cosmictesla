@@ -652,6 +652,22 @@ function fetchRaw(url, allowErrorBody = false, extraHeaders = {}) {
 }
 
 // ── Unsplash integration ───────────────────────────────────────────────────
+function isPicsum(url) {
+  return typeof url === 'string' && url.includes('picsum.photos');
+}
+
+// Registers a download event with Unsplash (required by their API guidelines).
+// Fires a server-side GET to download_location with client_id appended. Best effort.
+function triggerUnsplashDownload(downloadLocation) {
+  const key = process.env.UNSPLASH_ACCESS_KEY;
+  if (!key || !downloadLocation) return;
+  const sep = downloadLocation.includes('?') ? '&' : '?';
+  const url = `${downloadLocation}${sep}client_id=${key}`;
+  fetchRaw(url, true)
+    .then(() => console.log('[Unsplash] Download trigger fired'))
+    .catch((err) => console.error('[Unsplash] Download trigger failed:', err.message));
+}
+
 async function fetchUnsplashImage(query) {
   const key = process.env.UNSPLASH_ACCESS_KEY;
   if (!key) throw new Error('UNSPLASH_ACCESS_KEY not set');
@@ -665,26 +681,25 @@ async function fetchUnsplashImage(query) {
   const imageUrl = photo?.urls?.regular;
   if (!imageUrl) throw new Error(`No Unsplash results for "${query}"`);
   const photographerName = photo?.user?.name || '';
-  const rawProfileUrl = photo?.user?.links?.html || '';
-  const profileUrl = rawProfileUrl
-    ? rawProfileUrl + '?utm_source=cosmictesla&utm_medium=referral'
-    : '';
-  return { imageUrl, photographerName, profileUrl };
+  const photographerUsername = photo?.user?.username || '';
+  const downloadLocation = photo?.links?.download_location || '';
+  // Register the download event immediately, as required by Unsplash.
+  triggerUnsplashDownload(downloadLocation);
+  return { imageUrl, photographerName, photographerUsername, downloadLocation };
 }
 
 // Returns an Unsplash image URL for a given post title (keywords extracted).
-// Falls back to picsum if the API is unavailable.
+// Returns 502 if the Unsplash API is unavailable. No placeholder fallback.
 app.post('/api/generate-post-image', async (req, res) => {
   const { title } = req.body || {};
   if (!title) return res.status(400).json({ error: 'title is required' });
   const query = extractKeywords(title);
-  const fallback = `https://picsum.photos/seed/${encodeURIComponent(query.split(' ')[0] || 'post')}/1200/628`;
   try {
-    const { imageUrl, photographerName, profileUrl } = await fetchUnsplashImage(query);
-    res.json({ url: imageUrl, query, fallback: false, photographerName, profileUrl });
+    const { imageUrl, photographerName, photographerUsername } = await fetchUnsplashImage(query);
+    res.json({ url: imageUrl, query, photographerName, photographerUsername });
   } catch (err) {
     console.error('[Unsplash] generate-post-image failed:', err.message);
-    res.json({ url: fallback, query, fallback: true, photographerName: '', profileUrl: '' });
+    res.status(502).json({ error: 'Unsplash image fetch failed', query });
   }
 });
 
@@ -697,27 +712,24 @@ app.post('/api/create-post', async (req, res) => {
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   const filePath = path.join(POSTS_DIR, `${slug}.md`);
   const query = extractKeywords(title);
-  const firstKeyword = query.split(' ')[0] || slug.split('-')[0] || 'post';
-  const fallbackUrl = `https://picsum.photos/seed/${encodeURIComponent(firstKeyword)}/1200/628`;
-  let imageUrl = fallbackUrl;
+  let imageUrl = '';
   let photographerName = '';
-  let profileUrl = '';
-  let usedFallback = false;
+  let photographerUsername = '';
   try {
-    ({ imageUrl, photographerName, profileUrl } = await fetchUnsplashImage(query));
+    ({ imageUrl, photographerName, photographerUsername } = await fetchUnsplashImage(query));
     console.log(`[Unsplash] Image for "${title}": ${imageUrl}`);
   } catch (err) {
-    console.error('[Unsplash] Image fetch failed for new post, using fallback:', err.message);
-    usedFallback = true;
+    console.error('[Unsplash] Image fetch failed for new post, leaving image blank (will fetch on render):', err.message);
   }
-  // Format: line 1 = # title, line 2 = date, line 3 = IMAGE_URL|PHOTOGRAPHER_NAME|PROFILE_URL, blank line, body.
-  const imageLine = photographerName && profileUrl
-    ? `${imageUrl}|${photographerName}|${profileUrl}`
-    : imageUrl;
-  const content = `# ${title}\n${date}\n${imageLine}\n\n${body.trim()}\n`;
+  // Format: line 1 = # title, line 2 = date, line 3 = IMAGE_URL|PHOTOGRAPHER_NAME|USERNAME, blank line, body.
+  // If the fetch failed, omit the image line; the post page will fetch on render.
+  const imageLine = imageUrl
+    ? `${imageUrl}|${photographerName}|${photographerUsername}\n`
+    : '';
+  const content = `# ${title}\n${date}\n${imageLine}\n${body.trim()}\n`;
   try {
     fs.writeFileSync(filePath, content, 'utf8');
-    res.json({ slug, file: `posts/${slug}.md`, imageUrl, query, usedFallback, photographerName, profileUrl });
+    res.json({ slug, file: `posts/${slug}.md`, imageUrl, query, photographerName, photographerUsername });
   } catch (err) {
     console.error('[create-post] Write failed:', err.message);
     res.status(500).json({ error: 'Failed to write post file' });
@@ -1031,7 +1043,7 @@ app.get('/blog', (req, res) => {
     </div>`));
 });
 
-app.get('/blog/:slug', (req, res) => {
+app.get('/blog/:slug', async (req, res) => {
   const slug = req.params.slug.replace(/[^a-zA-Z0-9-_]/g, '');
   const filePath = path.join(POSTS_DIR, `${slug}.md`);
 
@@ -1048,24 +1060,53 @@ app.get('/blog/:slug', (req, res) => {
   const title = lines[0].replace(/^#+\s*/, '').trim();
   const date = lines[1].trim();
   // Line 3 (index 2) is an optional featured image line.
-  // New format: IMAGE_URL|PHOTOGRAPHER_NAME|PROFILE_URL
-  // Legacy format: IMAGE_URL (no attribution)
+  // New format: IMAGE_URL|PHOTOGRAPHER_NAME|USERNAME
+  // Legacy format: IMAGE_URL|PHOTOGRAPHER_NAME|PROFILE_URL  or  IMAGE_URL
   const line3 = (lines[2] || '').trim();
-  let featuredImage = null, imgPhotographerName = null, imgProfileUrl = null;
+  let featuredImage = null, photographerName = null, username = null;
+  let hadImageLine = false;
   if (line3.startsWith('http')) {
+    hadImageLine = true;
     const parts = line3.split('|');
-    featuredImage = parts[0];
-    if (parts.length >= 3) {
-      imgPhotographerName = parts[1];
-      imgProfileUrl = parts[2];
+    featuredImage = parts[0].trim();
+    if (parts[1]) photographerName = parts[1].trim();
+    if (parts[2]) {
+      const p2 = parts[2].trim();
+      // Accept either a raw username or a legacy full profile URL (@username).
+      const m = p2.match(/@([^?/]+)/);
+      username = m ? m[1] : p2;
     }
   }
-  const body = lines.slice(featuredImage ? 3 : 2).join('\n');
+  const body = lines.slice(hadImageLine ? 3 : 2).join('\n');
 
-  const imgCredit = featuredImage
-    ? (imgPhotographerName && imgProfileUrl
-        ? `<p class="post-img-credit">Photo by <a href="${escHtml(imgProfileUrl)}" target="_blank" rel="noopener">${escHtml(imgPhotographerName)}</a> on <a href="https://unsplash.com/?utm_source=cosmictesla&amp;utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>`
-        : `<p class="post-img-credit">Photo via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></p>`)
+  // Fetch a real Unsplash image at render time when one is needed:
+  // no image, a Picsum placeholder, or missing attribution data.
+  const needFetch = !featuredImage || isPicsum(featuredImage) || !photographerName || !username;
+  if (needFetch) {
+    try {
+      const r = await fetchUnsplashImage(extractKeywords(title) || title);
+      featuredImage = r.imageUrl;
+      photographerName = r.photographerName;
+      username = r.photographerUsername;
+      // Persist so subsequent renders are cache hits (no refetch, no Picsum).
+      try {
+        let bodyLines = lines.slice(hadImageLine ? 3 : 2);
+        if (bodyLines[0] !== '') bodyLines = ['', ...bodyLines];
+        const newLine3 = `${featuredImage}|${photographerName}|${username}`;
+        const newContent = [`# ${title}`, date, newLine3, ...bodyLines].join('\n');
+        fs.writeFileSync(filePath, newContent, 'utf8');
+      } catch (werr) {
+        console.error('[Unsplash] Failed to persist image to post:', werr.message);
+      }
+    } catch (err) {
+      console.error(`[Unsplash] Render-time fetch failed for "${title}":`, err.message);
+      featuredImage = null;
+    }
+  }
+
+  const profileHref = `https://unsplash.com/@${escHtml(username)}?utm_source=cosmictesla&amp;utm_medium=referral`;
+  const imgCredit = (featuredImage && photographerName && username)
+    ? `<p class="post-img-credit">Photo by <a href="${profileHref}" target="_blank" rel="noopener">${escHtml(photographerName)}</a> on <a href="https://unsplash.com?utm_source=cosmictesla&amp;utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>`
     : '';
 
   res.send(blogLayout(title, `
