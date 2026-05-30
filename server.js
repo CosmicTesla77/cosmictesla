@@ -688,10 +688,12 @@ async function fetchUnsplashImage(query) {
   const json = JSON.parse(raw);
   const photo = json.results?.[0];
   const imageUrl = photo?.urls?.regular;
+  console.log(`[Unsplash] urls.regular (image src): ${imageUrl}`);
   if (!imageUrl) throw new Error(`No Unsplash results for "${query}"`);
   const photographerName = photo?.user?.name || '';
   const photographerUsername = photo?.user?.username || '';
   const downloadLocation = photo?.links?.download_location || '';
+  console.log(`[Unsplash] links.download_location (from API): ${downloadLocation}`);
   // Register the download event immediately, as required by Unsplash.
   triggerUnsplashDownload(downloadLocation);
   return { imageUrl, photographerName, photographerUsername, downloadLocation };
