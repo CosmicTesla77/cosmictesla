@@ -663,9 +663,18 @@ function triggerUnsplashDownload(downloadLocation) {
   if (!key || !downloadLocation) return;
   const sep = downloadLocation.includes('?') ? '&' : '?';
   const url = `${downloadLocation}${sep}client_id=${key}`;
-  fetchRaw(url, true)
-    .then(() => console.log('[Unsplash] Download trigger fired'))
-    .catch((err) => console.error('[Unsplash] Download trigger failed:', err.message));
+  console.log(`[Unsplash] download_location GET: ${url}`);
+  const req = https.get(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    },
+    timeout: 8000,
+  }, (res) => {
+    console.log(`[Unsplash] download_location status: ${res.statusCode}`);
+    res.resume();
+  });
+  req.on('timeout', () => { req.destroy(); });
+  req.on('error', (err) => console.error('[Unsplash] Download trigger failed:', err.message));
 }
 
 async function fetchUnsplashImage(query) {
