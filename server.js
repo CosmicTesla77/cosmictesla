@@ -699,6 +699,55 @@ async function fetchUnsplashImage(query) {
   return { imageUrl, photographerName, photographerUsername, downloadLocation };
 }
 
+// One-time end-to-end test of the Unsplash download trigger + view tracking.
+app.get('/test-unsplash', async (req, res) => {
+  const key = process.env.UNSPLASH_ACCESS_KEY;
+  if (!key) return res.status(500).json({ error: 'UNSPLASH_ACCESS_KEY not set' });
+  try {
+    const searchUrl = `https://api.unsplash.com/search/photos?query=mountain&per_page=1&orientation=landscape`;
+    const raw = await fetchRaw(searchUrl, false, {
+      'Authorization': `Client-ID ${key}`,
+      'Accept-Version': 'v1',
+    });
+    const json = JSON.parse(raw);
+    const photo = json.results?.[0];
+    if (!photo) return res.status(502).json({ error: 'No Unsplash results for "mountain"' });
+
+    const regularUrl = photo.urls?.regular || '';
+    const downloadLocation = photo.links?.download_location || '';
+    console.log(`[Unsplash TEST] urls.regular (image src): ${regularUrl}`);
+    console.log(`[Unsplash TEST] links.download_location (from API): ${downloadLocation}`);
+
+    const sep = downloadLocation.includes('?') ? '&' : '?';
+    const triggerUrl = `${downloadLocation}${sep}client_id=${key}`;
+    console.log(`[Unsplash TEST] download trigger GET: ${triggerUrl}`);
+
+    const triggerStatus = await new Promise((resolve, reject) => {
+      const r = https.get(triggerUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36' },
+        timeout: 8000,
+      }, (tr) => {
+        console.log(`[Unsplash TEST] download trigger status: ${tr.statusCode}`);
+        tr.resume();
+        resolve(tr.statusCode);
+      });
+      r.on('timeout', () => { r.destroy(); reject(new Error('Request timed out')); });
+      r.on('error', reject);
+    });
+
+    res.json({
+      query: 'mountain',
+      urls_regular: regularUrl,
+      download_location: downloadLocation,
+      download_trigger_url: triggerUrl,
+      download_trigger_status: triggerStatus,
+    });
+  } catch (err) {
+    console.error('[Unsplash TEST] failed:', err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 // Returns an Unsplash image URL for a given post title (keywords extracted).
 // Returns 502 if the Unsplash API is unavailable. No placeholder fallback.
 app.post('/api/generate-post-image', async (req, res) => {
