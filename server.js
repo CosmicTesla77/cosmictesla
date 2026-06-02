@@ -1116,9 +1116,9 @@ app.get('/blog/:slug', async (req, res) => {
       }
     } catch (err) {
       console.error(`[Unsplash] Render-time fetch failed for "${title}":`, err.message);
-      // Picsum fallback ONLY when the Unsplash fetch fails. No attribution
-      // for a placeholder, so photographer/username are cleared.
-      featuredImage = `https://picsum.photos/seed/${encodeURIComponent(slug)}/1200/600`;
+      // No usable Unsplash result: render with no hero image at all. No
+      // placeholder, no attribution.
+      featuredImage = null;
       photographerName = null;
       username = null;
     }
