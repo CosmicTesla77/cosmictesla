@@ -661,11 +661,16 @@ function isPicsum(url) {
 function triggerUnsplashDownload(downloadLocation) {
   const key = process.env.UNSPLASH_ACCESS_KEY;
   if (!key || !downloadLocation) return;
+  // Keep the full download_location (incl. its ixid param) and append client_id.
   const sep = downloadLocation.includes('?') ? '&' : '?';
   const url = `${downloadLocation}${sep}client_id=${key}`;
   console.log(`[Unsplash] download_location GET: ${url}`);
   const req = https.get(url, {
     headers: {
+      // client_id is in the query string; the Authorization header is added too
+      // as belt-and-suspenders so the request is always authorized (no 401).
+      'Authorization': `Client-ID ${key}`,
+      'Accept-Version': 'v1',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
     },
     timeout: 8000,
@@ -1111,13 +1116,19 @@ app.get('/blog/:slug', async (req, res) => {
       }
     } catch (err) {
       console.error(`[Unsplash] Render-time fetch failed for "${title}":`, err.message);
-      featuredImage = null;
+      // Picsum fallback ONLY when the Unsplash fetch fails. No attribution
+      // for a placeholder, so photographer/username are cleared.
+      featuredImage = `https://picsum.photos/seed/${encodeURIComponent(slug)}/1200/600`;
+      photographerName = null;
+      username = null;
     }
   }
 
-  const profileHref = `https://unsplash.com/@${escHtml(username)}?utm_source=cosmictesla&amp;utm_medium=referral`;
-  const imgCredit = (featuredImage && photographerName && username)
-    ? `<p class="post-img-credit">Photo by <a href="${profileHref}" target="_blank" rel="noopener">${escHtml(photographerName)}</a> on <a href="https://unsplash.com?utm_source=cosmictesla&amp;utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>`
+  // utm_source must match the app name registered in the Unsplash dashboard
+  // exactly ("CosmicTesla"); both links also carry utm_medium=referral.
+  const profileHref = `https://unsplash.com/@${escHtml(username)}?utm_source=CosmicTesla&amp;utm_medium=referral`;
+  const imgCredit = (featuredImage && !isPicsum(featuredImage) && photographerName && username)
+    ? `<p class="post-img-credit">Photo by <a href="${profileHref}" target="_blank" rel="noopener">${escHtml(photographerName)}</a> on <a href="https://unsplash.com?utm_source=CosmicTesla&amp;utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>`
     : '';
 
   res.send(blogLayout(title, `
