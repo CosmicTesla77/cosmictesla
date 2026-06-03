@@ -836,13 +836,56 @@ function escHtml(str) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function blogLayout(pageTitle, bodyContent, activePage = 'blog') {
+// Converts a "Month DD YYYY" post date into an ISO 8601 date (YYYY-MM-DD).
+// Anchors at noon to avoid timezone rollback. Returns '' if unparseable.
+function toIsoDate(dateStr) {
+  const d = new Date(dateStr.includes('T') ? dateStr : dateStr + ' 12:00:00');
+  if (isNaN(d.getTime())) return '';
+  return d.toISOString().slice(0, 10);
+}
+
+// Builds a ~155 char meta description from the first real body paragraph,
+// stripping basic markdown and never cutting a word in half.
+function buildMetaDescription(body) {
+  const para = body
+    .split(/\n\s*\n/)
+    .map((s) => s.trim())
+    .find((s) => s && !s.startsWith('#') && !s.startsWith('http')) || '';
+  const text = para
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/[#*_`>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (text.length <= 155) return text;
+  const truncated = text.slice(0, 155);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated).trim();
+}
+
+// Reads all posts (title, date, slug) sorted newest first.
+function getAllPostsMeta() {
+  if (!fs.existsSync(POSTS_DIR)) return [];
+  return fs.readdirSync(POSTS_DIR)
+    .filter((f) => f.endsWith('.md'))
+    .map((file) => {
+      const lines = fs.readFileSync(path.join(POSTS_DIR, file), 'utf8').split('\n');
+      return {
+        title: lines[0].replace(/^#+\s*/, '').trim(),
+        date: lines[1].trim(),
+        slug: file.replace('.md', ''),
+      };
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escHtml(pageTitle)} | CosmicTesla</title>
+  ${headExtra}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-padding-top: 52px; }
@@ -1131,6 +1174,39 @@ app.get('/blog/:slug', async (req, res) => {
     ? `<p class="post-img-credit">Photo by <a href="${profileHref}" target="_blank" rel="noopener">${escHtml(photographerName)}</a> on <a href="https://unsplash.com?utm_source=CosmicTesla&amp;utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>`
     : '';
 
+  // ── SEO: canonical URL, meta description, BlogPosting JSON-LD ───────────────
+  const canonicalUrl = `https://cosmictesla.com/blog/${slug}`;
+  const metaDescription = buildMetaDescription(body);
+  const isoDate = toIsoDate(date);
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    ...(isoDate ? { datePublished: isoDate } : {}),
+    ...(featuredImage ? { image: featuredImage } : {}),
+    author: { '@type': 'Person', name: 'Lance Dombroski' },
+    publisher: { '@type': 'Organization', name: 'CosmicTesla' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+  };
+  // Escape '<' so a body value can never break out of the script tag.
+  const ldJson = JSON.stringify(ld).replace(/</g, '\\u003c');
+  const headExtra = `<meta name="description" content="${escHtml(metaDescription)}" />
+  <link rel="canonical" href="${canonicalUrl}" />
+  <script type="application/ld+json">${ldJson}</script>`;
+
+  // ── Internal linking: up to 4 most recent other posts ──────────────────────
+  const related = getAllPostsMeta().filter((p) => p.slug !== slug).slice(0, 4);
+  const relatedHtml = related.length
+    ? `<section style="margin-top:48px;border-top:1px solid #2a2d3a;padding-top:28px;">
+        <div class="blog-index-title" style="font-size:1.2rem;">Related Posts</div>
+        ${related.map((p) => `
+        <a class="post-card" href="/blog/${escHtml(p.slug)}">
+          <div class="post-card-title">${escHtml(p.title)}</div>
+          <div class="post-card-date">${escHtml(formatDate(p.date))}</div>
+        </a>`).join('')}
+      </section>`
+    : '';
+
   res.send(blogLayout(title, `
     <div class="blog-wrap">
       <div class="back-link"><a href="/blog">← Back to Blog</a></div>
@@ -1140,7 +1216,8 @@ app.get('/blog/:slug', async (req, res) => {
         ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
         <div class="post-content">${marked(linkifyAmazonLines(body))}</div>
       </article>
-    </div>`));
+      ${relatedHtml}
+    </div>`, 'blog', headExtra));
 });
 
 app.get('/contact', (req, res) => {
