@@ -1175,7 +1175,7 @@ app.get('/blog/:slug', async (req, res) => {
     : '';
 
   // ── SEO: canonical URL, meta description, BlogPosting JSON-LD ───────────────
-  const canonicalUrl = `https://cosmictesla.com/blog/${slug}`;
+  const canonicalUrl = `https://www.cosmictesla.com/blog/${slug}`;
   const metaDescription = buildMetaDescription(body);
   const isoDate = toIsoDate(date);
   const ld = {
