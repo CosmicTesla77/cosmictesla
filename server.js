@@ -836,12 +836,16 @@ function escHtml(str) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Converts a "Month DD YYYY" post date into an ISO 8601 date (YYYY-MM-DD).
-// Anchors at noon to avoid timezone rollback. Returns '' if unparseable.
+// Converts a "Month DD YYYY" post date into full ISO 8601 with a noon anchor
+// and fixed America/Los_Angeles offset, e.g. 2026-06-03T12:00:00-07:00.
+// Returns '' if unparseable.
 function toIsoDate(dateStr) {
   const d = new Date(dateStr.includes('T') ? dateStr : dateStr + ' 12:00:00');
   if (isNaN(d.getTime())) return '';
-  return d.toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}T12:00:00-07:00`;
 }
 
 // Builds a ~155 char meta description from the first real body paragraph,
@@ -1184,7 +1188,7 @@ app.get('/blog/:slug', async (req, res) => {
     headline: title,
     ...(isoDate ? { datePublished: isoDate } : {}),
     ...(featuredImage ? { image: featuredImage } : {}),
-    author: { '@type': 'Person', name: 'Lance Dombroski' },
+    author: { '@type': 'Person', name: 'Lance Dombroski', url: 'https://www.cosmictesla.com/about' },
     publisher: { '@type': 'Organization', name: 'CosmicTesla' },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
   };
