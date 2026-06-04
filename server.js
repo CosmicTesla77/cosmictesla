@@ -2,6 +2,7 @@ const express = require('express');
 const Parser = require('rss-parser');
 const path = require('path');
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const { marked } = require('marked');
 const cheerio = require('cheerio');
@@ -1231,6 +1232,99 @@ app.get('/contact', (req, res) => {
       <p style="color:#c8cad4;line-height:1.8;margin-bottom:12px;">CosmicTesla is a real-time trending intelligence hub that aggregates what people are searching, sharing, watching, buying, and talking about across Google, Reddit, YouTube, and a growing list of platforms. The scope is expanding continuously — more data sources, richer trend breakdowns, and original insight through the CosmicTesla Blog are actively in development. For questions, feedback, or partnership inquiries, reach out directly.</p>
       <p style="color:#c8cad4;line-height:1.8;">Email: <a href="mailto:pixelridgestudio@gmail.com" style="color:#00d4aa;text-decoration:underline;text-decoration-color:rgba(0,212,170,0.4);">pixelridgestudio@gmail.com</a></p>
     </div>`, 'contact'));
+});
+
+// ── Plain-text trending digest ─────────────────────────────────────────────
+// Server-rendered text/plain snapshot of every trending section. It reuses the
+// existing /api/* routes over an internal loopback request, so it inherits their
+// caching and external calls without duplicating any fetch logic. None of those
+// routes touch Unsplash, so no image fetching is ever triggered here. Any single
+// section that fails prints "data unavailable" and the route continues.
+function fetchInternalJson(routePath) {
+  return new Promise((resolve, reject) => {
+    const req = http.get({ hostname: '127.0.0.1', port: PORT, path: routePath, timeout: 15000 }, (r) => {
+      let raw = '';
+      r.on('data', (c) => { raw += c; });
+      r.on('end', () => {
+        if (r.statusCode !== 200) return reject(new Error(`HTTP ${r.statusCode}`));
+        try { resolve(JSON.parse(raw)); } catch (e) { reject(e); }
+      });
+    });
+    req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
+    req.on('error', reject);
+  });
+}
+
+function numFmt(n) {
+  const v = Number(n);
+  return Number.isFinite(v) ? v.toLocaleString('en-US') : String(n);
+}
+
+app.get('/digest', async (req, res) => {
+  const out = [];
+  out.push('COSMICTESLA TRENDING DIGEST');
+  out.push(`Generated: ${new Date().toString()}`);
+
+  // Renders one labeled section. `render` returns an array of item strings, or
+  // throws/returns empty to signal the source is unavailable.
+  async function section(name, routePath, render) {
+    out.push('');
+    out.push(`== ${name} ==`);
+    try {
+      const data = await fetchInternalJson(routePath);
+      const lines = render(data) || [];
+      if (!lines.length) { out.push('data unavailable'); return; }
+      lines.forEach((l, i) => out.push(`${i + 1}. ${l}`));
+    } catch (e) {
+      out.push('data unavailable');
+    }
+  }
+
+  await section('GOOGLE TRENDING', '/api/trends',
+    (d) => (d.trends || []).map((t) => `${t.title} (${t.traffic})`));
+  await section('REDDIT', '/api/reddit',
+    (d) => (d.posts || []).map((p) => `${p.title}${p.subreddit ? ` [r/${p.subreddit}]` : ''}`));
+  await section('YOUTUBE', '/api/youtube',
+    (d) => (d.videos || []).map((v) => `${v.title} (${numFmt(v.views)} views)`));
+  await section('WIKIPEDIA', '/api/wikimedia-trending',
+    (d) => (d.articles || []).map((a) => `${a.title} (${numFmt(a.views)} views)`));
+  await section('GITHUB', '/api/github-trending',
+    (d) => (d.repos || []).map((r) => `${r.name} (${r.starsToday} stars today${r.language ? `, ${r.language}` : ''})`));
+  await section('HACKER NEWS', '/api/hackernews-trending',
+    (d) => (d.stories || []).map((s) => `${s.title} (${numFmt(s.score)} points)`));
+  await section('PRODUCT HUNT', '/api/producthunt-trending',
+    (d) => (d.posts || []).map((p) => `${p.name} (${numFmt(p.votes)} votes)`));
+  await section('MOVIES & TV', '/api/tmdb-trending',
+    (d) => (d.items || []).map((m) => `${m.title} (${m.mediaType})`));
+  await section('CRYPTO', '/api/crypto-trending',
+    (d) => (d.coins || []).map((c) => `${c.symbol} ${c.name}${c.priceChange != null ? ` (${Number(c.priceChange).toFixed(2)}% 24h)` : ''}`));
+  await section('STEAM', '/api/steam-trending',
+    (d) => (d.games || []).map((g) => `${g.title} (${g.price})`));
+
+  // Books has two labeled sublists (Fiction + Nonfiction), each independently
+  // numbered. Rendered inline rather than via section() to keep the subheaders.
+  out.push('');
+  out.push('== BOOKS ==');
+  try {
+    const books = await fetchInternalJson('/api/books-trending');
+    const fiction = books.fiction || [];
+    const nonfiction = books.nonfiction || [];
+    out.push('-- Fiction --');
+    if (fiction.length) fiction.forEach((b, i) => out.push(`${i + 1}. ${b.title} by ${b.author}`));
+    else out.push('data unavailable');
+    out.push('-- Nonfiction --');
+    if (nonfiction.length) nonfiction.forEach((b, i) => out.push(`${i + 1}. ${b.title} by ${b.author}`));
+    else out.push('data unavailable');
+  } catch (e) {
+    out.push('data unavailable');
+  }
+
+  await section('TWITCH', '/api/twitch-trending',
+    (d) => (d.games || []).map((g) => `${g.name} (${numFmt(g.viewers)} viewers)`));
+  await section('ITUNES', '/api/itunes-top-songs',
+    (d) => (d.songs || []).map((s) => `${s.title} by ${s.artist}`));
+
+  res.set('Content-Type', 'text/plain; charset=utf-8').send(out.join('\n') + '\n');
 });
 
 // ── Startup environment variable check ────────────────────────────────────
