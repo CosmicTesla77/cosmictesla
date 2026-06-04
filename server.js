@@ -109,6 +109,44 @@ app.get('/sitemap.xml', (req, res) => {
 });
 
 app.use(express.json());
+
+// Server-rendered homepage: reads the static index.html shell and injects an
+// original intro plus the latest blog posts directly after the hero <header>,
+// so crawlers receive real text instead of an empty client-rendered shell. The
+// trending sections still load client side, exactly as before. Registered ahead
+// of express.static so it takes precedence for '/'; on any error we fall back to
+// the static file.
+app.get('/', (req, res, next) => {
+  try {
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    let html = fs.readFileSync(indexPath, 'utf8');
+
+    const latest = getAllPostsMeta().slice(0, 6);
+    const postItems = latest.map((p) => `
+      <a href="/blog/${escHtml(p.slug)}" style="display:block;background:#1a1d29;border:1px solid #2a2d3a;border-radius:8px;padding:14px 16px;text-decoration:none;color:#e2e4e9;transition:border-color 0.2s;">
+        <span style="display:block;font-size:1rem;font-weight:600;color:#00d4aa;">${escHtml(p.title)}</span>
+        <span style="display:block;margin-top:4px;font-size:0.8rem;color:#8b8fa3;">${escHtml(p.date)}</span>
+      </a>`).join('');
+
+    const injected = `
+  <section style="max-width:760px;margin:20px auto 8px;padding:0 16px;line-height:1.6;color:#c7cad4;">
+    <p style="margin-bottom:14px;">CosmicTesla pulls what the internet is watching, searching, buying, and talking about into one place. Every section on this page tracks a different corner of the web in real time, from Google search spikes and Reddit threads to Steam top sellers, Twitch viewer counts, the New York Times bestseller list, and trending crypto, refreshed throughout the day.</p>
+    <p>For deeper takes on the stories behind the trends, the CosmicTesla blog breaks down the day's most interesting topics with context and opinion. The latest posts are below.</p>
+  </section>
+  <section style="max-width:760px;margin:8px auto 16px;padding:0 16px;">
+    <h2 style="font-size:1.3rem;color:#e2e4e9;margin-bottom:14px;">Latest from the Blog</h2>
+    <div style="display:grid;gap:10px;">${postItems}</div>
+  </section>`;
+
+    if (html.includes('</header>')) {
+      html = html.replace('</header>', `</header>${injected}`);
+    }
+    res.set('Content-Type', 'text/html; charset=utf-8').send(html);
+  } catch (err) {
+    next();
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 const ACRONYM_MAP = new Map(
