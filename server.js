@@ -538,20 +538,22 @@ app.get('/api/twitch-trending', async (req, res) => {
   try {
     const token = await getTwitchToken();
     const twitchHeaders = { 'Client-ID': clientId, 'Authorization': `Bearer ${token}` };
-    const [gamesRaw, streamsRaw] = await Promise.all([
-      fetchRaw('https://api.twitch.tv/helix/games/top?first=20', false, twitchHeaders),
-      fetchRaw('https://api.twitch.tv/helix/streams?first=100', false, twitchHeaders),
-    ]);
+    const gamesRaw = await fetchRaw('https://api.twitch.tv/helix/games/top?first=10', false, twitchHeaders);
     const gamesJson = JSON.parse(gamesRaw);
-    const streamsJson = JSON.parse(streamsRaw);
-    const viewersByGame = {};
-    (streamsJson.data || []).forEach((s) => {
-      viewersByGame[s.game_id] = (viewersByGame[s.game_id] || 0) + s.viewer_count;
-    });
-    const games = (gamesJson.data || []).map((g) => ({
+    const topGames = gamesJson.data || [];
+    const viewerTotals = await Promise.all(topGames.map(async (g) => {
+      try {
+        const streamsRaw = await fetchRaw(`https://api.twitch.tv/helix/streams?game_id=${encodeURIComponent(g.id)}&first=50`, false, twitchHeaders);
+        const streamsJson = JSON.parse(streamsRaw);
+        return (streamsJson.data || []).reduce((sum, s) => sum + s.viewer_count, 0);
+      } catch (e) {
+        return 0;
+      }
+    }));
+    const games = topGames.map((g, i) => ({
       name: g.name,
       boxArt: g.box_art_url.replace('{width}', '144').replace('{height}', '192'),
-      viewers: viewersByGame[g.id] || 0,
+      viewers: viewerTotals[i] || 0,
       affiliateUrl: `https://www.amazon.com/s?k=${encodeURIComponent(g.name)}&tag=cosmictesla-20`,
     }));
     const result = { games };
