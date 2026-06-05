@@ -1,5 +1,5 @@
 God of War Laufey Is Real and It Stars Faye as the Lead
-June 05 2025
+June 05 2026
 
 Santa Monica Studio's next God of War game is confirmed and it puts Laufey, also known as Faye, at the center of the story. Faye is Kratos' wife and Atreus' mother, a character who died before the events of the 2018 reboot and whose mysterious backstory has loomed over the entire Norse saga. Now she gets her own chapter.
 

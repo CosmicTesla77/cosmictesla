@@ -1,5 +1,5 @@
 Studio MDHR Just Announced Two New Cuphead Games at Summer Game Fest 2026
-June 05 2025
+June 05 2026
 
 Studio MDHR announced two new Cuphead projects at Summer Game Fest 2026 today: a full hand-animated sequel to the original Cuphead and a separate retro spinoff called Mighty Cuphead Adventure. The sequel is confirmed to be in early development, while Mighty Cuphead Adventure is further along and will launch first.
 

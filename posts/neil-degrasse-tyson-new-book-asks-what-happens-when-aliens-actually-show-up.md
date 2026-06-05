@@ -1,5 +1,5 @@
 Neil deGrasse Tyson's New Book Asks What Happens When Aliens Actually Show Up
-June 05 2025
+June 05 2026
 
 Take Me to Your Leader: Perspectives on Your First Alien Encounter by Neil deGrasse Tyson is a 240-page guide to first contact published by Simon and Schuster on May 12, 2026. It is currently on the NYT Nonfiction Bestseller list and represents what Tyson himself calls the culmination of a lifetime of fascination with the possibility of extraterrestrial life.
 

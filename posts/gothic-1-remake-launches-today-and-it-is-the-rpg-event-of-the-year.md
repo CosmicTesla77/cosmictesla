@@ -1,5 +1,5 @@
 Gothic 1 Remake Launches Today and It Is the RPG Event of the Year
-June 05 2025
+June 05 2026
 
 Gothic 1 Remake released globally today, June 5, 2026, on PC, PlayStation 5, and Xbox Series X and S. Developed by Alkimia Interactive and published by THQ Nordic, it is a full reconstruction of the 2001 cult-classic open-world RPG in Unreal Engine 5, built for modern hardware while preserving the atmosphere and systems that made the original extraordinary.
 

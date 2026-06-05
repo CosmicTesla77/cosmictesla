@@ -1,5 +1,5 @@
 Summer Game Fest 2026 Is Live Tonight and the Announcements Are Already Stacking Up
-June 05 2025
+June 05 2026
 
 Summer Game Fest 2026 is live today, June 5, broadcasting from the Dolby Theatre in Hollywood at 2 PM PT. Hosted by Geoff Keighley and Lucy James, the two-hour showcase is the anchor event for a full weekend of gaming announcements that runs through the Xbox Games Showcase on June 7.
 

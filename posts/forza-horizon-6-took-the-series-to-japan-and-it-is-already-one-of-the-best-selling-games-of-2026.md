@@ -1,5 +1,5 @@
 Forza Horizon 6 Took the Series to Japan and It Is Already One of the Best-Selling Games of 2026
-June 05 2025
+June 05 2026
 
 Forza Horizon 6 released on May 19, 2026 for Xbox Series X and S, PC, Steam, and Xbox Cloud Gaming, with a PlayStation 5 version planned for later in the year. Developed by Playground Games with assistance from Turn 10 Studios and published by Microsoft, the game takes the Horizon Festival to Japan for the first time, with a roster of over 550 cars and what the studio describes as the largest map in franchise history.
 
