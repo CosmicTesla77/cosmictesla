@@ -1300,7 +1300,15 @@ function numFmt(n) {
   return Number.isFinite(v) ? v.toLocaleString('en-US') : String(n);
 }
 
-app.get('/digest', async (req, res) => {
+// 30-minute in-memory cache for the digest. The digest is rebuilt only when the
+// cached copy is older than the TTL; otherwise the cached text is served as-is.
+// The "Generated:" timestamp is stamped inside buildDigest(), so it is refreshed
+// on every rebuild and always reflects the data actually being served. Rebuilds
+// are throttled this way because the underlying sources are rate limited.
+const CACHE_TTL_30M = 30 * 60 * 1000;
+const digestCache = { text: null, builtAt: null };
+
+async function buildDigest() {
   const out = [];
   out.push('COSMICTESLA TRENDING DIGEST');
   out.push(`Generated: ${new Date().toString()}`);
@@ -1364,7 +1372,18 @@ app.get('/digest', async (req, res) => {
   await section('ITUNES', '/api/itunes-top-songs',
     (d) => (d.songs || []).map((s) => `${s.title} by ${s.artist}`));
 
-  res.set('Content-Type', 'text/plain; charset=utf-8').send(out.join('\n') + '\n');
+  return out.join('\n') + '\n';
+}
+
+app.get('/digest', async (req, res) => {
+  if (!digestCache.text || (Date.now() - digestCache.builtAt >= CACHE_TTL_30M)) {
+    digestCache.text = await buildDigest();
+    digestCache.builtAt = Date.now();
+  }
+  res
+    .set('Content-Type', 'text/plain; charset=utf-8')
+    .set('Cache-Control', 'no-store')
+    .send(digestCache.text);
 });
 
 // ── Startup environment variable check ────────────────────────────────────
