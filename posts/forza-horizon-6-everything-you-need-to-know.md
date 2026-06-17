@@ -1,4 +1,4 @@
-Forza Horizon 6 Is Here: Everything You Need to Know About the Biggest Racing Game of 2025
+Forza Horizon 6 Is Here: Everything You Need to Know About the Biggest Racing Game of 2026
 May 21 2026
 
 Forza Horizon 6 has arrived and it is already sitting at the top of Steam's top sellers chart with a very positive rating. For racing game fans, this is the moment they have been waiting for. The Forza Horizon series has consistently delivered some of the most visually stunning and mechanically satisfying open world racing experiences in gaming history, and the sixth installment appears to be carrying that tradition forward.
