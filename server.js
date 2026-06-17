@@ -81,12 +81,12 @@ app.use((req, res, next) => {
 
 app.get('/robots.txt', (req, res) => {
   res.set('Content-Type', 'text/plain').send(
-    'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://cosmictesla.com/sitemap.xml\n'
+    'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://www.cosmictesla.com/sitemap.xml\n'
   );
 });
 
 app.get('/sitemap.xml', (req, res) => {
-  const base = 'https://cosmictesla.com';
+  const base = 'https://www.cosmictesla.com';
   const today = new Date().toISOString().slice(0, 10);
   const staticUrls = [
     { loc: `${base}/`,        priority: '1.0', changefreq: 'daily'   },
@@ -954,6 +954,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '')
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escHtml(pageTitle)} | CosmicTesla</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1906585717244962" crossorigin="anonymous"></script>
   ${headExtra}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1108,7 +1109,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '')
   </div>
   <header>
     <h1><a href="/">CosmicTesla</a></h1>
-    <p>Real-time trending searches across the internet</p>
+    <p>What the internet is watching right now, all in one place</p>
   </header>
   ${bodyContent}
   <footer>
@@ -1293,7 +1294,7 @@ app.get('/contact', (req, res) => {
   res.send(blogLayout('Contact', `
     <div class="blog-wrap">
       <h1 style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:16px;">Contact</h1>
-      <p style="color:#c8cad4;line-height:1.8;margin-bottom:12px;">CosmicTesla is a real-time trending intelligence hub that aggregates what people are searching, sharing, watching, buying, and talking about across Google, Reddit, YouTube, and a growing list of platforms. The scope is expanding continuously — more data sources, richer trend breakdowns, and original insight through the CosmicTesla Blog are actively in development. For questions, feedback, or partnership inquiries, reach out directly.</p>
+      <p style="color:#c8cad4;line-height:1.8;margin-bottom:12px;">CosmicTesla tracks what people are searching, watching, and talking about across Google, Reddit, YouTube, Steam, and a growing list of platforms, and the CosmicTesla Blog explains the stories behind those trends with original analysis and opinion. New sources and deeper breakdowns are added regularly. For questions, feedback, or partnership inquiries, reach out directly.</p>
       <p style="color:#c8cad4;line-height:1.8;">Email: <a href="mailto:pixelridgestudio@gmail.com" style="color:#00d4aa;text-decoration:underline;text-decoration-color:rgba(0,212,170,0.4);">pixelridgestudio@gmail.com</a></p>
     </div>`, 'contact'));
 });
