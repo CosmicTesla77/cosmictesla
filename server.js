@@ -130,8 +130,8 @@ app.get('/', (req, res, next) => {
 
     const injected = `
   <section style="max-width:760px;margin:20px auto 8px;padding:0 16px;line-height:1.6;color:#c7cad4;">
-    <p style="margin-bottom:14px;">CosmicTesla pulls what the internet is watching, searching, buying, and talking about into one place. Every section on this page tracks a different corner of the web in real time, from Google search spikes and Reddit threads to Steam top sellers, Twitch viewer counts, the New York Times bestseller list, and trending crypto, refreshed throughout the day.</p>
-    <p>For deeper takes on the stories behind the trends, the CosmicTesla blog breaks down the day's most interesting topics with context and opinion. The latest posts are below.</p>
+    <p style="margin-bottom:14px;">CosmicTesla is one person reading the entire internet so you do not have to. Every morning the web throws off thousands of signals about what people are searching, watching, building, and buying, and most of them are noise. This site pulls the live trending data from the platforms that matter into one place, and the blog explains the handful of stories actually worth your attention.</p>
+    <p>What is moving right now is below. Why it matters is in the writing.</p>
   </section>
   <section style="max-width:760px;margin:8px auto 16px;padding:0 16px;">
     <h2 style="font-size:1.3rem;color:#e2e4e9;margin-bottom:14px;">Latest from the Blog</h2>
@@ -141,6 +141,30 @@ app.get('/', (req, res, next) => {
     if (html.includes('</header>')) {
       html = html.replace('</header>', `</header>${injected}`);
     }
+
+    const SECTION_INTRO_STYLE = 'max-width:820px;margin:4px auto 16px;padding:0 20px;color:#8b8fa3;line-height:1.6;font-size:0.95rem;';
+    const sectionIntros = {
+      'tmdb-content': `This list tracks the films and shows pulling the most attention across the internet. Trailers, premieres, and streaming releases drive sudden spikes, and the titles climbing fastest are the ones dominating group chats and feeds. It is the quickest way to see what the entertainment world is fixated on today.`,
+      'youtube-content': `YouTube trending is driven by two forces, music drops and cultural moments. A video from a major artist or a viral clip can rack up millions of views in a day, and this section captures that velocity as it happens. Watch which trailers and releases climb fastest, because that momentum tends to predict the week's entertainment conversation.`,
+      'itunes-content': `The iTunes chart rewards purchases, which makes it a measure of fan intensity rather than passive streaming. A song near the top has listeners committed enough to pay for it, and that commitment often signals a breakout artist or a cultural moment. Watch when one artist holds several spots, because that is how a takeover looks.`,
+      'twitch-content': `Twitch viewer counts measure what people want to watch other people play, a different signal than what they buy. A game high on this list has an audience and a community, the two things that keep a title alive long after launch. When a new release tops both Steam and Twitch at once, that is a genuine hit.`,
+      'content': `Google search spikes are the closest thing to a live readout of public attention. When a name or phrase jumps here, it usually means a news event, a sporting result, or a sudden controversy broke in the last few hours. Read this first when you want to know what the country is reacting to, then check the blog where the day's biggest spike gets explained.`,
+      'reddit-content': `Reddit's front page is where a story goes from niche to mainstream. What sits at the top of r/all has already survived thousands of upvotes from the most online audience on the internet, which makes it an early signal for what the rest of the web talks about tomorrow. Treat it as a leading indicator, not a news source.`,
+      'wiki-content': `Wikipedia pageviews are the most honest curiosity metric on the web. Nobody reads an encyclopedia entry to perform for an algorithm, so a spike here means a lot of people genuinely wanted to understand a person, place, or event. When an unfamiliar name tops this list, it is worth finding out why.`,
+      'github-content': `GitHub Trending is where the future of software shows up before anyone writes a headline about it. The repositories gaining the most stars in a day reveal what developers are actually building and adopting, from AI agents to new programming tools. Non developers should still glance at it, because today's trending repo often becomes next year's product.`,
+      'hn-content': `Hacker News is the front page of the technically literate internet. A post that reaches the top has been judged by founders, engineers, and researchers, which makes it a sharp filter for what matters in technology and startups. The comment threads are frequently more valuable than the articles themselves.`,
+      'ph-content': `Product Hunt is the daily launchpad for new software and tools. The top products show what builders are shipping and what early adopters are willing to vote for, an early read on where consumer and developer software is heading. It is equal parts inspiration and competitive intelligence.`,
+      'crypto-content': `Crypto trending lists move on hype as much as fundamentals, so read them with skepticism. A coin surging twenty percent in a day usually reflects a narrative, a listing, or a social push rather than a change in real value. This section tracks where speculative attention is flowing, which is useful to watch and dangerous to chase.`,
+      'steam-content': `Steam top sellers are the clearest scoreboard in PC gaming. What sits at the top reflects new releases, sales, and the games people are actually spending money on, not just what they say they want. Pair this with the Twitch list to see which titles have staying power versus a launch week spike.`,
+      'books-content': `The New York Times bestseller list is the most established measure of what people are reading. Fiction shows where the culture is escaping to, nonfiction shows what it is trying to understand, and a title that holds the list for weeks is telling you something durable. The blog regularly breaks down the standout book of the week.`,
+    };
+    for (const [id, text] of Object.entries(sectionIntros)) {
+      const marker = `<div id="${id}">`;
+      if (html.includes(marker)) {
+        html = html.replace(marker, `<p style="${SECTION_INTRO_STYLE}">${text}</p>\n  ${marker}`);
+      }
+    }
+
     res.set('Content-Type', 'text/html; charset=utf-8').send(html);
   } catch (err) {
     next();
