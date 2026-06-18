@@ -35,6 +35,7 @@ const steamCache = { data: null, fetchedAt: null };
 const booksCache = { data: null, fetchedAt: null };
 const twitchCache = { data: null, fetchedAt: null };
 const itunesCache = { data: null, fetchedAt: null };
+const gamingNewsCache = { data: null, fetchedAt: null };
 const CACHE_TTL_2H = 2 * 60 * 60 * 1000;
 
 const CACHE_TTL_60M = 60 * 60 * 1000;
@@ -557,6 +558,66 @@ app.get('/api/steam-trending', async (req, res) => {
   } catch (error) {
     console.error('Error fetching Steam:', error.message);
     res.status(500).json({ error: 'Failed to fetch Steam top sellers' });
+  }
+});
+
+app.get('/api/gaming-news', async (req, res) => {
+  if (gamingNewsCache.data && gamingNewsCache.fetchedAt && (Date.now() - gamingNewsCache.fetchedAt < CACHE_TTL_60M)) {
+    return res.json(gamingNewsCache.data);
+  }
+  try {
+    // Live gaming news from stable publisher RSS feeds. These are the primary
+    // source for Gaming cluster blog posts. The Steam and Twitch charts are
+    // evergreen lists that burn out fast as subjects get published; these feeds
+    // surface fresh launches, reveals, patches, and sales every day.
+    const FEEDS = [
+      { source: 'PC Gamer',      url: 'https://www.pcgamer.com/rss/' },
+      { source: 'GameSpot',      url: 'https://www.gamespot.com/feeds/news/' },
+      { source: 'Nintendo Life', url: 'https://www.nintendolife.com/feeds/latest' },
+      { source: 'Push Square',   url: 'https://www.pushsquare.com/feeds/latest' },
+    ];
+    const settled = await Promise.allSettled(FEEDS.map(async (f) => {
+      const raw = await fetchRaw(f.url, false, {
+        'Accept': 'application/rss+xml, application/xml, text/xml',
+      });
+      const feed = await parser.parseString(raw);
+      return (feed.items || []).map((it) => {
+        const iso = it.isoDate || (it.pubDate ? new Date(it.pubDate).toISOString() : null);
+        return { title: (it.title || '').trim(), link: it.link || '', source: f.source, iso };
+      });
+    }));
+    let merged = settled
+      .filter((r) => r.status === 'fulfilled')
+      .flatMap((r) => r.value)
+      .filter((it) => it.title);
+
+    // Drop items older than 4 days so the list stays fresh; keep undated items.
+    const MAX_AGE = 4 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    merged = merged.filter((it) => !it.iso || (now - new Date(it.iso).getTime()) <= MAX_AGE);
+
+    // Dedup by normalized title across feeds.
+    const seen = new Set();
+    const deduped = [];
+    for (const it of merged) {
+      const key = it.title.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+      if (key && !seen.has(key)) { seen.add(key); deduped.push(it); }
+    }
+
+    // Most recent first; undated items sink to the bottom.
+    deduped.sort((a, b) => {
+      const ta = a.iso ? new Date(a.iso).getTime() : 0;
+      const tb = b.iso ? new Date(b.iso).getTime() : 0;
+      return tb - ta;
+    });
+
+    const result = { items: deduped.slice(0, 15) };
+    gamingNewsCache.data = result;
+    gamingNewsCache.fetchedAt = Date.now();
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching gaming news:', error.message);
+    res.status(500).json({ error: 'Failed to fetch gaming news' });
   }
 });
 
@@ -1371,6 +1432,8 @@ async function buildDigest() {
     (d) => (d.items || []).map((m) => `${m.title} (${m.mediaType})`));
   await section('CRYPTO', '/api/crypto-trending',
     (d) => (d.coins || []).map((c) => `${c.symbol} ${c.name}${c.priceChange != null ? ` (${Number(c.priceChange).toFixed(2)}% 24h)` : ''}`));
+  await section('GAMING NEWS', '/api/gaming-news',
+    (d) => (d.items || []).map((g) => `${g.title} [${g.source}]`));
   await section('STEAM', '/api/steam-trending',
     (d) => (d.games || []).map((g) => `${g.title} (${g.price})`));
 
