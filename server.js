@@ -239,7 +239,32 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/privacy', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+  res.send(blogLayout('Privacy Policy', `
+    <div class="blog-wrap">
+      <div class="post-content">
+        <h1>Privacy Policy</h1>
+        <p>This Privacy Policy explains how CosmicTesla (cosmictesla.com) collects, uses, and protects information when you visit the site. By using CosmicTesla you agree to the practices described here.</p>
+        <h2>Information We Collect</h2>
+        <p>CosmicTesla does not require you to create an account or submit personal information to read content. When you visit, our servers and third party services may automatically record standard log data such as your browser type, device type, referring pages, and the pages you view. This data is used to understand traffic and improve the site.</p>
+        <h2>Cookies and Web Beacons</h2>
+        <p>CosmicTesla and its third party partners use cookies and similar technologies to store preferences and to measure how the site is used. You can disable cookies through your browser settings, though some features may not function as intended if you do.</p>
+        <h2>Google AdSense and Advertising</h2>
+        <p>CosmicTesla uses Google AdSense to display advertisements. Google, as a third party vendor, uses cookies to serve ads based on your prior visits to this and other websites. Google uses advertising cookies, including the DoubleClick DART cookie, to serve ads to users based on their interests.</p>
+        <p>You may opt out of personalized advertising by visiting Google Ads Settings at google.com/settings/ads. You may also opt out of third party vendor cookies for personalized advertising by visiting aboutads.info. For more information about how Google uses data on partner sites, see google.com/policies/technologies/partner-sites.</p>
+        <h2>Affiliate Disclosure</h2>
+        <p>CosmicTesla is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by linking to Amazon.com. As an Amazon Associate, CosmicTesla earns from qualifying purchases. Some links on this site are affiliate links, which means CosmicTesla may receive a commission at no additional cost to you.</p>
+        <h2>Third Party Links</h2>
+        <p>CosmicTesla aggregates and links to content hosted on other websites and services. We are not responsible for the privacy practices or content of those external sites. We encourage you to review the privacy policies of any site you reach through our links.</p>
+        <h2>Your California Privacy Rights</h2>
+        <p>If you are a California resident, the California Consumer Privacy Act gives you the right to request information about the personal data we collect, to request deletion of that data, and to opt out of the sale of personal information. CosmicTesla does not sell personal information. To exercise any of these rights, contact us using the details below.</p>
+        <h2>Children's Privacy</h2>
+        <p>CosmicTesla is not directed to children under the age of 13 and we do not knowingly collect personal information from children. If you believe a child has provided us with personal information, contact us and we will remove it.</p>
+        <h2>Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with a revised effective date. Your continued use of CosmicTesla after changes are posted constitutes acceptance of the updated policy.</p>
+        <h2>Contact</h2>
+        <p>If you have questions about this Privacy Policy, contact us through the contact page at cosmictesla.com/contact.</p>
+      </div>
+    </div>`, 'privacy'));
 });
 
 app.get('/terms', (req, res) => {
