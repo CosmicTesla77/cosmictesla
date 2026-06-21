@@ -123,24 +123,40 @@ app.get('/', (req, res, next) => {
     let html = fs.readFileSync(indexPath, 'utf8');
 
     const latest = getAllPostsMeta().slice(0, 6);
-    const postItems = latest.map((p) => `
+    const postItems = latest.map((p) => {
+      const bodyLines = fs.readFileSync(path.join(POSTS_DIR, `${p.slug}.md`), 'utf8').split('\n');
+      const summary = buildPostSummary(bodyLines.slice(3).join('\n'));
+      return `
       <a href="/blog/${escHtml(p.slug)}" style="display:block;background:#1a1d29;border:1px solid #2a2d3a;border-radius:8px;padding:14px 16px;text-decoration:none;color:#e2e4e9;transition:border-color 0.2s;">
         <span style="display:block;font-size:1rem;font-weight:600;color:#00d4aa;">${escHtml(p.title)}</span>
         <span style="display:block;margin-top:4px;font-size:0.8rem;color:#8b8fa3;">${escHtml(p.date)}</span>
-      </a>`).join('');
+        <div class="post-card-summary">${escHtml(summary)}</div>
+      </a>`;
+    }).join('');
 
     const injected = `
-  <section style="max-width:760px;margin:20px auto 8px;padding:0 16px;line-height:1.6;color:#c7cad4;">
-    <p style="margin-bottom:14px;">CosmicTesla is one person reading the entire internet so you do not have to. Every morning the web throws off thousands of signals about what people are searching, watching, building, and buying, and most of them are noise. This site pulls the live trending data from the platforms that matter into one place, and the blog explains the handful of stories actually worth your attention.</p>
-    <p>What is moving right now is below. Why it matters is in the writing.</p>
+  <section class="home-hero">
+    <h2>Make sense of what the internet is watching</h2>
+    <p>CosmicTesla tracks what is rising across search, gaming, space, technology, film, books, and markets, then turns the noise into original reporting. The live boards on this page are the raw signal. The articles below explain why each story matters and what to watch next.</p>
   </section>
   <section style="max-width:760px;margin:8px auto 16px;padding:0 16px;">
-    <h2 style="font-size:1.3rem;color:#e2e4e9;margin-bottom:14px;">Latest from the Blog</h2>
+    <h2 class="latest-heading">Latest reporting</h2>
     <div style="display:grid;gap:10px;">${postItems}</div>
   </section>`;
 
     if (html.includes('</header>')) {
       html = html.replace('</header>', `</header>${injected}`);
+    }
+
+    const homeCss = `
+    .home-hero { max-width: 760px; margin: 32px auto 8px; padding: 0 20px; }
+    .home-hero h2 { font-size: 1.5rem; font-weight: 700; color: #f0f1f5; margin-bottom: 10px; line-height: 1.3; }
+    .home-hero p { color: #c8cad4; line-height: 1.7; font-size: 1rem; }
+    .latest-heading { max-width: 760px; margin: 28px auto 12px; padding: 0 20px; font-size: 1.25rem; font-weight: 700; color: #e2e4e9; }
+    .post-card-summary { font-size: 0.9rem; color: #aab0c0; margin-top: 8px; line-height: 1.6; }
+  `;
+    if (html.includes('</style>')) {
+      html = html.replace('</style>', `${homeCss}</style>`);
     }
 
     const SECTION_INTRO_STYLE = 'max-width:820px;margin:4px auto 16px;padding:0 20px;color:#8b8fa3;line-height:1.6;font-size:0.95rem;';
@@ -1015,6 +1031,22 @@ function buildMetaDescription(body) {
   const truncated = text.slice(0, 155);
   const lastSpace = truncated.lastIndexOf(' ');
   return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated).trim();
+}
+
+// Builds a one-sentence original summary from a post body (line 4 onward).
+// Strips markdown, then takes the first sentence ending in a period followed
+// by a space, capped at 220 chars. Falls back to the first 200 chars plus an
+// ellipsis when no clean sentence boundary is found within the cap.
+function buildPostSummary(body) {
+  const text = body
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/^#+\s*/gm, '')
+    .replace(/\*\*/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const m = text.match(/^(.*?\.)\s/);
+  if (m && m[1].length <= 220) return m[1];
+  return text.slice(0, 200).trim() + '…';
 }
 
 // Reads all posts (title, date, slug) sorted newest first.
