@@ -279,6 +279,8 @@ app.get('/privacy', (req, res) => {
         <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with a revised effective date. Your continued use of CosmicTesla after changes are posted constitutes acceptance of the updated policy.</p>
         <h2>Contact</h2>
         <p>If you have questions about this Privacy Policy, contact us through the contact page at cosmictesla.com/contact.</p>
+        <h2>Privacy regulations and your choices</h2>
+        <p>CosmicTesla uses Google AdSense and other third party vendors to display advertising. These vendors, including Google, use cookies and similar technologies to serve ads based on a visitor's prior activity on this and other websites. Visitors in the European Economic Area, the United Kingdom, and Switzerland are shown a consent message, managed through a consent management platform, before personalized advertising cookies are set, in line with the General Data Protection Regulation. Visitors in California and other United States regions covered by laws such as the California Consumer Privacy Act may opt out of the sale or sharing of personal information and may request that their data processing be restricted. Any visitor may opt out of personalized advertising at any time through Google Ads Settings at adssettings.google.com or through the choices listed at aboutads.info. Continued use of this site indicates agreement with this policy.</p>
       </div>
     </div>`, 'privacy'));
 });
