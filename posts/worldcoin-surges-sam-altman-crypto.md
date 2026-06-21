@@ -4,12 +4,24 @@ https://picsum.photos/seed/worldcoin-surges-sam-altman-crypto/1200/600
 
 Worldcoin is up nearly 30 percent and trending at the top of CoinGecko's most watched coins right now. For most people outside the crypto world the name might not register immediately, but the backstory of this project is one of the more fascinating and contested in the entire cryptocurrency space, and the person behind it is someone almost everyone has heard of.
 
+## What Is Worldcoin?
+
 Worldcoin was cofounded by Sam Altman, the CEO of OpenAI. The project's core premise is both simple and strange: in order to prove you are a unique human being and not an AI or a duplicate account, you scan your iris using a device called the Orb. In exchange for completing this biometric verification you receive a grant of Worldcoin tokens. The explicit rationale is to create a universal proof of personhood system that could eventually serve as the foundation for distributing universal basic income as AI automation displaces human workers.
+
+## What Problem Is It Trying to Solve?
 
 The ambition is genuinely large. Altman has been vocal about his belief that AI will eventually disrupt labor markets at a scale that requires new economic structures to support displaced workers. Worldcoin is his practical attempt to build infrastructure for that future, starting with solving the identity verification problem that any such system would require. If you cannot reliably distinguish humans from AI agents you cannot build a system that distributes resources exclusively to people.
 
+## What Are the Criticisms?
+
 The critics have raised serious concerns. Collecting iris scans from people, many of whom were in developing countries with limited understanding of what they were consenting to, generated significant privacy and ethics scrutiny. Regulators in multiple countries including Kenya, Germany, and Hong Kong opened investigations or suspended operations. The tension between a genuinely idealistic vision for the future and the methods used to pursue it made Worldcoin one of the most argued about projects in crypto even among people who generally support the underlying goals.
+
+## Why Is It Surging Now?
 
 The current price surge likely connects to broader momentum in the AI and crypto intersection. As OpenAI continues to dominate headlines and Sam Altman remains one of the most prominent figures in technology, attention flows toward adjacent projects with his name attached. Worldcoin sits at exactly the intersection of AI anxiety, crypto speculation, and debates about the future of human identity that are dominating the cultural and economic conversation right now.
 
+## What Is the Bigger Question?
+
 Whether Worldcoin ultimately becomes the infrastructure for a post-AI-disruption economy or ends up as a cautionary tale about ambitious projects that outran their ethics is genuinely unknown. What is clear is that the problem it is trying to solve, how do you know you are talking to a human, is only going to become more pressing as AI capabilities continue to advance.
+
+[See what else is trending in Crypto](https://www.cosmictesla.com/#crypto-trending)
