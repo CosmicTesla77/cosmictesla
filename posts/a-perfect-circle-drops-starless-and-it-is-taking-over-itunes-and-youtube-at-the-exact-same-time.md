@@ -1,9 +1,26 @@
 A Perfect Circle Drops Starless and It Is Taking Over iTunes and YouTube at the Exact Same Time
 May 28 2026
+
 Something rare happened today. A Perfect Circle released a new song called "Starless" and it landed simultaneously in two places: number two on the iTunes Top Songs chart and number three on YouTube Trending. That kind of parallel chart performance across audio and video platforms is not something you see from legacy rock acts very often, and it says something significant about where A Perfect Circle sits in the culture right now even years after their last full studio release.
+
+## Who Is A Perfect Circle?
+
 A Perfect Circle is the supergroup fronted by Maynard James Keenan, best known as the lead vocalist of Tool. The band has a devoted following that has been waiting for new material, and their last studio album, Eat the Elephant, came out in 2018 as a deliberately slow and meditative record that divided some longtime fans while winning new ones. "Starless" is arriving with real momentum, judging by the numbers it is already pulling just hours after release.
+
+## Why Does the Title Starless Matter?
+
 The song title itself is worth noting. "Starless" is famously the title of a King Crimson song from 1974, widely considered one of the greatest pieces in progressive rock history. Whether Maynard is paying homage, offering a response, or simply using the word for its own emotional resonance is exactly the kind of question A Perfect Circle fans will spend weeks dissecting in forums and comment sections. That interpretive layer is part of what makes this band's releases feel like cultural events rather than ordinary music drops.
+
+## What Do the Chart Numbers Tell Us?
+
 The chart data tells us the audience for A Perfect Circle is not just nostalgic, it is active. Over 187,000 views on the YouTube visualizer in a matter of hours, combined with a top three iTunes position, means people are not passively streaming. They are seeking the song out, playing it repeatedly, and sharing it. That is genuine engagement that most current pop artists would envy.
+
+## Why Do Maynard's Releases Feel Like Events?
+
 Maynard James Keenan has always occupied a unique space in rock music. He is intensely private, rarely does press, and approaches every project with a conceptual seriousness that his fanbase mirrors back with equal intensity. When he releases something, his audience treats it like an artifact worth returning to multiple times with fresh ears. "Starless" is already generating that kind of devoted attention, which is a reliable sign that the song has the sonic depth his listeners expect.
+
+## Is This a Good Place to Start?
+
 For people who are not already in the A Perfect Circle orbit, this is a reasonable entry point. The band is more immediately accessible than Tool while still operating in the same intellectual and emotional territory. If you have been sleeping on them, "Starless" charting simultaneously on iTunes and YouTube is a hard-to-ignore signal that something worth your attention just arrived.
-Check out what else is trending at iTunes Top Songs
+
+[Shop A Perfect Circle music on Amazon](https://www.amazon.com/s?k=A+Perfect+Circle&tag=cosmictesla-20)
