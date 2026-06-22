@@ -1035,6 +1035,15 @@ function linkifyAmazonLines(text) {
   }).join('\n');
 }
 
+function addAmazonRel(html) {
+  const $ = cheerio.load(`<div id="ct-rel-wrap">${html}</div>`);
+  $('#ct-rel-wrap a[href*="amazon."]').each((i, el) => {
+    $(el).attr('rel', 'sponsored nofollow noopener');
+    $(el).attr('target', '_blank');
+  });
+  return $('#ct-rel-wrap').html();
+}
+
 function formatDate(dateStr) {
   const d = new Date(dateStr.includes('T') ? dateStr : dateStr + 'T12:00:00');
   if (isNaN(d.getTime())) return dateStr;
@@ -1337,6 +1346,31 @@ app.get('/blog', (req, res) => {
     </div>`));
 });
 
+const BLOG_REDIRECTS = {
+  'apple-container-tool-runs-linux-containers-on-mac': 'apple-container-reaches-version-1-0-for-running-linux-containers-on-mac',
+  'apples-container-tool-hits-1-0-and-runs-linux-containers-natively-on-a-mac': 'apple-container-reaches-version-1-0-for-running-linux-containers-on-mac',
+  'apples-container-tool-just-hit-version-1-0-and-it-is-coming-for-docker-on-the-mac': 'apple-container-reaches-version-1-0-for-running-linux-containers-on-mac',
+  'forza-horizon-6-brings-the-horizon-festival-to-japan': 'forza-horizon-6-takes-the-series-to-japan-and-already-smashed-its-steam-record',
+  'forza-horizon-6-everything-you-need-to-know': 'forza-horizon-6-takes-the-series-to-japan-and-already-smashed-its-steam-record',
+  'forza-horizon-6-takes-the-horizon-festival-to-japan': 'forza-horizon-6-takes-the-series-to-japan-and-already-smashed-its-steam-record',
+  'whistler-by-ann-patchett-reunites-a-daughter-and-her-stepfather': 'whistler-is-ann-patchetts-first-novel-since-tom-lake-and-critics-are-calling-it-her-best',
+  'whistler-by-ann-patchett-reunites-a-woman-with-her-former-stepfather': 'whistler-is-ann-patchetts-first-novel-since-tom-lake-and-critics-are-calling-it-her-best',
+  'the-midnight-train-is-matt-haigs-return-to-the-world-of-the-midnight-library': 'the-midnight-train-by-matt-haig-returns-to-the-world-of-the-midnight-library',
+  'glm-5-2-ships-a-1m-token-context-window': 'glm-5-2-launches-with-1-million-token-context-and-mit-open-weights',
+  'deltarune-chapter-5-the-field-of-pink-and-gold-launches-june-24': 'deltarune-chapter-5-field-of-pink-and-gold-arrives-june-24-2026',
+  'cyclops-joins-marvel-rivals-as-a-duelist-when-season-8-5-launches-june-12': 'marvel-rivals-season-8-5-adds-cyclops-and-an-18v18-mode-on-june-12',
+  'eurovision-2026-wikipedia-trending': 'eurovision-song-contest-2026',
+  'spacex-goes-public-today-at-a-1-77-trillion-valuation-in-the-largest-stock-debut-ever': 'spacex-ipo-makes-elon-musk-the-first-trillionaire-on-june-12-2026',
+};
+
+app.get('/blog/:slug', (req, res, next) => {
+  const slug = req.params.slug.replace(/[^a-zA-Z0-9-_]/g, '');
+  if (BLOG_REDIRECTS[slug]) {
+    return res.redirect(301, `/blog/${BLOG_REDIRECTS[slug]}`);
+  }
+  next();
+});
+
 app.get('/blog/:slug', async (req, res) => {
   const slug = req.params.slug.replace(/[^a-zA-Z0-9-_]/g, '');
   const filePath = path.join(POSTS_DIR, `${slug}.md`);
@@ -1450,7 +1484,7 @@ app.get('/blog/:slug', async (req, res) => {
         <div class="post-date">${escHtml(formatDate(date))}</div>
         <div class="post-byline">By <a href="/about">Lance Dombroski</a>, Editor</div>
         ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
-        <div class="post-content">${marked(linkifyAmazonLines(body))}</div>
+        <div class="post-content">${addAmazonRel(marked(linkifyAmazonLines(body)))}</div>
       </article>
       ${relatedHtml}
     </div>`, 'blog', headExtra));
