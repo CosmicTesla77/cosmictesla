@@ -288,7 +288,10 @@ app.get('/about', (req, res) => {
         <p>CosmicTesla is founded and edited by Lance Dombroski. Every article on the site is written and reviewed by a person, not published automatically. Lance selects the stories worth covering from the day's trending signals, verifies the facts against primary sources, and writes the analysis and opinion that turns a raw trend into something worth reading.</p>
 
         <h2>How the content is made</h2>
-        <p>The trending boards on the homepage aggregate public signals from across the web, each with original framing that explains what the feed is and why it matters. The articles go a step further. Each one starts from a verified fact, adds context and a point of view, and links to the primary source so readers can go deeper. Nothing is republished from another site without original reporting on top of it.</p>
+        <p>The trending boards on the homepage aggregate public signals from across the web, each with original framing that explains what the feed is and why it matters. The articles go a step further. Each one starts from a verified fact, adds context and a point of view, and links to the primary source so readers can go deeper. Nothing is republished from another site without original reporting on top of it. Articles are published only when a subject genuinely warrants original coverage, not on a fixed daily quota.</p>
+
+        <h2>Affiliate disclosure</h2>
+        <p>Some articles contain affiliate links, including Amazon Associates links. If you buy something through one of these links, CosmicTesla may earn a commission at no extra cost to you. Affiliate links never decide which topics get covered or what the article says about them.</p>
 
         <h2>How to reach the editor</h2>
         <p>Questions, corrections, and tips are welcome through the contact page. Corrections are made promptly when something is wrong, because accuracy is the whole point of a site like this.</p>
