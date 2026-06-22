@@ -283,6 +283,15 @@ app.get('/about', (req, res) => {
         <p>CosmicTesla pulls live trending data from Google, Reddit, YouTube, Wikipedia, GitHub, Hacker News, Steam, Twitch, iTunes, and many more sources, with new ones added regularly. No recycled takes, no algorithm bait. Just what is trending right now across the internet, updated continuously.</p>
 
         <p>I write about these trends daily because context matters. A trending search is more interesting when someone explains why it matters. That is what the blog is for.</p>
+
+        <h2>Who runs CosmicTesla</h2>
+        <p>CosmicTesla is founded and edited by Lance Dombroski. Every article on the site is written and reviewed by a person, not published automatically. Lance selects the stories worth covering from the day's trending signals, verifies the facts against primary sources, and writes the analysis and opinion that turns a raw trend into something worth reading.</p>
+
+        <h2>How the content is made</h2>
+        <p>The trending boards on the homepage aggregate public signals from across the web, each with original framing that explains what the feed is and why it matters. The articles go a step further. Each one starts from a verified fact, adds context and a point of view, and links to the primary source so readers can go deeper. Nothing is republished from another site without original reporting on top of it.</p>
+
+        <h2>How to reach the editor</h2>
+        <p>Questions, corrections, and tips are welcome through the contact page. Corrections are made promptly when something is wrong, because accuracy is the whole point of a site like this.</p>
       </div>
     </div>`, 'about'));
 });
@@ -1158,6 +1167,9 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '')
     .back-link a:hover { color: #00d4aa; }
     .post-article h1 { font-size: 1.8rem; font-weight: 700; color: #f0f1f5; margin-bottom: 8px; line-height: 1.3; }
     .post-date { font-size: 0.85rem; color: #6b7080; margin-bottom: 32px; }
+    .post-byline { color: #aab0c0; font-size: 0.9rem; margin: 4px 0 20px; }
+    .post-byline a { color: #8fb0ff; text-decoration: none; }
+    .post-byline a:hover { text-decoration: underline; }
     .post-content { line-height: 1.8; color: #c8cad4; }
     .post-content h2 { font-size: 1.25rem; font-weight: 700; color: #e2e4e9; margin: 32px 0 12px; }
     .post-content h3 { font-size: 1.05rem; font-weight: 600; color: #e2e4e9; margin: 24px 0 10px; }
@@ -1436,6 +1448,7 @@ app.get('/blog/:slug', async (req, res) => {
       <article>
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
         <div class="post-date">${escHtml(formatDate(date))}</div>
+        <div class="post-byline">By <a href="/about">Lance Dombroski</a>, Editor</div>
         ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
         <div class="post-content">${marked(linkifyAmazonLines(body))}</div>
       </article>
