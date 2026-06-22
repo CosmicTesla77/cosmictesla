@@ -1349,6 +1349,44 @@ app.get('/blog', (req, res) => {
     </div>`));
 });
 
+const BLOG_GONE = new Set([
+  'eurovision-2026-wikipedia-trending',
+  'eurovision-song-contest-2026',
+  'drake-2-hard-4-radio-number-one',
+  'olivia-rodrigo-the-cure',
+  'raccoon-rabies-vaccine-helicopters',
+  'ronda-rousey-gina-carano-mma',
+  'kyle-busch-wikipedia-trending',
+  'jack-ryan-ghost-war-trending',
+  'shakira-burna-boy-dai-dai',
+  'hyperliquid-crypto-surging',
+  'rod-stewart-wikipedia-trending',
+  'ella-langley-dominates-itunes-country-music-newest-superstar',
+  'the-boys-season-5-trending',
+  'lanterns-hbo-max-official-teaser-2-breakdown',
+  'aaron-rai-wikipedia-trending-who-is-he',
+  'victor-wembanyama-taking-over-internet-what-makes-wemby-different',
+  'pollyreach-ai-phone-calls-product-hunt-top-launch',
+  'tycoon-ai-product-hunt-number-one',
+  'masters-of-the-universe-final-trailer',
+  'whats-trending-and-why',
+  'drake-iceman-album',
+  'the-fourth-option-by-jack-carr-is-the-thriller-everyone-is-reading-right-now',
+  'microsoft-bitlocker-backdoor',
+]);
+
+app.get('/blog/:slug', (req, res, next) => {
+  const slug = req.params.slug.replace(/[^a-zA-Z0-9-_]/g, '');
+  if (BLOG_GONE.has(slug)) {
+    return res.status(410).send(blogLayout('Post Removed', `
+      <div class="blog-wrap">
+        <div class="back-link"><a href="/blog">← Back to Blog</a></div>
+        <p style="color:#aab0c0">This post has been removed.</p>
+      </div>`));
+  }
+  next();
+});
+
 const BLOG_REDIRECTS = {
   'apple-container-tool-runs-linux-containers-on-mac': 'apple-container-reaches-version-1-0-for-running-linux-containers-on-mac',
   'apples-container-tool-hits-1-0-and-runs-linux-containers-natively-on-a-mac': 'apple-container-reaches-version-1-0-for-running-linux-containers-on-mac',
@@ -1362,7 +1400,6 @@ const BLOG_REDIRECTS = {
   'glm-5-2-ships-a-1m-token-context-window': 'glm-5-2-launches-with-1-million-token-context-and-mit-open-weights',
   'deltarune-chapter-5-the-field-of-pink-and-gold-launches-june-24': 'deltarune-chapter-5-field-of-pink-and-gold-arrives-june-24-2026',
   'cyclops-joins-marvel-rivals-as-a-duelist-when-season-8-5-launches-june-12': 'marvel-rivals-season-8-5-adds-cyclops-and-an-18v18-mode-on-june-12',
-  'eurovision-2026-wikipedia-trending': 'eurovision-song-contest-2026',
   'spacex-goes-public-today-at-a-1-77-trillion-valuation-in-the-largest-stock-debut-ever': 'spacex-ipo-makes-elon-musk-the-first-trillionaire-on-june-12-2026',
 };
 
