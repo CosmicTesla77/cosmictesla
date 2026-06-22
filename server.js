@@ -154,6 +154,7 @@ app.get('/', (req, res, next) => {
     .home-hero p { color: #c8cad4; line-height: 1.7; font-size: 1rem; }
     .latest-heading { max-width: 760px; margin: 28px auto 12px; padding: 0 20px; font-size: 1.25rem; font-weight: 700; color: #e2e4e9; }
     .post-card-summary { font-size: 0.9rem; color: #aab0c0; margin-top: 8px; line-height: 1.6; }
+    .board-note { max-width: 820px; margin: 4px auto 16px; padding: 0 20px; color: #aab0c0; font-size: 0.92rem; line-height: 1.6; }
   `;
     if (html.includes('</style>')) {
       html = html.replace('</style>', `${homeCss}</style>`);
@@ -180,6 +181,38 @@ app.get('/', (req, res, next) => {
       if (html.includes(marker)) {
         html = html.replace(marker, `<p style="${SECTION_INTRO_STYLE}">${text}</p>\n  ${marker}`);
       }
+    }
+
+    const BOARD_NOTES = {
+      "google-trending": "Google Trending tracks the search terms spiking fastest across the United States, ranked by volume. It is the closest thing to a live readout of national curiosity, useful for spotting a story before it saturates the news cycle.",
+      "reddit-trending": "This board pulls the posts climbing fastest across Reddit, the forums where most internet subcultures argue first. Treat it as an early signal, since what trends here often reaches the rest of the web a day or two later.",
+      "youtube-trending": "YouTube Trending surfaces the videos gaining views fastest across the platform. It is a quick map of what people are choosing to watch rather than read, from breaking news to music to creator culture.",
+      "wiki-trending": "Wikipedia's most viewed articles reveal what people are looking up, which is a sharper signal than what they are posting. A sudden spike on a person or event here usually means the public is trying to understand a story still unfolding.",
+      "twitch-trending": "This board ranks the games and streams drawing the largest live audiences on Twitch. It shows what the gaming community is actually playing and watching, which often predicts which titles will dominate the broader conversation.",
+      "tmdb-trending": "Movies and TV here are ranked by audience interest across film databases, blending new releases with titles people keep returning to. It is a fast way to see what is worth your next watch and what is simply loud marketing.",
+      "steam-trending": "Steam's top games are ranked by concurrent players, the most honest popularity metric in gaming because it counts people actually playing rather than people merely buying. Watch this board to see which releases have staying power and which fade after launch week.",
+      "ph-trending": "Product Hunt collects the new apps, tools, and startups launching to an audience of early adopters. It is where a lot of useful software is discovered first, well before it reaches mainstream coverage.",
+      "itunes-trending": "This board tracks what is climbing the Apple charts, from music to podcasts to apps. It captures paid and downloaded interest, which tends to reflect commitment rather than idle curiosity.",
+      "hn-trending": "Hacker News ranks the stories the engineering and startup world is reading and debating. The comments are often more valuable than the headlines, which makes this a strong board for anyone who builds or invests in technology.",
+      "github-trending": "GitHub Trending lists the open source projects gaining stars fastest. It is a leading indicator of where developers are putting their attention, and it frequently flags the tools and frameworks that define the next wave of software.",
+      "crypto-trending": "This board tracks the coins and tokens moving most across the crypto market. Read it as a sentiment gauge rather than advice, since attention and price often spike together for reasons that have nothing to do with fundamentals.",
+      "books-trending": "The book charts here surface what readers are buying across fiction and nonfiction. A title that holds its place week after week usually signals genuine word of mouth rather than a marketing push."
+    };
+    // Each board's anchor id (X-trending) sits just above its grid container
+    // (X-content), except Google whose grid container is plain id="content".
+    const gridMarkerFor = (id) =>
+      id === 'google-trending' ? '<div id="content">' : `<div id="${id.replace('-trending', '-content')}">`;
+    const unmatchedBoards = [];
+    for (const [id, text] of Object.entries(BOARD_NOTES)) {
+      const marker = gridMarkerFor(id);
+      if (html.includes(marker)) {
+        html = html.replace(marker, `<p class="board-note">${text}</p>\n  ${marker}`);
+      } else {
+        unmatchedBoards.push(id);
+      }
+    }
+    if (unmatchedBoards.length) {
+      console.warn('BOARD_NOTES unmatched board ids:', unmatchedBoards.join(', '));
     }
 
     res.set('Content-Type', 'text/html; charset=utf-8').send(html);
