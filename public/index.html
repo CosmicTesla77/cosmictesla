@@ -587,6 +587,7 @@
   <header>
     <h1>CosmicTesla</h1>
     <p>What the internet is watching right now, all in one place</p>
+    <button onclick="sharePage(this)" style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:9px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
   </header>
   <div class="date-bar" id="dateBar"></div>
   <div class="filter-bar">
@@ -761,6 +762,18 @@
 
     function toggleMenu() { document.getElementById('navMobileMenu').classList.toggle('open'); }
     function closeMenu() { document.getElementById('navMobileMenu').classList.remove('open'); }
+    function sharePage(btn) {
+      var url = window.location.href;
+      var title = document.title;
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(function(){});
+      } else {
+        navigator.clipboard.writeText(url).then(function(){
+          var t = btn.querySelector('.share-label');
+          if (t) { var o = t.textContent; t.textContent = 'Copied'; setTimeout(function(){ t.textContent = o; }, 1800); }
+        }).catch(function(){});
+      }
+    }
     function toggleAccordion(btn) { btn.closest('.nav-acc-group').classList.toggle('open'); }
     document.addEventListener('click', function(e) {
       var menu = document.getElementById('navMobileMenu');

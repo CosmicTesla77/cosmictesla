@@ -308,6 +308,7 @@ app.get('/spacex', (req, res) => {
       <div class="post-content">${watch}</div>
       <h2 style="font-size:1.3rem;font-weight:700;color:#e2e4e9;margin:40px 0 4px">The log</h2>
       <div class="post-content">${log}</div>
+      <button onclick="sharePage(this)" style="margin-top:28px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
     </div>`, 'spacex', headExtra));
 });
 
@@ -1346,6 +1347,18 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '')
     });
     function toggleMenu() { document.getElementById('navMobileMenu').classList.toggle('open'); }
     function closeMenu() { document.getElementById('navMobileMenu').classList.remove('open'); }
+    function sharePage(btn) {
+      var url = window.location.href;
+      var title = document.title;
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(function(){});
+      } else {
+        navigator.clipboard.writeText(url).then(function(){
+          var t = btn.querySelector('.share-label');
+          if (t) { var o = t.textContent; t.textContent = 'Copied'; setTimeout(function(){ t.textContent = o; }, 1800); }
+        }).catch(function(){});
+      }
+    }
     function toggleAccordion(btn) { btn.closest('.nav-acc-group').classList.toggle('open'); }
     document.addEventListener('click', function(e) {
       var menu = document.getElementById('navMobileMenu');
@@ -1567,6 +1580,7 @@ app.get('/blog/:slug', async (req, res) => {
         <div class="post-byline">By <a href="/about">Lance Dombroski</a>, Editor</div>
         ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
         <div class="post-content">${addAmazonRel(marked(linkifyAmazonLines(body)))}</div>
+        <button onclick="sharePage(this)" style="margin-top:28px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
       </article>
       ${relatedHtml}
     </div>`, 'blog', headExtra));
