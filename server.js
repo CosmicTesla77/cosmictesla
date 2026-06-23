@@ -303,6 +303,7 @@ app.get('/spacex', (req, res) => {
     <div class="blog-wrap">
       <h1 class="post-article" style="font-size:1.9rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(headline)}</h1>
       <div class="post-byline">By <a href="/about">Lance Dombroski</a>, Editor</div>
+      <button onclick="sharePage(this)" style="margin:0 0 24px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
       <div class="post-content">${intro}</div>
       <h2 style="font-size:1.3rem;font-weight:700;color:#e2e4e9;margin:40px 0 4px">What to watch next</h2>
       <div class="post-content">${watch}</div>
@@ -1578,6 +1579,7 @@ app.get('/blog/:slug', async (req, res) => {
         <h1 class="post-article" style="font-size:1.8rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(title)}</h1>
         <div class="post-date">${escHtml(formatDate(date))}</div>
         <div class="post-byline">By <a href="/about">Lance Dombroski</a>, Editor</div>
+        <button onclick="sharePage(this)" style="margin:0 0 20px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
         ${featuredImage ? `<img class="post-featured-img" src="${escHtml(featuredImage)}" alt="${escHtml(title)}" />${imgCredit}` : ''}
         <div class="post-content">${addAmazonRel(marked(linkifyAmazonLines(body)))}</div>
         <button onclick="sharePage(this)" style="margin-top:28px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
