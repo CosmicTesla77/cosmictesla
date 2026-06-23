@@ -92,6 +92,7 @@ app.get('/sitemap.xml', (req, res) => {
   const staticUrls = [
     { loc: `${base}/`,        priority: '1.0', changefreq: 'daily'   },
     { loc: `${base}/blog`,    priority: '0.8', changefreq: 'daily'   },
+    { loc: `${base}/spacex`,  priority: '0.9', changefreq: 'weekly'  },
     { loc: `${base}/about`,   priority: '0.6', changefreq: 'monthly' },
     { loc: `${base}/contact`, priority: '0.6', changefreq: 'monthly' },
     { loc: `${base}/privacy`, priority: '0.4', changefreq: 'monthly' },
@@ -270,6 +271,45 @@ function extractKeywords(title) {
     .slice(0, 4);
   return words.join(' ') || title.split(' ')[0].toLowerCase();
 }
+
+const TRACKERS_DIR = path.join(__dirname, 'trackers');
+
+function extractSection(text, startMarker, endMarker) {
+  const s = text.indexOf(startMarker);
+  const e = text.indexOf(endMarker);
+  if (s === -1 || e === -1) return '';
+  return text.slice(s + startMarker.length, e).trim();
+}
+
+app.get('/spacex', (req, res) => {
+  const filePath = path.join(TRACKERS_DIR, 'spacex.md');
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send(blogLayout('SpaceX Tracker', `
+      <div class="blog-wrap">
+        <div class="back-link"><a href="/blog">← Back to Blog</a></div>
+        <p style="color:#ff6b6b">Tracker not found.</p>
+      </div>`, 'spacex'));
+  }
+  const raw = fs.readFileSync(filePath, 'utf8');
+  const lines = raw.split('\n');
+  const headline = lines[0].replace(/^#+\s*/, '').trim();
+  const rest = lines.slice(1).join('\n');
+  const intro = marked(extractSection(rest, '<!-- INTRO START -->', '<!-- INTRO END -->'));
+  const watch = marked(extractSection(rest, '<!-- WATCH START -->', '<!-- WATCH END -->'));
+  const log = marked(extractSection(rest, '<!-- LOG START -->', '<!-- LOG END -->'));
+  const headExtra = `<link rel="canonical" href="https://www.cosmictesla.com/spacex" />
+  <meta name="description" content="A living SpaceX tracker that follows the mission to make humanity a multiplanetary species, with original analysis on every major development." />`;
+  res.send(blogLayout('SpaceX Tracker', `
+    <div class="blog-wrap">
+      <h1 class="post-article" style="font-size:1.9rem;font-weight:700;color:#f0f1f5;margin-bottom:8px;line-height:1.3">${escHtml(headline)}</h1>
+      <div class="post-byline">By <a href="/about">Lance Dombroski</a>, Editor</div>
+      <div class="post-content">${intro}</div>
+      <h2 style="font-size:1.3rem;font-weight:700;color:#e2e4e9;margin:40px 0 4px">What to watch next</h2>
+      <div class="post-content">${watch}</div>
+      <h2 style="font-size:1.3rem;font-weight:700;color:#e2e4e9;margin:40px 0 4px">The log</h2>
+      <div class="post-content">${log}</div>
+    </div>`, 'spacex', headExtra));
+});
 
 app.get('/about', (req, res) => {
   res.send(blogLayout('About CosmicTesla', `
@@ -1237,6 +1277,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '')
         <a href="/#crypto-trending">🪙 Crypto</a>
       </div>
     </div>
+    <a href="/spacex" class="nav-standalone ${activePage === 'spacex' ? 'active' : ''}">🚀 SpaceX</a>
     <a href="/about" class="nav-standalone ${activePage === 'about' ? 'active' : ''}">ℹ️ About</a>
     <a href="/blog" class="nav-standalone ${activePage === 'blog' ? 'active' : ''}">✍️ Blog</a>
     <a href="/contact" class="nav-standalone ${activePage === 'contact' ? 'active' : ''}">📬 Contact</a>
@@ -1279,6 +1320,7 @@ function blogLayout(pageTitle, bodyContent, activePage = 'blog', headExtra = '')
       </div>
     </div>
     <div class="nav-mobile-standalone">
+      <a href="/spacex" onclick="closeMenu()">🚀 SpaceX</a>
       <a href="/about" onclick="closeMenu()">ℹ️ About</a>
       <a href="/blog" onclick="closeMenu()">✍️ Blog</a>
       <a href="/contact" onclick="closeMenu()">📬 Contact</a>

@@ -1,0 +1,55 @@
+Why SpaceX Is Undoubtedly the Most Important Company on Earth
+
+<!-- INTRO START -->
+SpaceX is worth following because it represents the beginning of a real movement to secure the long term survival of the human species. That is the lens I bring to everything this company does, and it is the reason this page exists. Strip away the stock price and the launch spectacle and what remains is a single mission that Elon Musk has stated plainly since before the company existed: make humanity a multiplanetary civilization. Most coverage treats SpaceX as a rocket business or a hot stock. I treat it as the most serious attempt anyone has made to give our species a second home.
+
+The argument behind that mission is worth laying out in full, because it is the thing that makes SpaceX different from every other company on Earth. Musk has explained again and again why he believes humanity has to expand beyond this planet. Picture the best case. Imagine we avoid nuclear war. Imagine we avoid environmental collapse. Imagine we never poison our own food supply, never get struck by an asteroid, never suffer a supervolcano eruption like the ones that have driven mass die offs in Earth's past, and never face one of the other mass extinction level events such as the one believed to have ended the dinosaurs. Imagine everything goes right for Earth and for the human race.
+
+Even in that perfect scenario, we are not safe, and the reason is not up for debate. Our Sun is a star, and stars do not last forever. The Sun will eventually reach the end of its life cycle and render Earth uninhabitable. A species that keeps all of itself on one planet is a species with an expiration date, no matter how well it behaves and no matter how lucky it gets. Confinement to a single world is extinction on a long enough timeline.
+
+Seen that way, the path to survival is not complicated to describe, only hard to build. Humanity has to become a multiplanetary civilization. We have to expand beyond Earth and make space our backyard rather than an unreachable frontier. The goal is not tourism and it is not national prestige. It is redundancy for the entire species, a backup for everything we have ever been and everything we might become.
+
+What makes the mission real rather than theoretical is that one person has made that goal the center of his life's work. Through SpaceX, Elon Musk is trying to drag the idea of a multiplanetary human civilization out of science fiction and into engineering, hardware, and launch schedules. You do not have to like him and you do not have to agree with how he runs things to recognize that no one else is attempting this at his scale or with his urgency.
+
+I write this page as someone who wants this mission to succeed. I am not here to tell you whether the stock is cheap or whether the company is worth what the market says. I care about one question only, and I measure everything on this page against it: does this bring humanity closer to becoming a multiplanetary species that can outlast any single world. Everything else is noise.
+
+This is also why I follow SpaceX the way other people follow a team. Humans are tribal by nature. We root for the city we live in, wear its colors, defend its teams, and that loyalty scales up to the country we are born into, fierce enough that people will defend their town, their community, their nation, sometimes with their lives. SpaceX is the first thing I have found that lets me point that same instinct at the whole species. It is not a team for a city or a flag. It frames humanity itself as the team. So I check in on it the way a fan checks the standings, because rooting for SpaceX is the closest thing I have to rooting for all of us at once.
+<!-- INTRO END -->
+
+<!-- WATCH START -->
+- The next Starship test, and whether it moves the vehicle closer to carrying people and cargo off Earth rather than just clearing a checkpoint.
+- Artemis 3 progress toward the 2028 crewed landing, judged not by the calendar but by whether the program keeps moving in the right direction.
+<!-- WATCH END -->
+
+<!-- LOG START -->
+
+## June 14, 2026
+
+**The story most people miss about SpaceX is not a single launch. It is how many.** On June 14, 2026, SpaceX put its 1,500th Starlink satellite of the year into orbit, part of a pace that had already passed sixty launches before 2026 reached its halfway point and roughly 675 launches across the company's history. The headlines chase the IPO and the big Starship moments. The quiet number is the one that actually matters.
+
+I think launch cadence is one of the most important things this company does, and it has almost nothing to do with the satellites themselves. Every successful launch is another real world practice run. Every mission generates data, refines the systems, sharpens the procedures, and moves the whole operation one step closer to the goals that actually count. A company that can launch this often and this reliably is not just running a satellite business. It is rehearsing the single hardest skill the mission requires.
+
+Because making humanity multiplanetary is not a one launch problem. In the future we will not only need to launch flawlessly from Earth. We will need repeatable, dependable launch operations from space stations, from the Moon, from Mars, and possibly from places with gravity and conditions we have never operated in. The only way a species learns to do that reliably is to do it constantly, and SpaceX is the only organization on Earth building that muscle at this volume.
+
+This is also why I do not see the cadence as a statistic. I see it as repetition, and repetition is how excellence is built. Athletes know they play the way they practice. Every drill, every rep, every session compounds into mastery, and there is no shortcut around the volume. It is no different for an engineering organization. Every launch is another opportunity to learn, to improve, and to bank the experience required to do things that have never been done before. The high cadence is not an operational footnote. It is a competitive advantage no one else can copy quickly, and it is one of the truest signs that this company is actually preparing for the mission, not just talking about it.
+
+## June 12, 2026
+
+**On June 12, 2026, a private company took a step that could matter to the long term survival of the human species.** SpaceX debuted on the Nasdaq under the ticker SPCX at a valuation near $1.77 trillion, then climbed above $2 trillion within days, the largest initial public offering in history. It carries roughly $41 billion in accumulated losses since 2002 and now holds Musk's xAI, its Grok models, and the social network X. Wall Street saw a record stock debut. I saw something far bigger.
+
+I am not going to tell you whether this stock is cheap or expensive, because that is not what I care about and it is not what this page is about. I care about one thing, whether this moves humanity closer to surviving beyond a single planet, and by that measure the IPO is a milestone worth marking. For decades the accepted wisdom, argued even by respected voices like Neil deGrasse Tyson, was that no individual and no private company could ever fund something as monumental as getting humans to Mars, that it would take the full treasury of a national government. A public valuation near $2 trillion is the clearest proof yet that the wisdom was wrong. A private company chasing the survival of our species now commands resources on the scale once reserved for superpowers.
+
+That is why the number matters to me, not as a return, but as fuel. Becoming multiplanetary is the most expensive and most difficult thing our species has ever attempted, and it does not happen on goodwill. It happens on capital, on engineering, and on the freedom to move fast, and this IPO pours all three into the one company actually trying to do it. Musk has repeatedly built successful companies, allocated capital well, solved problems people called impossible, and he holds the authority to set a direction and execute it without drowning in the bureaucracy that slows government programs to a crawl. Handing more resources and more speed to a mission this important raises the odds that humanity actually gets a second home.
+
+So I do not read June 12 as a financial event at all. I read it as the day the resources finally started to match the size of the goal. We have to move in this direction eventually. A species confined to one planet runs out of time no matter how well it behaves, even if the deadline is billions of years away, and there is no better moment to start than the one where it finally became possible. That is what this milestone means to me.
+
+## June 09, 2026
+
+**The most important thing SpaceX does next will not be measured in dollars. It will be measured in whether humanity can work together to set foot somewhere new.** On June 9, 2026, NASA announced the crew for Artemis 3, a flight planned for the following year to test rendezvous and docking in low Earth orbit with the lunar landers being built by SpaceX and Blue Origin, a milestone on the road to a crewed Moon landing targeted for 2028. SpaceX's Starship is the vehicle meant to carry people and cargo off Earth at the scale the mission actually requires.
+
+Artemis and Starship matter to me because they prove the capabilities a spacefaring civilization cannot do without. First, they show that SpaceX can operate alongside other organizations in some of the most complex, high pressure, high stakes conditions imaginable. The ability for SpaceX, NASA, and their partners to coordinate safely and put astronauts onto another world is a historic achievement on its own, before you even count where it leads.
+
+And it does lead somewhere. The journey starts at the Moon, but it almost certainly does not end there. Mars is the obvious next step, and past that the possibilities are hard to even predict. What begins as a partnership between one company and one space agency could become the foundation for far broader international cooperation, because success changes what people believe is possible. Once humanity proves it can return to the Moon and build a sustainable presence there, it pulls other nations, other companies, and the next generation toward bolder goals. Achievement is contagious in a way that talk never is.
+
+This is also why I care deeply about the 2028 crewed landing without being chained to the date itself. I am not worried about whether it flies exactly on schedule, a little early, or a little late. Large historic achievements are almost never delivered on a perfect timeline, and I have made peace with that. What matters to me is that the progress is real and the direction holds. The calendar is not the point. The point is that every day brings meaningful movement toward expanding humanity's presence beyond Earth, and as long as that stays true, the program is doing exactly what it needs to do.
+<!-- LOG END -->
