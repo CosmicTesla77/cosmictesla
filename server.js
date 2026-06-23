@@ -1401,6 +1401,7 @@ app.get('/blog', (req, res) => {
   res.send(blogLayout('Blog', `
     <div class="blog-wrap">
       <div class="blog-index-title">Blog</div>
+      <button onclick="sharePage(this)" style="margin:0 0 24px;display:inline-flex;align-items:center;gap:8px;background:#1a1d29;border:1px solid #2a2d3a;color:#00d4aa;font-family:inherit;font-size:0.9rem;font-weight:600;padding:10px 18px;border-radius:8px;cursor:pointer">🔗 <span class="share-label">Share</span></button>
       ${postsHtml}
     </div>`));
 });
