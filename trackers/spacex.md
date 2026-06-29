@@ -17,11 +17,23 @@ This is also why I follow SpaceX the way other people follow a team. Humans are 
 <!-- INTRO END -->
 
 <!-- WATCH START -->
-- The next Starship test, and whether it moves the vehicle closer to carrying people and cargo off Earth rather than just clearing a checkpoint.
-- Artemis 3 progress toward the 2028 crewed landing, judged not by the calendar but by whether the program keeps moving in the right direction.
+## What to watch next
+
+- Flight 13, the second flight of Starship V3, and whether it moves the vehicle toward orbit and toward carrying mass off Earth rather than clearing another checkpoint.
+- The first in orbit propellant transfer demonstration, the capability that unlocks the Moon and Mars, expected before the year closes.
+- The second Starfall reentry demo, and whether controlled recoverable return from orbit starts to look routine instead of experimental.
+- Artemis 3 progress toward the crewed landing targeted for 2028, judged by whether the direction holds rather than by the calendar.
 <!-- WATCH END -->
 
 <!-- LOG START -->
+
+## June 23, 2026
+
+**Getting to orbit is the half of spaceflight everyone watches. Coming back down with your cargo intact is the half that decides whether a civilization can actually live out there, and SpaceX just proved it can do that part too.** On June 23, 2026, SpaceX launched the first flight of Starfall, a new uncrewed reentry capsule, on a Falcon 9 from Cape Canaveral, and confirmed its deployment in orbit hours after liftoff. The disk shaped vehicle measures about 3.1 meters across, weighs roughly 2,100 kilograms, and is built to return as much as 1,000 kilograms of payload from orbit. It carries no propulsion of its own, relying on the launch vehicle to set its reentry path and on parachutes and a jettisoned heat shield for the descent. The capsule splashed down in the Pacific and was recovered and delivered to the Port of Long Beach on June 25.
+
+Starfall matters to me because of what it proves, not what it sells. Bringing mass down from orbit in a controlled, repeatable, recoverable way is not a logistics footnote. It is half of a capability a Mars supply chain has to have in both directions. A civilization that can only throw mass up and never bring it back in one piece is not a spacefaring civilization. It is a civilization littering. Proving the return leg works, and works reliably enough to pull the vehicle out of the ocean and inspect it, is SpaceX building the muscle for moving things between worlds rather than just away from this one.
+
+The manufacturing piece carries just as much weight, and it is the part I care about most. To survive beyond Earth we have to become a species that can build in space, not one that ships everything it needs up from the ground forever. Whether it is data centers for our AI, solar capability, or hardware we cannot even picture, we are going to need the ability to manufacture off the surface of a planet, and we are going to need the hard won knowledge of how to do it. That knowledge does not care which planet you are standing on. A species that learns to make things in orbit is a species learning to make things on the Moon, on Mars, and on the journey between them. We must eventually become a space navigating civilization, and you do not navigate space while staying chained to a single factory floor at the bottom of one gravity well. Starfall is a small, unglamorous step toward cutting that cord, and that is exactly why it counts.
 
 ## June 14, 2026
 
