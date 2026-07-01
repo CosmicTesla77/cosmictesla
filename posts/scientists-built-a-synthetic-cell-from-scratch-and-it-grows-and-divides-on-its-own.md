@@ -1,0 +1,22 @@
+Scientists Built A Synthetic Cell From Scratch And It Grows And Divides On Its Own
+July 01 2026
+
+Researchers led by synthetic biologist Kate Adamala at the University of Minnesota have assembled a cell entirely from nonliving molecules, and for the first time that lab made cell can grow, replicate its own genome, and divide into daughter cells across multiple generations. The cell, named SpudCell, is made up of somewhere between 150 and 200 individual molecules, a fraction of the millions or billions found in an ordinary biological cell, yet it manages to complete a functioning version of the same basic cycle every living cell relies on.
+
+## What is SpudCell actually made of and how does it divide?
+
+SpudCell was built piece by piece inside a lipid membrane, the same kind of fatty barrier that surrounds every natural cell. Adamala's team supplied it with a synthetic genome and the machinery needed to transcribe that genome into RNA and translate the RNA into proteins, along with ribosomes and nutrients delivered from the outside. The most technically difficult problem the team solved was division without a cytoskeleton, the internal scaffolding that natural cells use to physically pull themselves apart. SpudCell sidesteps that requirement entirely: a fusion protein crowds together on the inside of the membrane until mechanical stress builds up and the membrane splits on its own, producing two daughter cells from one parent.
+
+## Does SpudCell count as alive, and does it pose any biosafety risk?
+
+Every researcher involved is careful to say no on both counts. Adamala described it as an incredibly weak organism that does little beyond eating and occasionally producing a daughter cell, and Stanford bioengineer Drew Endy, a co founder alongside Adamala of the public benefit institution Biotic that will make the platform available to other labs, has said SpudCell cannot be considered life in any meaningful sense. It depends entirely on a constant external supply of food and ribosomes, has no waste removal system, and cannot defend itself from anything. Researchers also emphasized that this version of SpudCell poses no biosafety risk and cannot be used to manufacture biological weapons, since it can only divide with a full and continuous supply of every component it needs from outside its membrane.
+
+## Why is this considered such a major milestone in synthetic biology?
+
+Jack Szostak, a University of Chicago researcher who studies the origins of life and was not involved in this work, called it an impressive step and said he is not aware of any other effort to assemble an artificial cell from biological components that has progressed this far. The significance lies less in the limited tasks SpudCell can perform on its own and more in what it proves is possible: that lifelike behavior, including growth, replication, and division, can emerge from a defined set of nonliving parts assembled deliberately rather than evolved. Each generation of SpudCell takes roughly twelve hours to replicate at 30 degrees Celsius, compared to roughly twenty minutes for a fast growing bacterium like E coli, so this is nowhere close to matching natural life in efficiency.
+
+The research also demonstrated something researchers consider just as important as the division itself: selection. When Adamala's team introduced a genetic change that increased production of the fusion protein responsible for division, the modified cells grew and reproduced faster than the unmodified version, and after five generations the faster growing variant had outcompeted the original. Because that change was deliberately introduced rather than arising as a spontaneous mutation, the researchers are careful not to call this evolution in the traditional sense, but it does show that synthetic cells can respond to selective pressure in a way that mirrors natural biology.
+
+Adamala started her lab in 2016 with the explicit goal of building a synthetic cell capable of a complete division cycle using its own genome, and this result represents roughly a decade of work toward that specific target. The team's stated hope is that a fully programmable, engineerable cellular platform like SpudCell could eventually help design custom therapeutic molecules, including drugs built from amino acids that natural evolution never produced, or manufacturing processes that operate at biological temperatures rather than industrial ones.
+
+Check out what else is trending at [Hacker News](https://www.cosmictesla.com/#hn-trending)
