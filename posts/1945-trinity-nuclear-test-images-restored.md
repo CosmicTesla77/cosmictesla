@@ -19,4 +19,8 @@ The newly restored images bring a level of visual clarity to the event that was 
 
 History of this magnitude deserves to be seen clearly. These images are worth seeking out.
 
+## How Did Restoration Actually Work?
+
+Digital restoration of photographs this old generally combines several techniques: removing decades of physical damage like scratches and fading, correcting for the limitations of 1940s film stock and lenses, and in some cases using modern software to sharpen detail that the original equipment could not capture cleanly. None of this invents new information that was not already faintly present in the original negative, it recovers detail that was always there but too degraded to see clearly. That distinction matters for a historical event like Trinity, where the value of the images depends entirely on their authenticity, not on artistic enhancement.
+
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

@@ -20,4 +20,8 @@ The reason this story resonates so broadly is that it is not really about one pr
 
 Google is not unique in this behavior among large technology companies, but its scale makes the consequences of each shutdown larger. Today's Hacker News top story is a community processing that frustration in real time, and the volume of engagement suggests the conversation is far from over.
 
+## How Should Developers Protect Themselves?
+
+The practical lesson from this pattern is not to avoid Google products entirely, since the scale and integration often make them the right technical choice, but to treat any single vendor dependency as a risk to actively manage rather than assume away. That means keeping data portable, avoiding lock in wherever a reasonable alternative exists, and building contingency plans before a shutdown announcement forces a scramble. Teams that survived past Google product deprecations with the least damage were almost always the ones who had already asked what happens if this goes away, long before it did.
+
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

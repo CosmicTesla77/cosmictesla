@@ -21,4 +21,8 @@ For two decades Halo was the face of Xbox exclusivity, so putting Master Chief o
 
 For longtime fans, the bigger draw is the chance to replay the mission that started it all with modern fidelity, plus three entirely new missions that expand the lore. Combat Evolved is the game that built the franchise, and this is the most complete way to revisit it.
 
+## How Does This Fit Into Halo's Larger Story?
+
+Operation METEORITE slotting in one year before the original game gives longtime fans new lore without disturbing the story beats everyone already knows by heart, a low risk way to expand the universe around a beloved fixed point rather than rewriting it. It also tests whether audiences want more Halo history told through short, focused side stories rather than another full length mainline entry, a format that costs less to produce and lets the studio experiment with settings and characters that would not carry an entire game on their own.
+
 https://www.amazon.com/s?k=Halo+Campaign+Evolved&tag=cosmictesla-20

@@ -15,4 +15,8 @@ This release is significant for a few reasons beyond nostalgia. Computer science
 
 For developers today, reading early DOS code is humbling. The engineers who wrote it were solving real problems with tools that barely existed yet. The release is available on GitHub and has already generated significant discussion in the open source community about preservation, history, and what we owe to the software that built the world we live in.
 
+## What Does This Mean for Software Preservation Broadly?
+
+Most software from the early personal computing era has already been lost, not through any dramatic event but through the mundane reality that floppy disks degrade, formats become unreadable, and companies rarely prioritize archiving code once it stops generating revenue. Each release like this one narrows that gap slightly and sets a precedent that other companies sitting on similarly old code might choose to follow. Whether Microsoft's move becomes a pattern or stays an isolated gesture will say a lot about how the industry values its own history versus how much it simply lets slip away by default. Every additional archive that survives makes the next one slightly more likely to survive too, simply by proving there is an audience that actually cares.
+
 [See what else is trending on GitHub](https://www.cosmictesla.com/#github-trending)

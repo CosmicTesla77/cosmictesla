@@ -19,4 +19,8 @@ The downstream effects are still unfolding. Film production companies are restru
 
 If the next four years match the last four, the question stops being whether AI video is impressive and starts being whether human-produced video retains any premium at all. That is either the most exciting or most unsettling sentence in media, depending entirely on where you sit in the industry.
 
+## What Should You Watch For Going Forward?
+
+The next real test is not visual fidelity, which is already convincing enough to fool most viewers, it is consistency across longer runtimes and controllability, meaning whether a creator can direct specific characters and actions reliably rather than getting an impressive but unpredictable result. Visual quality was the easy problem in retrospect. Precise creative control over a generated scene, the kind a director needs to actually replace a shot list, is the harder problem the next few years of development will be judged on.
+
 [See what else is trending on Reddit](https://www.cosmictesla.com/#reddit-trending)

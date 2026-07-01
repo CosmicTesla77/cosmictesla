@@ -15,4 +15,8 @@ Microsoft listed several enrollment paths. A consumer can pay 30 dollars, redeem
 
 Both. Critics call it double dipping, since Microsoft sells the operating system and then charges again for security after a fixed window, and the original consumer offer was sold as a one time 12 month bridge for 30 dollars before quietly becoming a longer runway. The likelier driver is the memory price crisis, the same component surge pushing Mac and iPad prices up by hundreds. Telling people to buy a new PC lands badly when new PCs are getting more expensive, so handing out another year of patches is the path of least resistance. It is a reprieve, but the end of life wall just moved, it did not disappear.
 
+## What Should Windows 10 Users Actually Do?
+
+Anyone still on Windows 10 has a clear window now to make a deliberate choice instead of a rushed one. Checking whether your specific machine actually supports Windows 11 upgrade requirements is the first step, since many people assume incompatibility without verifying it. For hardware that genuinely cannot upgrade, enrolling in the free extended update path through one of Microsoft's listed methods buys real time to plan a replacement on your own schedule rather than being forced into a purchase the week support actually ends.
+
 Check out what else is trending at [Google Trending](https://www.cosmictesla.com/#google-trending)

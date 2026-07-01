@@ -15,4 +15,8 @@ What Obsidian built is genuinely difficult to replicate. The plugin community, t
 
 The question with any Hacker News front page moment is whether it translates beyond the technical audience. Obsidian won users outside of developers and researchers. Files.md will need to do the same to matter at scale. Today is a good start. The follow through is everything.
 
+## What Would It Take to Actually Switch?
+
+For a longtime Obsidian user, switching tools is rarely about the core note taking experience, it is about everything built around it: years of accumulated notes in a specific format, a curated set of plugins tuned to a personal workflow, and muscle memory around keyboard shortcuts and folder structures. An alternative has to either import that history cleanly or offer something compelling enough to justify starting over. Files.md landing well on Hacker News today is a promising first signal, but the real test is whether it can convince someone with three years of Obsidian vaults that the open source principle is worth the migration cost, and that is a much higher bar than a single good launch day. That kind of switching cost is exactly why most note taking tools eventually compete less on features and more on how painlessly they let you leave if you ever want to.
+
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

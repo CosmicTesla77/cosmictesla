@@ -16,4 +16,8 @@ At $69.99 the price point sits at the premium tier, which is a signal that the d
 
 For families with kids who are into superheroes, gaming, or both, this is the cleanest possible recommendation on the Steam store right now. The LEGO formula is proven, the Batman license is evergreen, and the reviews are about as strong as they get. LEGO Batman Legacy of the Dark Knight is available now on Steam.
 
+## How Does It Compare to Past LEGO Titles?
+
+Traveller's Tales has released dozens of LEGO games since the format debuted, and quality across that catalog has varied more than the consistent brand suggests, with some entries feeling like reskins of the same engine and others clearly built with more care and ambition. An Overwhelmingly Positive rating at a premium price point places Legacy of the Dark Knight closer to the high end of that spectrum, alongside the entries fans point to as the series at its best rather than the more forgettable licensed cash ins that also carry the LEGO name.
+
 [Shop LEGO Batman Legacy of the Dark Knight on Amazon](https://www.amazon.com/s?k=LEGO+Batman+Legacy+of+the+Dark+Knight&tag=cosmictesla-20)

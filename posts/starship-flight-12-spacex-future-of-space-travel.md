@@ -19,4 +19,8 @@ NASA has selected Starship as the Human Landing System for the Artemis program, 
 
 For anyone who has been following the space industry, Starship represents the most consequential rocket development program since the Apollo era. Every flight test, success or failure, brings humanity one step closer to becoming a multi-planetary species. That is why the world keeps watching.
 
+## What Are the Remaining Technical Hurdles?
+
+Full and rapid reusability sounds simple stated as a goal, but the remaining engineering problems are substantial: reliably catching and reflying the booster and upper stage without lengthy refurbishment between flights, proving the heat shield holds up to repeated atmospheric reentry without replacement, and demonstrating orbital refueling, which is required for any Mars or extended lunar mission and has never been done at this scale. Each flight test is aimed at retiring one or more of these specific unknowns rather than simply proving the rocket can fly, which is why SpaceX treats even a partial failure as useful data instead of a setback.
+
 [See more of what is trending right now](https://www.cosmictesla.com/#google-trending)

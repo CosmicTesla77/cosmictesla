@@ -11,4 +11,8 @@ This is a point that anyone who has worked inside a large organization will reco
 
 What this argument is really pointing at is the difference between individual productivity and organizational throughput. AI tools are genuinely transforming what a single person can produce in a day. That matters enormously if you are a solo operator running your own business, because every bottleneck is yours to solve and every improvement compounds directly. It matters far less inside a bureaucracy where the constraint is never output velocity. The people getting the most out of AI right now are overwhelmingly the ones who have removed organizational drag from the equation entirely and are working for themselves.
 
+## What Should Organizations Actually Fix First?
+
+If the bottleneck is structural rather than computational, throwing AI tools at individual tasks treats the symptom instead of the disease. The organizations actually seeing throughput gains from AI are the ones pairing new tools with a hard look at their own approval chains, meeting cadence, and decision rights, cutting steps that exist purely out of habit rather than necessity. Speeding up a draft that then sits in a two week review queue accomplishes nothing. The unglamorous work of redesigning how decisions actually get made is what turns individual productivity gains into organizational ones, and most companies skip that work entirely because buying a tool is easier than rebuilding a process.
+
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)
