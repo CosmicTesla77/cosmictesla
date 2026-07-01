@@ -1,4 +1,4 @@
-# What Is High Dimensional Geometry and How Is It Quietly Transforming Medicine
+What Is High Dimensional Geometry and How Is It Quietly Transforming Medicine
 2026-05-15
 
 Geometry is one of those subjects that feels finished. Triangles, circles, the Pythagorean theorem. You learned it in school and it has not changed. But there is a branch of mathematics called high dimensional geometry that operates in spaces with hundreds or thousands of dimensions, and it is actively transforming fields from artificial intelligence to medical imaging in ways that most people never hear about.
@@ -22,5 +22,13 @@ The same mathematical principles underlying this medical application also power 
 ## Why Does This Matter Now?
 
 High dimensional geometry is one of the most practically powerful areas of mathematics currently active. The fact that it is appearing in medical imaging research suggests we are still in the early stages of understanding what it can do.
+
+## What Are the Limits of This Approach?
+
+High dimensional methods are powerful but not magic. The more dimensions a dataset has, the more data you generally need to find real patterns rather than coincidental ones, a problem mathematicians call the curse of dimensionality. In medical imaging this means a model trained on too few patient scans can find a pattern that looks meaningful in the math but does not hold up on new patients. Reputable research in this space is judged heavily on how it was validated, meaning whether the pattern held true on data the model never saw during training. That validation step is often less exciting to report than the initial discovery, which is part of why coverage of these findings tends to overstate certainty.
+
+## Where Does This Research Go From Here?
+
+The near term path for work like this is not replacing radiologists but giving them a second set of eyes trained on patterns humans cannot perceive directly. A doctor still makes the diagnosis. The high dimensional model flags regions or patterns worth a closer look, similar to how spell check does not write the sentence but catches what a tired eye might miss.
 
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

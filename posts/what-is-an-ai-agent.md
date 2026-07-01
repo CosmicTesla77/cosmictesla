@@ -1,4 +1,4 @@
-# What Is an AI Agent and Why Is Every Developer Building One Right Now
+What Is an AI Agent and Why Is Every Developer Building One Right Now
 2026-05-15
 
 If you have been paying attention to tech news lately, you have probably seen the phrase "AI agent" everywhere. But most explanations assume you already know what that means. You do not need to be a developer to understand this, and once you do, a lot of what is happening in technology right now will make much more sense.
@@ -26,5 +26,13 @@ The companies that figure out how to build trustworthy, capable AI agents in the
 ## How Can You Follow This Trend?
 
 CosmicTesla tracks GitHub Trending daily so you can watch this unfold in real time. Check the GitHub section every morning and you will develop an intuition for where this is all headed faster than most people who work in the industry.
+
+## What Are the Current Limitations of AI Agents?
+
+Despite the hype, most AI agents today still fail in predictable ways on long, multi step tasks. They can lose track of the original goal partway through a chain of actions, misinterpret an ambiguous instruction and confidently pursue the wrong outcome, or get stuck retrying a failed step instead of recognizing it needs a different approach entirely. This is why most production agent deployments today are scoped narrowly, handling one well defined type of task extremely well rather than acting as a general purpose assistant capable of anything.
+
+## How Do Companies Currently Handle These Failures?
+
+The practical answer companies have converged on is keeping a human in the loop at the points where a mistake would be expensive. An agent might draft an email but wait for approval before sending it, or compile a report but require a person to review the sources before it goes to a client. This is likely to remain standard practice for years, not because the technology cannot improve, but because trust in autonomous systems is earned gradually, one successfully completed task at a time.
 
 [See what else is trending on GitHub](https://www.cosmictesla.com/#github-trending)

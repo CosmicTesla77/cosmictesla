@@ -1,4 +1,4 @@
-# What Is Local First Software and Why Developers Are Building Apps That Work Without the Internet
+What Is Local First Software and Why Developers Are Building Apps That Work Without the Internet
 2026-05-15
 
 Almost every app you use today stores your data on someone else's server. Your photos live on Apple or Google servers. Your documents live on Microsoft or Google servers. Your messages live on Meta servers. This arrangement is so normal that most people never question it. But a growing movement in software development is questioning it seriously, and the result is a new category of applications called local first software.
@@ -22,5 +22,13 @@ The local first movement matters beyond just apps for developers. It represents 
 ## What Is the Future of Local First Software?
 
 As internet connectivity becomes assumed and cloud storage becomes commoditized, the designers who figure out how to build software that respects user ownership without sacrificing collaboration will define the next generation of applications.
+
+## What Tools Exist for This Today?
+
+The local first movement has moved past academic papers into working software. Libraries like Automerge and Yjs give developers a practical way to handle the conflict problem described above, letting multiple devices edit the same data offline and merge changes automatically when they reconnect. Note taking apps, drawing tools, and even some project management software now ship with local first architecture under the hood, often without users ever knowing the term. The technology is maturing quietly while most of the software industry still defaults to cloud first design out of habit rather than necessity.
+
+## Does Local First Mean No Cloud at All?
+
+Not necessarily. Most local first applications still use a server, but the server's role shifts from being the source of truth to being a sync helper. Your device holds the real data and can function completely without the server. The server exists only to help multiple devices agree on the latest version when they are online. That distinction, cloud as convenience rather than cloud as dependency, is the entire philosophy in one sentence.
 
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

@@ -1,4 +1,4 @@
-# On Device AI Is Here and It Changes Everything You Think You Know About Privacy
+On Device AI Is Here and It Changes Everything You Think You Know About Privacy
 2026-05-15
 
 Every time you use an AI tool today, something happens that most people do not think about. Your words, your questions, your data, travel across the internet to a server owned by a company you may never have heard of, get processed, and a response comes back. The AI is not on your phone or your computer. It lives in a data center somewhere, and you are renting access to it.
@@ -24,5 +24,13 @@ The reason this was not possible a few years ago is hardware. AI models require 
 ## What Comes Next?
 
 What you are watching on GitHub Trending is developers building the tools and frameworks that will make on device AI the default rather than the exception. The next generation of apps will not ask for an internet connection to think. They will think on your device, with your data staying exactly where it belongs.
+
+## What Are the Tradeoffs of Running AI Locally?
+
+On device AI is not a strict upgrade over cloud AI. The models that fit on a phone or laptop are smaller than the largest cloud models, which usually means somewhat less capable at complex reasoning tasks. There is a real tradeoff between privacy and raw capability, and most companies are landing on a hybrid approach: simple, fast, private tasks run locally, while harder tasks still get sent to the cloud when the user allows it. The interesting design question for the next few years is not local versus cloud but how software decides, moment to moment, which one to use.
+
+## How Will You Notice This Change as a User?
+
+Most people will not notice on device AI arriving through an announcement. They will notice it as features that used to require a loading spinner and an internet connection suddenly working instantly, even in airplane mode. Voice typing that used to lag, photo editing suggestions that used to require an upload, and translation that used to need a live connection are all early examples of tasks quietly moving from the cloud to the device sitting in your hand.
 
 [See what else is trending on GitHub](https://www.cosmictesla.com/#github-trending)

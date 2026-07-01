@@ -23,4 +23,12 @@ The reason ASCII is trending on Hacker News today is that Jason Scott, a promine
 
 Understanding ASCII means understanding the foundation layer of every word processor, email client, programming language, and web browser ever built. It is a 63 year old standard that shows no signs of going away.
 
+## How Did ASCII Shape the Standards That Came After It?
+
+Almost every text encoding system built after 1963 made a deliberate choice to remain compatible with ASCII rather than start from scratch. UTF eight, the encoding that now powers most of the internet, was specifically designed so that any ASCII text is already valid UTF eight text without changing a single byte. This backward compatibility is not an accident. It reflects a lesson the computing industry learned the hard way in ASCII's early years: once millions of systems agree on a standard, changing it becomes enormously expensive, so new standards are built to extend the old one rather than replace it outright.
+
+## What Can ASCII Teach About Technology Standards in General?
+
+ASCII survives because it solved a real coordination problem simply enough that adopting it cost less than ignoring it. That same pattern shows up whenever a technical standard actually sticks, from the shipping container to the USB port. The lesson for anyone watching new standards emerge today is that the ones built with the fewest assumptions about the future tend to outlast the ones built to be clever.
+
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

@@ -23,4 +23,12 @@ What the Australian study adds to the existing literature is geographic breadth 
 
 The reason this lands on Hacker News consistently is that it sits at the intersection of productivity culture, remote work, and the ongoing renegotiation of what working actually means post pandemic. That conversation is not finished. If anything it is accelerating as AI tooling compresses the time required for a growing category of tasks and forces the question of what we are actually optimizing for when we count hours as a proxy for value.
 
+## What Does This Mean for Employers Specifically?
+
+For an employer, the honest reading of this data is not that every job can compress into four days tomorrow. It is that most organizations have not seriously audited how their five day week is actually being used. Meetings that could be emails, status updates that duplicate a dashboard already available, and approval chains built for a smaller company that never got redesigned all eat hours that show up nowhere in a productivity report. The employers seeing real gains from a shorter week are the ones who treated the transition as an excuse to cut that waste first, rather than simply asking the same workflow to happen faster.
+
+## What Should a Skeptical Manager Watch For?
+
+A fair skeptic should ask whether the reported gains hold up over multiple quarters, not just the initial pilot period when participants know they are being measured. Novelty effects are real in workplace studies. The stronger evidence comes from the countries and companies that have kept a shorter week in place for years and continued measuring, since that removes the temporary boost that comes from any change being closely watched.
+
 [See what else is trending on Hacker News](https://www.cosmictesla.com/#hn-trending)

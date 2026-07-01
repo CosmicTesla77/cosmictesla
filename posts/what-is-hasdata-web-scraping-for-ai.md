@@ -1,4 +1,4 @@
-# What Is HasData and Why AI Agents Need Web Scraping Tools
+What Is HasData and Why AI Agents Need Web Scraping Tools
 2026-05-15
 
 Every AI agent needs data. That sounds obvious until you try to build one and realize that most of the data you actually want lives on websites that were never designed to share it programmatically. There is no button that says "download everything on this page as clean structured data." You have to go get it yourself. That process is called web scraping, and it is one of the most fundamental and underappreciated parts of the modern AI stack.
@@ -22,5 +22,13 @@ For AI agents specifically, reliable web access changes what is possible. An age
 ## What Does This Tell Us About AI?
 
 The fact that a web scraping service for AI agents topped Product Hunt today tells you something important about where AI development is right now. The infrastructure layer is being built in real time. The tools that will make AI agents capable of operating in the real world are launching today, being voted on today, and being integrated into production systems today.
+
+## What Are the Legal and Ethical Considerations?
+
+Web scraping exists in a genuine gray area. Publicly visible information is generally fair to access, but many websites explicitly prohibit automated scraping in their terms of service, and some jurisdictions have ruled differently on whether that prohibition is enforceable. Responsible scraping services and the developers who use them typically respect a site's robots dot txt file, which signals what a site owner does and does not want crawled, and avoid overwhelming a site's servers with request volume that could function like an unintentional denial of service. As AI agents scale up how much of the web they access, this legal gray area is likely to get formally tested and clarified in the next few years.
+
+## How Does This Connect to the Broader AI Infrastructure Story?
+
+Web scraping for agents sits in the same category as the other tools covered in this series: unglamorous plumbing that determines whether flashy AI capabilities actually work in practice. An agent with brilliant reasoning is useless if it cannot reliably get accurate, current information from the web. Tools like this are a reminder that the AI industry's next bottleneck is not model intelligence alone, it is the boring infrastructure of access, verification, and reliable data that sits underneath it.
 
 [See what else is trending on Product Hunt](https://www.cosmictesla.com/#ph-trending)
