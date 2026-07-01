@@ -17,4 +17,8 @@ The anger is less about the feature itself and more about how it vanished. AMD m
 
 There is also a product segmentation angle that rubs people the wrong way. By keeping encryption alive only on professional branded chips, AMD appears to be turning a baseline security feature into a paid upsell, a move that lands badly at a moment when memory level attacks are a real and studied threat. Until AMD explains what happened and why, the most reasonable read is that mainstream buyers quietly lost something they were never told they had.
 
+## What should Ryzen owners do now?
+
+There is no firmware rollback that safely restores the feature, since older AGESA versions carry their own bugs and security patches that most owners should not give up. The realistic options are checking whether your specific board vendor has issued guidance, holding off on the firmware update if you have not already installed it, or accepting that memory encryption on this hardware now depends on which chip tier you bought rather than which firmware you run. For most desktop users the practical exposure remains low, but anyone who travels with hardware or works with sensitive local data should treat this as a real downgrade worth tracking closely as AMD responds to the backlash.
+
 Check out what else is trending at [Hacker News](https://www.cosmictesla.com/#hn-trending)

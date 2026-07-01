@@ -17,4 +17,8 @@ Endless Ragnarok matters because it doubles down on the exact loop that earned R
 
 The launch also lands at an interesting moment for the action role playing space, where cooperative hunt games compete fiercely for the same audience. By leading with a feature rich demo, full cross play, and carryover progress, Cygames is making the case that Relink has matured into the kind of long tail game that rewards sticking around. For anyone who bounced off the original because it ended too soon, this is the version built to keep going.
 
+## Is the demo worth playing before launch?
+
+For anyone still deciding whether to buy Endless Ragnarok, the demo removes most of the risk. Carryover progress means the hours spent are not wasted even if you wait for the full release, and the mix of story, quest, and tutorial modes gives a genuine sense of how the new Summons mechanic changes party strategy before committing money. Given how short the window is before launch, there is little reason for an interested player to skip it.
+
 https://www.amazon.com/s?k=Granblue+Fantasy+Relink&tag=cosmictesla-20

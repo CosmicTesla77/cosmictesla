@@ -17,4 +17,8 @@ Real world events handed the film an unusual marketing tailwind. Roughly three w
 
 The public reaction to that file release was quieter than expected, partly because much of the footage echoed grainy surveillance videos already published years earlier, and some critics read it as a distraction rather than a revelation. That muted response is its own commentary on the film's central question, which is whether proof would actually change anything. Early reactions to the movie have been strong, the trailer won a Golden Trailer Award for best summer blockbuster trailer, and for anyone who grew up on Spielberg's earlier encounters with the sky, this is the summer release worth seeing on the largest screen available.
 
+## How is early reaction shaping up?
+
+Early response has split along a predictable line. Audiences drawn in by Spielberg's name and the anniversary tie in to Close Encounters have responded well to the emotional core built around Emily Blunt's character, while some critics have questioned whether the political thriller half of the film gets enough room to breathe alongside the more intimate story. That tension between spectacle and intimacy is the same balance Spielberg has walked his entire career, and how well he sticks the landing here is shaping up to be the central question in wider reviews.
+
 https://www.amazon.com/s?k=Disclosure+Day+Spielberg&tag=cosmictesla-20

@@ -17,4 +17,8 @@ The biggest limit is hardware. Apple Container requires a Mac with Apple silicon
 
 There are functional gaps as well. Through much of its pre release life the tool could not fully stand in for Docker, with various features still missing or partial, and a recent release patched a low severity security issue in the image load path that could let a maliciously crafted archive write outside the extraction directory. None of that is disqualifying for a 1.0, but it is the kind of detail a team should weigh before moving real workflows over. For developers already living inside the Apple silicon ecosystem, a native, stable, OCI compatible runtime with strong per container isolation is a meaningful addition to the toolbox.
 
+## Who should actually adopt this today?
+
+Developers already deep in the Apple ecosystem, building on Apple silicon and comfortable working close to the metal, are the clearest fit. Teams that need cross platform parity with Intel machines or that rely on mature Docker specific tooling and plugins should wait, since the ecosystem around Apple Container is still younger and thinner than what Docker has built over a decade. The 1.0 tag is a signal of API stability, not a signal that every workflow built around a competing tool will translate over without friction.
+
 Check out what else is trending at [GitHub](https://www.cosmictesla.com/#github-trending)

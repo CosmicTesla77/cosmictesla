@@ -17,4 +17,8 @@ Spiegel framed the launch around a bold claim, that almost twenty years after th
 
 The honest answer is that no one replaces the phone in a single leap, and Snap knows it. What Specs represent is a stake in the ground, a wager that the post smartphone interface will be something you wear rather than something you hold. Whether Snap has the resources to outlast far larger competitors chasing the same future is the real question, but the company has at least shipped a genuine standalone augmented reality product that others are still only demoing.
 
+## Should you actually buy a pair?
+
+At 2195 dollars with a fall 2026 ship date and no proven killer application yet, Specs are a purchase for early adopters and developers who want to build for the platform early, not for anyone looking for a practical daily device. The honest comparison point is the first generation of any new computing category, expensive, limited in software, and valuable mainly to the people who want to shape what comes next rather than use something finished today.
+
 Check out what else is trending at [Product Hunt](https://www.cosmictesla.com/#ph-trending)

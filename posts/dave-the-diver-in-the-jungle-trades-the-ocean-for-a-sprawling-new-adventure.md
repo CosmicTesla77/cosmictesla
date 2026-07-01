@@ -17,4 +17,8 @@ For people who sank dozens of hours into the first game, In the Jungle is an eas
 
 Newcomers are in a slightly trickier spot, since the pack assumes some familiarity with the loop and the cast, and it lands with the most weight if you already understand the world it is bending out of shape. The smartest move is to play the base game first and then treat this as the second act it clearly wants to be. Either way, it is one more sign that Mintrocket has no interest in making the same game twice.
 
+## How does the jungle setting change the pacing?
+
+Swapping the ocean for dense canopy does more than reskin the environment. Underwater exploration in the base game rewarded patient, methodical searching, while the jungle setting pushes players toward faster traversal and more frequent encounters, a pacing shift that mirrors the new combat system underneath it. Players used to the original's unhurried rhythm may need a session or two to adjust before the new tempo clicks, but reviewers largely agree the adjustment pays off once it does.
+
 https://www.amazon.com/s?k=Dave+the+Diver+In+the+Jungle&tag=cosmictesla-20

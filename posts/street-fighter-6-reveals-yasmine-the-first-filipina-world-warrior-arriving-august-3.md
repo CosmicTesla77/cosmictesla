@@ -17,4 +17,8 @@ Yasmine matters because representation in a series this old and this globally po
 
 There is a story hook too. Yasmine is searching for her long lost brother, and despite a shy and gentle demeanor she turns fierce the moment her blade comes out, a contrast that gives her more personality than a typical guest slot. Between the cultural milestone and a kit that genuinely looks fresh, she is shaping up to be one of the more anticipated additions in the game's post launch life.
 
+## How does she compare to other newcomers this season?
+
+Where several recent Street Fighter additions have leaned on returning archetypes with new coats of paint, Yasmine's combination of a bladed close range game and wind based zoning tools gives her a genuinely distinct identity in the current roster. Capcom's stated goal of building Year 4 characters for newer players suggests her execution ceiling will be more forgiving than some of the series' more technical veterans, without sacrificing the visual flair that makes a character worth learning.
+
 https://www.amazon.com/s?k=Street+Fighter+6&tag=cosmictesla-20
