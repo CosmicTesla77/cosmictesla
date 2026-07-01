@@ -22,3 +22,5 @@ It also taps a wider unease about wealth and inequality. London Falling lands as
 London Falling is perfect for readers of literary true crime and narrative nonfiction, the audience that devours writers like Keefe, David Grann, and Michelle McNamara. If you want a book that delivers the page turning momentum of a thriller while leaving you with something heavier to think about, this is squarely it.
 
 It will land hardest for parents, for anyone fascinated by the hidden machinery of modern cities, and for readers who like their nonfiction to indict a system rather than just solve a puzzle. Keefe has built a reputation on exactly that combination, and London Falling is another confident entry in a body of work that keeps proving how much a single carefully told story can reveal.
+
+[Find London Falling on Amazon](https://www.amazon.com/s?k=London%20Falling%20Patrick%20Radden%20Keefe&tag=cosmictesla-20)
