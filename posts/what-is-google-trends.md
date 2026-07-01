@@ -1,4 +1,4 @@
-# What Is Google Trends and Why Should You Care
+What Is Google Trends and Why Should You Care
 2026-05-10
 
 Every day, billions of people type questions into Google. Most of those searches disappear into the void, anonymous and forgotten. But Google Trends captures something important from that flood of data: the shape of collective human curiosity in real time.

@@ -1,4 +1,4 @@
-# LEGO Batman Legacy of the Dark Knight Just Launched on Steam and the Reviews Are Overwhelming
+LEGO Batman Legacy of the Dark Knight Just Launched on Steam and the Reviews Are Overwhelming
 2026-05-21
 https://picsum.photos/seed/lego/1200/628
 

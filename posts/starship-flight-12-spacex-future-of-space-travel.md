@@ -1,4 +1,4 @@
-# Starship Flight 12: What SpaceX's Latest Test Means for the Future of Space Travel
+Starship Flight 12: What SpaceX's Latest Test Means for the Future of Space Travel
 2026-05-20
 
 SpaceX's Starship program continues to dominate conversations in the space community, and the twelfth flight test has people talking. Starship is the most powerful rocket ever built, standing taller than the Statue of Liberty and designed to carry humans to the Moon and eventually Mars. Each flight test pushes the program closer to that reality.

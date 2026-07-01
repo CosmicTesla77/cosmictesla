@@ -1,4 +1,4 @@
-# The Rise of Real-Time Information: Why We Crave Live Data
+The Rise of Real-Time Information: Why We Crave Live Data
 2026-05-03
 
 There is a specific feeling that comes from watching a number change in real time. Stock tickers, live election results, sports scores updating by the second, trending search data. Something in how the brain processes dynamic information is fundamentally different from how it processes static content. Real-time data does not just inform. It creates a state of sustained attention that static information cannot match.

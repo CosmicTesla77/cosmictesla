@@ -1,4 +1,4 @@
-# How AI Video Evolved in Just 4 Years and Why It's Mind Blowing
+How AI Video Evolved in Just 4 Years and Why It's Mind Blowing
 2026-05-19
 
 Four years ago, AI-generated video looked like a fever dream rendered by a broken graphics card. Faces melted, hands had too many fingers, and any motion longer than two seconds turned into visual soup. Today that same technology produces photorealistic clips that fool seasoned video editors on first watch. The gap between 2022 and 2026 is not incremental. It is a cliff.

@@ -1,4 +1,4 @@
-# AI and the Future of Search: What Trending Data Tells Us About Where We Are Going
+AI and the Future of Search: What Trending Data Tells Us About Where We Are Going
 2026-05-01
 
 Search is changing faster right now than at any point since Google displaced directory-based web navigation in the late 1990s. The introduction of AI-generated responses into the search experience is not an incremental improvement to existing systems. It is a structural change to how people relate to information retrieval, and the effects on what trends, how it trends, and what trending data means are only beginning to be understood.

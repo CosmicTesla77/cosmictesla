@@ -1,4 +1,4 @@
-# Explore Wikipedia Like Windows XP: Why Nostalgia Drives Millions of Clicks Online
+Explore Wikipedia Like Windows XP: Why Nostalgia Drives Millions of Clicks Online
 2026-05-15
 
 One of the top stories on Hacker News today is a project that lets you explore Wikipedia through an interface designed to look exactly like Windows XP, the operating system Microsoft released in 2001 and discontinued in 2014. It has received hundreds of upvotes from developers who have no practical reason to use it. It solves no real problem. It does not make Wikipedia faster or more functional. And yet it spread across the internet instantly.

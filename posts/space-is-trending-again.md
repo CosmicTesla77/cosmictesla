@@ -1,4 +1,4 @@
-# Space Is Trending Again: Why the New Space Race Is Capturing Attention
+Space Is Trending Again: Why the New Space Race Is Capturing Attention
 2026-05-06
 
 Space is having a moment. Not the vague, ambient interest that space always generates when something spectacular happens and then fades, but a sustained, compounding attention that shows up in Google Trends data, in Reddit thread activity, in YouTube view counts, and in mainstream news coverage with a frequency not seen since the Apollo era.

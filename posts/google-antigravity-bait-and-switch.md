@@ -1,4 +1,4 @@
-# Google's Antigravity Bait and Switch Is the Top Story on Hacker News Today
+Google's Antigravity Bait and Switch Is the Top Story on Hacker News Today
 2026-05-21
 https://picsum.photos/seed/technology/1200/628
 

@@ -1,4 +1,4 @@
-# The YouTube Algorithm Explained: Why These Videos Keep Trending
+The YouTube Algorithm Explained: Why These Videos Keep Trending
 2026-05-07
 
 YouTube has over 2.7 billion logged-in users per month. More than 500 hours of video are uploaded to the platform every minute. The algorithm that decides what surfaces in trending, in recommendations, and in search results is one of the most consequential ranking systems in existence. Understanding its basic mechanics helps explain why the videos on CosmicTesla's YouTube Trending feed look the way they do.

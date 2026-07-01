@@ -1,4 +1,4 @@
-# What Is PHBench and Can AI Actually Predict Which Startups Will Raise Series A
+What Is PHBench and Can AI Actually Predict Which Startups Will Raise Series A
 2026-05-15
 
 Venture capital is one of the most information asymmetric markets in the world. A small number of investors with access to proprietary deal flow, founder networks, and years of pattern recognition make bets on early stage companies that most people never hear about until they either succeed spectacularly or disappear quietly. The question of what separates a company that raises a Series A from one that does not has been studied extensively and answered inconsistently.

@@ -1,4 +1,4 @@
-# Gaming Culture Goes Mainstream: How Steam Trends Reflect Society
+Gaming Culture Goes Mainstream: How Steam Trends Reflect Society
 2026-05-02
 
 Steam is the dominant PC gaming distribution platform in the world, with over 130 million active users and a library of more than 50,000 games. What trends on Steam on a given day is not just a gaming story. It is a data point about what millions of people are choosing to spend their leisure time doing, and increasingly, that data point overlaps with broader cultural conversations in ways it did not a decade ago.

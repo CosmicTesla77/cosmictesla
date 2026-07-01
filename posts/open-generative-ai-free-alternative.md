@@ -1,4 +1,4 @@
-# What Is Open Generative AI and Why It Matters That 200 Plus AI Models Are Now Free
+What Is Open Generative AI and Why It Matters That 200 Plus AI Models Are Now Free
 2026-05-16
 
 One of the top trending repositories on GitHub today is called Open Generative AI, built by a developer named Anil Matcha. It describes itself as a free AI image and video generation studio with over 200 models available, including Flux, Midjourney style models, Kling, Sora alternatives, and Veo, all self hosted and MIT licensed with no content filters. It accumulated nearly 400 stars in a single day, which reflects genuine excitement from developers who have been waiting for exactly this kind of project.

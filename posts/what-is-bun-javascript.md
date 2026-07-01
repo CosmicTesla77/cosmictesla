@@ -1,4 +1,4 @@
-# What Is Bun and Why JavaScript Developers Are Switching From Node.js
+What Is Bun and Why JavaScript Developers Are Switching From Node.js
 2026-05-16
 
 There is a new JavaScript runtime called Bun that has been quietly gaining momentum for two years and is now firmly at the top of GitHub Trending with over 400 new stars today. If you are not a developer, the term JavaScript runtime probably means nothing to you. But the shift that Bun represents is worth understanding because it affects the performance and cost of a significant portion of the software the internet runs on.

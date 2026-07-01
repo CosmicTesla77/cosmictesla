@@ -1,4 +1,4 @@
-# No, AI Is Not Going to Make Your Processes Go Faster
+No, AI Is Not Going to Make Your Processes Go Faster
 2026-05-17
 
 The top story on Hacker News today is making an argument that cuts against most of the AI productivity narrative you have been sold: AI will not make your processes go faster. The piece, posted by TheEdonian and pulling 258 points, argues that the bottleneck in most organizations is not the speed of individual tasks but the coordination, decision-making, and organizational structure wrapped around those tasks. Making individual steps faster does not compress the overall timeline when the delays are structural.

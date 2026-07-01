@@ -1,4 +1,4 @@
-# Reddit's Front Page: How r/all Shapes What America Talks About
+Reddit's Front Page: How r/all Shapes What America Talks About
 2026-05-08
 
 Reddit calls itself the front page of the internet. That used to feel like arrogance. Increasingly, it feels like an accurate description of how the platform functions in the broader information ecosystem.

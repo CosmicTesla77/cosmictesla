@@ -1,4 +1,4 @@
-# GTA6: Release Date, Trailer Leaks, and Everything We Know Right Now
+GTA6: Release Date, Trailer Leaks, and Everything We Know Right Now
 2026-05-16
 
 Grand Theft Auto 6 is the most anticipated video game in history. That is not hyperbole. The original announcement trailer released in December 2023 became the most viewed gaming trailer of all time within 24 hours, accumulating tens of millions of views before most people had finished their morning coffee. Years later, with the release window approaching, search interest in GTA6 has not slowed down. It has accelerated.

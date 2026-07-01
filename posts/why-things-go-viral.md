@@ -1,4 +1,4 @@
-# Why Things Go Viral: The Science Behind Trending Content
+Why Things Go Viral: The Science Behind Trending Content
 2026-05-09
 
 Something goes viral every hour of every day. A video, a phrase, a image, a story. Most of them are gone from public consciousness within 48 hours. A small number become genuinely embedded in culture. Understanding the difference between those two outcomes tells you a lot about how human attention actually works.
